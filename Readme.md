@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
-* Студент: [Евгений Скробов](https://up.htmlacademy.ru/ecmascript/15/user/1530283).
-* Наставник: `Неизвестно`.
+- Студент: [Евгений Скробов](https://up.htmlacademy.ru/ecmascript/15/user/1530283).
+- Наставник: [Сергей Рожков](https://htmlacademy.ru/profile/id1069033).
 
 ---
 
