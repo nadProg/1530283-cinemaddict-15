@@ -5,6 +5,9 @@ import { createFilmsTemplate } from './views/films.js';
 import { createFilmCardTemplate } from './views/film-card.js';
 import { createShowMoreButtonTemplate } from './views/show-more-button.js';
 import { createStatisticsTemplate } from './views/statistics.js';
+import { createFilmDetailsTemplate } from './views/film-details.js';
+
+const HIDE_OVERFLOW = 'hide-overflow';
 
 const MAIN_FILMS_AMOUNT = 5;
 const EXTRA_FILMS_AMOUNT = 2;
@@ -16,9 +19,10 @@ const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-const headerNode = document.body.querySelector('.header');
-const mainNode = document.body.querySelector('.main');
-const footerNode = document.body.querySelector('.footer');
+const bodyNode = document.body;
+const headerNode = bodyNode.querySelector('.header');
+const mainNode = bodyNode.querySelector('.main');
+const footerNode = bodyNode.querySelector('.footer');
 
 render(headerNode, createProfileTemplate(), BEFOREEND);
 
@@ -47,3 +51,6 @@ for (let i = 0; i < EXTRA_FILMS_AMOUNT; i++) {
 }
 
 render(footerNode, createStatisticsTemplate(), BEFOREEND);
+
+render(bodyNode, createFilmDetailsTemplate(), BEFOREEND);
+bodyNode.classList.add(HIDE_OVERFLOW);
