@@ -4,7 +4,7 @@ import { createSortTemplate } from './views/sort.js';
 import { createFilmsTemplate } from './views/films.js';
 import { createFilmCardTemplate } from './views/film-card.js';
 import { createShowMoreButtonTemplate } from './views/show-more-button.js';
-import { createStatisticsTemplate } from './views/statistics.js';
+import { createFooterStatisticsTemplate } from './views/footer-statistics.js';
 import { createFilmDetailsTemplate } from './views/film-details.js';
 
 import { generateFilm } from './mock/film.js';
@@ -58,7 +58,7 @@ for (let i = 0; i < EXTRA_FILMS_AMOUNT; i++) {
   render(mostCommentedFilmsListNode, createFilmCardTemplate(films[i]), BEFORE_END);
 }
 
-render(footerNode, createStatisticsTemplate(), BEFORE_END);
+render(footerNode, createFooterStatisticsTemplate(films.length), BEFORE_END);
 
 // render(bodyNode, createFilmDetailsTemplate(), BEFORE_END);
 // bodyNode.classList.add(HIDE_OVERFLOW_CLASS);
