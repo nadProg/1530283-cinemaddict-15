@@ -16,8 +16,10 @@ const HIDE_OVERFLOW_CLASS = 'hide-overflow';
 
 const COMMENTS_AMOUNT = 100;
 const MAIN_FILMS_AMOUNT = getRandomInteger(15, 25);
-const EXTRA_FILMS_AMOUNT = 2;
 const MAIN_FILMS_STEP = 5;
+const EXTRA_FILMS_AMOUNT = 2;
+
+let renderedFilmsAmount = 0;
 
 const BEFORE_END = 'beforeend';
 const AFTER_END = 'afterend';
@@ -49,11 +51,9 @@ const [
   mostCommentedFilmsListNode,
 ] = mainNode.querySelectorAll('.films-list__container');
 
-for (let i = 0; i < MAIN_FILMS_STEP; i++) {
-  render(mainFilmsListNode, createFilmCardTemplate(films[i]), BEFORE_END);
-}
-
 render(mainFilmsListNode, createShowMoreButtonTemplate(), AFTER_END);
+
+const shohMoreButtonNode = mainNode.querySelector('.films-list__show-more');
 
 const topRatedFilms = [...films].sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
 const mostCommentedFilms = [...films].sort((a, b) => b.comments.length - a.comments.length);
@@ -70,3 +70,20 @@ render(footerNode, createFooterStatisticsTemplate(getFilterCount(filters, 'all')
 
 // render(bodyNode, createFilmDetailsTemplate(films[0], getCommentsFromIds(comments, films[0].comments)), BEFORE_END);
 // bodyNode.classList.add(HIDE_OVERFLOW_CLASS);
+
+const onShowMoreButtonNodeClick = (evt) => {
+  evt.preventDefault();
+
+  films
+    .slice(renderedFilmsAmount, renderedFilmsAmount + MAIN_FILMS_STEP)
+    .forEach((film) => render(mainFilmsListNode, createFilmCardTemplate(film), BEFORE_END));
+
+  renderedFilmsAmount += MAIN_FILMS_STEP;
+
+  if (renderedFilmsAmount >= MAIN_FILMS_AMOUNT) {
+    shohMoreButtonNode.remove();
+  }
+};
+
+shohMoreButtonNode.addEventListener('click', onShowMoreButtonNodeClick);
+shohMoreButtonNode.click();

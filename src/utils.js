@@ -1,5 +1,8 @@
 
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -30,4 +33,6 @@ export const getReleaseDate = (date) => dayjs(date).format('DD MMMM YYYY');
 
 export const getRuntime = (minutesAmount) => dayjs().startOf('day').add(minutesAmount, 'minute').format('H[h] mm[m]');
 
-export const getCommentDate = (date) => dayjs(date).format('YYYY/MM/DD HH:mm');
+// export const getCommentDate = (date) => dayjs(date).format('YYYY/MM/DD HH:mm');
+
+export const getCommentDate = (date) => dayjs(date).fromNow();
