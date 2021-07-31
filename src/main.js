@@ -17,8 +17,7 @@ const EXTRA_FILMS_AMOUNT = 2;
 const BEFORE_END = 'beforeend';
 const AFTER_END = 'afterend';
 
-const films = new Array(5).fill().map((item, index) => generateFilm(index + 1));
-console.log(films);
+const films = new Array(MAIN_FILMS_AMOUNT).fill().map((item, index) => generateFilm(index + 1));
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -42,17 +41,17 @@ const [
 ] = mainNode.querySelectorAll('.films-list__container');
 
 for (let i = 0; i < MAIN_FILMS_AMOUNT; i++) {
-  render(mainFilmsListNode, createFilmCardTemplate(), BEFORE_END);
+  render(mainFilmsListNode, createFilmCardTemplate(films[i]), BEFORE_END);
 }
 
 render(mainFilmsListNode, createShowMoreButtonTemplate(), AFTER_END);
 
 for (let i = 0; i < EXTRA_FILMS_AMOUNT; i++) {
-  render(topRatedFilmsListNode, createFilmCardTemplate(), BEFORE_END);
+  render(topRatedFilmsListNode, createFilmCardTemplate(films[i]), BEFORE_END);
 }
 
 for (let i = 0; i < EXTRA_FILMS_AMOUNT; i++) {
-  render(mostCommentedFilmsListNode, createFilmCardTemplate(), BEFORE_END);
+  render(mostCommentedFilmsListNode, createFilmCardTemplate(films[i]), BEFORE_END);
 }
 
 render(footerNode, createStatisticsTemplate(), BEFORE_END);

@@ -84,8 +84,8 @@ const MAX_TOTAL_RATING = 10;
 const MIN_GENRES_AMOUNT = 1;
 const MAX_GENRES_AMOUNT = 3;
 
-const MIN_RUNTIME = 60;
-const MAX_RUNTIME = 180;
+const MIN_RUNTIME = 30;
+const MAX_RUNTIME = 120;
 
 const generateDescription = () => {
   const maxAmount = getRandomInteger(MIN_PHRASE_AMOUNT, MAX_PHRASE_AMOUNT);
@@ -94,7 +94,7 @@ const generateDescription = () => {
 
 const generateAgeRating = () => getRandomItemFromArray(AGE_RATINGS);
 
-const generatePoster = () => `images/posters/${getRandomItemFromArray(POSTERS)}`;
+const generatePoster = () => getRandomItemFromArray(POSTERS);
 
 const generateTotalRating = () => getRandomInteger(MIN_TOTAL_RATING * 10, MAX_TOTAL_RATING * 10) / 10;
 
@@ -141,8 +141,8 @@ const generateComments = () => {
 export const generateFilm = (id) => {
   const title = generateTitle();
   const alternativeTitle = getRandomBoolean() ? title : generateTitle();
-  const alreadyWatched = getRandomBoolean();
-  const watchingDate = alreadyWatched ? generateWatchingDate() : ''; // generate Date with dayjs
+  const isWatched = getRandomBoolean();
+  const watchingDate = isWatched ? generateWatchingDate() : ''; // generate Date with dayjs
 
   return ({
     id,
@@ -165,14 +165,14 @@ export const generateFilm = (id) => {
         releaseCountry: generateCountry(),
       },
       runtime: generateRuntime(),
-      genre: generateGenres(),
+      genres: generateGenres(),
       description: generateDescription(),
     },
     userDetails: {
       watchingDate,
-      alreadyWatched,
-      favorite: getRandomBoolean(),
-      watchlist: getRandomBoolean(),
+      isWatched,
+      isFavorite: getRandomBoolean(),
+      isToWhatch: getRandomBoolean(),
     },
   });
 };
