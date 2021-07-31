@@ -79,7 +79,7 @@ const generateComments = () => {
 
 export const generateFilm = (id) => {
   const title = generateTitle();
-  const alternativeTitle = getRandomBoolean() ? title : generateTitle();
+  const originalTitle = getRandomBoolean() ? title : generateTitle();
   const isWatched = getRandomBoolean();
   const watchingDate = isWatched ? generateWatchingDate() : '';
 
@@ -88,7 +88,7 @@ export const generateFilm = (id) => {
     comments: generateComments(),
     filmInfo: {
       title,
-      alternativeTitle,
+      originalTitle,
       totalRating: generateTotalRating(),
       poster: generatePoster(),
       ageRating: generateAgeRating(),

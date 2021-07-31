@@ -9,10 +9,12 @@ import { createFilmDetailsTemplate } from './views/film-details.js';
 
 import { generateFilm } from './mock/film.js';
 import { generateFilters, getFilterCount } from './mock/filters.js';
+import { generateComment, getCommentsFromIds } from './mock/comment.js';
 import { getRandomInteger } from './utils.js';
 
 const HIDE_OVERFLOW_CLASS = 'hide-overflow';
 
+const COMMENTS_AMOUNT = 100;
 const MAIN_FILMS_AMOUNT = getRandomInteger(15, 25);
 const EXTRA_FILMS_AMOUNT = 2;
 const MAIN_FILMS_STEP = 5;
@@ -20,6 +22,7 @@ const MAIN_FILMS_STEP = 5;
 const BEFORE_END = 'beforeend';
 const AFTER_END = 'afterend';
 
+const comments = new Array(COMMENTS_AMOUNT).fill().map((item, index) => generateComment(index + 1));
 const films = new Array(MAIN_FILMS_AMOUNT).fill().map((item, index) => generateFilm(index + 1));
 const filters = generateFilters(films);
 
@@ -65,5 +68,5 @@ mostCommentedFilms
 
 render(footerNode, createFooterStatisticsTemplate(getFilterCount(filters, 'all')), BEFORE_END);
 
-// render(bodyNode, createFilmDetailsTemplate(), BEFORE_END);
+// render(bodyNode, createFilmDetailsTemplate(films[0], getCommentsFromIds(comments, films[0].comments)), BEFORE_END);
 // bodyNode.classList.add(HIDE_OVERFLOW_CLASS);
