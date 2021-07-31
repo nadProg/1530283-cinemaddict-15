@@ -172,7 +172,7 @@ export const generateFilm = (id) => {
       watchingDate,
       isWatched,
       isFavorite: getRandomBoolean(),
-      isToWhatch: getRandomBoolean(),
+      isToWatch: getRandomBoolean(),
     },
   });
 };
