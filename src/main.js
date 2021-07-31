@@ -52,13 +52,16 @@ for (let i = 0; i < MAIN_FILMS_STEP; i++) {
 
 render(mainFilmsListNode, createShowMoreButtonTemplate(), AFTER_END);
 
-for (let i = 0; i < EXTRA_FILMS_AMOUNT; i++) {
-  render(topRatedFilmsListNode, createFilmCardTemplate(films[i]), BEFORE_END);
-}
+const topRatedFilms = [...films].sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
+const mostCommentedFilms = [...films].sort((a, b) => b.comments.length - a.comments.length);
 
-for (let i = 0; i < EXTRA_FILMS_AMOUNT; i++) {
-  render(mostCommentedFilmsListNode, createFilmCardTemplate(films[i]), BEFORE_END);
-}
+topRatedFilms
+  .slice(0, EXTRA_FILMS_AMOUNT)
+  .forEach((film) => render(topRatedFilmsListNode, createFilmCardTemplate(film), BEFORE_END));
+
+mostCommentedFilms
+  .slice(0, EXTRA_FILMS_AMOUNT)
+  .forEach((film) => render(mostCommentedFilmsListNode, createFilmCardTemplate(film), BEFORE_END));
 
 render(footerNode, createFooterStatisticsTemplate(getFilterCount(filters, 'all')), BEFORE_END);
 

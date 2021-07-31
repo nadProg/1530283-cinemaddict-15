@@ -19,4 +19,3 @@ export const generateFilters = (films) => Object
   }));
 
 export const getFilterCount = (filters, filterName) => filters.find(({ name }) => name === filterName).count;
-
