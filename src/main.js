@@ -7,6 +7,8 @@ import { createShowMoreButtonTemplate } from './views/show-more-button.js';
 import { createStatisticsTemplate } from './views/statistics.js';
 import { createFilmDetailsTemplate } from './views/film-details.js';
 
+import { generateFilm } from './mock/film.js';
+
 const HIDE_OVERFLOW_CLASS = 'hide-overflow';
 
 const MAIN_FILMS_AMOUNT = 5;
@@ -14,6 +16,9 @@ const EXTRA_FILMS_AMOUNT = 2;
 
 const BEFORE_END = 'beforeend';
 const AFTER_END = 'afterend';
+
+const films = new Array(5).fill().map((item, index) => generateFilm(index + 1));
+console.log(films);
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -52,5 +57,5 @@ for (let i = 0; i < EXTRA_FILMS_AMOUNT; i++) {
 
 render(footerNode, createStatisticsTemplate(), BEFORE_END);
 
-render(bodyNode, createFilmDetailsTemplate(), BEFORE_END);
-bodyNode.classList.add(HIDE_OVERFLOW_CLASS);
+// render(bodyNode, createFilmDetailsTemplate(), BEFORE_END);
+// bodyNode.classList.add(HIDE_OVERFLOW_CLASS);
