@@ -8,16 +8,20 @@ import { createStatisticsTemplate } from './views/statistics.js';
 import { createFilmDetailsTemplate } from './views/film-details.js';
 
 import { generateFilm } from './mock/film.js';
+import { getRandomInteger } from './utils.js';
 
 const HIDE_OVERFLOW_CLASS = 'hide-overflow';
 
-const MAIN_FILMS_AMOUNT = 5;
+const MAIN_FILMS_AMOUNT = getRandomInteger(15, 25);
 const EXTRA_FILMS_AMOUNT = 2;
+const MAIN_FILMS_STEP = 5;
 
 const BEFORE_END = 'beforeend';
 const AFTER_END = 'afterend';
 
 const films = new Array(MAIN_FILMS_AMOUNT).fill().map((item, index) => generateFilm(index + 1));
+
+console.log(films);
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -28,7 +32,7 @@ const headerNode = bodyNode.querySelector('.header');
 const mainNode = bodyNode.querySelector('.main');
 const footerNode = bodyNode.querySelector('.footer');
 
-render(headerNode, createProfileTemplate(), BEFORE_END);
+render(headerNode, createProfileTemplate(films), BEFORE_END);
 
 render(mainNode, createNavigationTemplate(), BEFORE_END);
 render(mainNode, createSortTemplate(), BEFORE_END);
@@ -40,7 +44,7 @@ const [
   mostCommentedFilmsListNode,
 ] = mainNode.querySelectorAll('.films-list__container');
 
-for (let i = 0; i < MAIN_FILMS_AMOUNT; i++) {
+for (let i = 0; i < MAIN_FILMS_STEP; i++) {
   render(mainFilmsListNode, createFilmCardTemplate(films[i]), BEFORE_END);
 }
 
