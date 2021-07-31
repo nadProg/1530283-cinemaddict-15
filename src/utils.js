@@ -28,8 +28,6 @@ export const getFullYear = (date) => dayjs(date).format('YYYY');
 
 export const getReleaseDate = (date) => dayjs(date).format('DD MMMM YYYY');
 
-export const getRuntime = (minutesAmount) => dayjs().hour(0).minute(0).add(minutesAmount, 'minute').format('H[h] mm[m]');
+export const getRuntime = (minutesAmount) => dayjs().startOf('day').add(minutesAmount, 'minute').format('H[h] mm[m]');
 
 export const getCommentDate = (date) => dayjs(date).format('YYYY/MM/DD HH:mm');
-
-// 2019/12/31 23:59
