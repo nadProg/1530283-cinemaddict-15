@@ -16,9 +16,12 @@ export const getRandomItemFromArray = (items) => {
 };
 
 export const getUniqueItemsFromArray = (items, maxUniqueAmount, minUniqueAmount = 1) => {
-  const amount = getRandomInteger(minUniqueAmount, maxUniqueAmount);
-  const nonUniqueItems = new Array(amount).fill().map(() => getRandomItemFromArray(items));
-  return Array.from(new Set(nonUniqueItems));
+  const uniqueAmount = getRandomInteger(minUniqueAmount, maxUniqueAmount);
+  const itemsSet = new Set();
+  while (itemsSet.size < uniqueAmount) {
+    itemsSet.add(getRandomItemFromArray(items));
+  }
+  return Array.from(itemsSet);
 };
 
 export const getYear = (date) => dayjs(date).format('YYYY');
