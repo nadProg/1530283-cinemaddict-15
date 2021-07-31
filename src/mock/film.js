@@ -129,6 +129,7 @@ const generateReleaseDate = () => {
 };
 
 const generateComments = () => {
+  // с вероятностью 25% комментарии отсутствуют
   if (getRandomBoolean() && getRandomBoolean()) {
     return [];
   }

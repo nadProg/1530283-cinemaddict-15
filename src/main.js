@@ -8,7 +8,7 @@ import { createFooterStatisticsTemplate } from './views/footer-statistics.js';
 import { createFilmDetailsTemplate } from './views/film-details.js';
 
 import { generateFilm } from './mock/film.js';
-import { generateFilters } from './mock/filters.js';
+import { generateFilters, getFilterCount } from './mock/filters.js';
 import { getRandomInteger } from './utils.js';
 
 const HIDE_OVERFLOW_CLASS = 'hide-overflow';
@@ -34,7 +34,7 @@ const headerNode = bodyNode.querySelector('.header');
 const mainNode = bodyNode.querySelector('.main');
 const footerNode = bodyNode.querySelector('.footer');
 
-render(headerNode, createProfileTemplate(films), BEFORE_END);
+render(headerNode, createProfileTemplate(getFilterCount(filters, 'history')), BEFORE_END);
 
 render(mainNode, createNavigationTemplate(filters), BEFORE_END);
 render(mainNode, createSortTemplate(), BEFORE_END);
@@ -60,7 +60,7 @@ for (let i = 0; i < EXTRA_FILMS_AMOUNT; i++) {
   render(mostCommentedFilmsListNode, createFilmCardTemplate(films[i]), BEFORE_END);
 }
 
-render(footerNode, createFooterStatisticsTemplate(films.length), BEFORE_END);
+render(footerNode, createFooterStatisticsTemplate(getFilterCount(filters, 'all')), BEFORE_END);
 
 // render(bodyNode, createFilmDetailsTemplate(), BEFORE_END);
 // bodyNode.classList.add(HIDE_OVERFLOW_CLASS);

@@ -16,14 +16,9 @@ const getProfileRating = (watchedFilmsAmount) => {
   return ProfileRating.MOVIE_BUFF;
 };
 
-export const createProfileTemplate = (films) => {
-  const watchedFilmsAmount = films.reduce((count, film) => film.userDetails.isWatched ? ++count : count, 0);
-  console.log(watchedFilmsAmount);
-
-  return  `
-    <section class="header__profile profile">
-      ${watchedFilmsAmount ? `<p class="profile__rating">${getProfileRating(watchedFilmsAmount)}</p>` : ''}
-      <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-    </section>
-  `;
-};
+export const createProfileTemplate = (watchedFilmsAmount) => `
+  <section class="header__profile profile">
+    ${watchedFilmsAmount ? `<p class="profile__rating">${getProfileRating(watchedFilmsAmount)}</p>` : ''}
+    <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
+  </section>
+`;
