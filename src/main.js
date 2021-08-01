@@ -1,49 +1,46 @@
+import { generateFilm } from './mock/film.js';
+import { generateComment, getCommentsByIds } from './mock/comment.js';
+import { generateFilters, getFilterCountByName } from './mock/filters.js';
+import { ClassName, COMMENTS_AMOUNT, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_NAMES } from './const.js';
+import { getRandomInteger, renderAfterEnd, renderBeforeEnd, sortFilmsByRating, sortFilmsByComments } from './utils.js';
 import { createProfileTemplate } from './views/profile.js';
 import { createNavigationTemplate } from './views/navigation.js';
-import { createSortTemplate } from './views/sort.js';
+import { createSortListTemplate } from './views/sort-list.js';
 import { createFilmsTemplate } from './views/films.js';
 import { createFilmCardTemplate } from './views/film-card.js';
 import { createShowMoreButtonTemplate } from './views/show-more-button.js';
 import { createFooterStatisticsTemplate } from './views/footer-statistics.js';
 import { createFilmDetailsTemplate } from './views/film-details.js';
 
-import { generateFilm } from './mock/film.js';
-import { generateFilters, getFilterCountByName } from './mock/filters.js';
-import { generateComment, getCommentsByIds } from './mock/comment.js';
-import { getRandomInteger } from './utils.js';
-
-const HIDE_OVERFLOW_CLASS = 'hide-overflow';
-
-const COMMENTS_AMOUNT = 100;
-const MAIN_FILMS_AMOUNT = getRandomInteger(15, 25);
-const MAIN_FILMS_STEP = 5;
-const EXTRA_FILMS_AMOUNT = 2;
+const filmsAmount = getRandomInteger(15, 25);
 
 let renderedFilmsAmount = 0;
 
-const BEFORE_END = 'beforeend';
-const AFTER_END = 'afterend';
-
+const films = new Array(filmsAmount).fill().map((item, index) => generateFilm(index + 1));
 const comments = new Array(COMMENTS_AMOUNT).fill().map((item, index) => generateComment(index + 1));
-const films = new Array(MAIN_FILMS_AMOUNT).fill().map((item, index) => generateFilm(index + 1));
+
 const filters = generateFilters(films);
+const allFilmsAmount = getFilterCountByName(filters, 'all');
+const historyFilmsAmount = getFilterCountByName(filters, 'history');
 
-console.log(films);
+const topRatedFilms = sortFilmsByRating(films);
+const mostCommentedFilms = sortFilmsByComments(films);
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
+const popupFilm = films[0];
+const popupFilmComments = getCommentsByIds(comments, popupFilm.comments);
+
+console.log(films, comments, filters);
 
 const bodyNode = document.body;
 const headerNode = bodyNode.querySelector('.header');
 const mainNode = bodyNode.querySelector('.main');
 const footerNode = bodyNode.querySelector('.footer');
 
-render(headerNode, createProfileTemplate(getFilterCountByName(filters, 'history')), BEFORE_END);
+renderBeforeEnd(headerNode, createProfileTemplate(historyFilmsAmount));
 
-render(mainNode, createNavigationTemplate(filters), BEFORE_END);
-render(mainNode, createSortTemplate(), BEFORE_END);
-render(mainNode, createFilmsTemplate(), BEFORE_END);
+renderBeforeEnd(mainNode, createNavigationTemplate(filters, filters[0].name));
+renderBeforeEnd(mainNode, createSortListTemplate(SORT_NAMES, SORT_NAMES[0]));
+renderBeforeEnd(mainNode, createFilmsTemplate());
 
 const [
   mainFilmsListNode,
@@ -51,37 +48,33 @@ const [
   mostCommentedFilmsListNode,
 ] = mainNode.querySelectorAll('.films-list__container');
 
-render(mainFilmsListNode, createShowMoreButtonTemplate(), AFTER_END);
+renderAfterEnd(mainFilmsListNode, createShowMoreButtonTemplate());
 
 const shohMoreButtonNode = mainNode.querySelector('.films-list__show-more');
 
-const topRatedFilms = [...films].sort((a, b) => b.filmInfo.rating - a.filmInfo.rating);
-const mostCommentedFilms = [...films].sort((a, b) => b.comments.length - a.comments.length);
-
 topRatedFilms
   .slice(0, EXTRA_FILMS_AMOUNT)
-  .forEach((film) => render(topRatedFilmsListNode, createFilmCardTemplate(film), BEFORE_END));
+  .forEach((film) => renderBeforeEnd(topRatedFilmsListNode, createFilmCardTemplate(film)));
 
 mostCommentedFilms
   .slice(0, EXTRA_FILMS_AMOUNT)
-  .forEach((film) => render(mostCommentedFilmsListNode, createFilmCardTemplate(film), BEFORE_END));
+  .forEach((film) => renderBeforeEnd(mostCommentedFilmsListNode, createFilmCardTemplate(film)));
 
-render(footerNode, createFooterStatisticsTemplate(getFilterCountByName(filters, 'all')), BEFORE_END);
+renderBeforeEnd(footerNode, createFooterStatisticsTemplate(allFilmsAmount));
 
-const popupFilm = films[0];
-render(bodyNode, createFilmDetailsTemplate(popupFilm, getCommentsByIds(comments, popupFilm.comments)), BEFORE_END);
-bodyNode.classList.add(HIDE_OVERFLOW_CLASS);
+// renderBeforeEnd(bodyNode, createFilmDetailsTemplate(popupFilm, popupFilmComments));
+// bodyNode.classList.add(ClassName.HIDE_OVERFLOW);
 
 const onShowMoreButtonNodeClick = (evt) => {
   evt.preventDefault();
 
   films
-    .slice(renderedFilmsAmount, renderedFilmsAmount + MAIN_FILMS_STEP)
-    .forEach((film) => render(mainFilmsListNode, createFilmCardTemplate(film), BEFORE_END));
+    .slice(renderedFilmsAmount, renderedFilmsAmount + FILMS_STEP)
+    .forEach((film) => renderBeforeEnd(mainFilmsListNode, createFilmCardTemplate(film)));
 
-  renderedFilmsAmount += MAIN_FILMS_STEP;
+  renderedFilmsAmount += FILMS_STEP;
 
-  if (renderedFilmsAmount >= MAIN_FILMS_AMOUNT) {
+  if (renderedFilmsAmount >= filmsAmount) {
     shohMoreButtonNode.remove();
   }
 };

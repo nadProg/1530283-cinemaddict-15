@@ -1,6 +1,9 @@
-import { getReleaseDate, getRuntime, getCommentDate, formatRating } from '../utils.js';
+import { ClassName } from '../const.js';
+import { getReleaseDate, getRuntime, getCommentDate, formatRating, formatItems } from '../utils.js';
 
-const CONTROLS_ITEM_ACTIVE_CLASSNAME = 'film-details__control-button--active';
+const setActiveClassName = (condition) => condition ? ClassName.FILM_DETAILS_CONTROL_ACTIVE : '';
+
+const getGenreTermTextContent = (genres) => genres.length > 1 ? 'Genres' : 'Genre';
 
 const createGenreTemplate = (genre) => `<span class="film-details__genre">${genre}</span>`;
 
@@ -79,11 +82,11 @@ export const createFilmDetailsTemplate = (film, comments) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Writers</td>
-                  <td class="film-details__cell">${writers.join(', ')}</td>
+                  <td class="film-details__cell">${formatItems(writers)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Actors</td>
-                  <td class="film-details__cell">${actors.join(', ')}</td>
+                  <td class="film-details__cell">${formatItems(actors)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
@@ -98,9 +101,8 @@ export const createFilmDetailsTemplate = (film, comments) => {
                   <td class="film-details__cell">${country}</td>
                 </tr>
                 <tr class="film-details__row">
-                  <td class="film-details__term">Genre${genres.length > 1 ? 's' : ''}</td>
-                  <td class="film-details__cell">
-                    ${genresTemplate}
+                  <td class="film-details__term">${getGenreTermTextContent(genres)}</td>
+                  <td class="film-details__cell">${genresTemplate}</td>
                 </tr>
               </table>
 
@@ -111,9 +113,9 @@ export const createFilmDetailsTemplate = (film, comments) => {
           </div>
 
           <section class="film-details__controls">
-            <button type="button" class="film-details__control-button film-details__control-button--watchlist ${isToWatch ? CONTROLS_ITEM_ACTIVE_CLASSNAME : ''}" id="watchlist" name="watchlist">Add to watchlist</button>
-            <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched  ${isWatched ? CONTROLS_ITEM_ACTIVE_CLASSNAME : ''}" id="watched" name="watched">Already watched</button>
-            <button type="button" class="film-details__control-button film-details__control-button--favorite  ${isFavorite ? CONTROLS_ITEM_ACTIVE_CLASSNAME : ''}" id="favorite" name="favorite">Add to favorites</button>
+            <button type="button" class="film-details__control-button film-details__control-button--watchlist ${setActiveClassName(isToWatch)}" id="watchlist" name="watchlist">Add to watchlist</button>
+            <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched  ${setActiveClassName(isWatched)}" id="watched" name="watched">Already watched</button>
+            <button type="button" class="film-details__control-button film-details__control-button--favorite  ${setActiveClassName(isFavorite)}" id="favorite" name="favorite">Add to favorites</button>
           </section>
         </div>
 

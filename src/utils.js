@@ -1,8 +1,21 @@
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { Place } from './const';
 
 dayjs.extend(relativeTime);
+
+const render = (container, template, place) => {
+  container.insertAdjacentHTML(place, template);
+};
+
+export const renderAfterEnd = (container, template) => render(container, template, Place.AFTER_END);
+
+export const renderBeforeEnd = (container, template) => render(container, template, Place.BEFORE_END);
+
+export const sortFilmsByRating = (films) => [...films].sort((a, b) => b.filmInfo.rating - a.filmInfo.rating);
+
+export const sortFilmsByComments = (films) => [...films].sort((a, b) => b.comments.length - a.comments.length);
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -36,3 +49,5 @@ export const getRuntime = (minutesAmount) => dayjs().startOf('day').add(minutesA
 export const getCommentDate = (date) => dayjs(date).fromNow();
 
 export const formatRating = (rating) => rating.toFixed(1);
+
+export const formatItems = (items) => items.join(', ');
