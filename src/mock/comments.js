@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { EMOTIONS } from '../const.js';
 import { PEOPLE, COMMENT_PHRASES } from './mock-const.js';
-import { getRandomItemFromArray, getRandomInteger } from '../utils.js';
+import { getRandomItemFromArray, getRandomInteger, getRandomBoolean } from '../utils.js';
 
 const MIN_COMMENT_DAY_SHIFT = 0;
 const MAX_COMMENT_DAY_SHIFT = 180;
@@ -27,6 +27,14 @@ export const generateComment = (id) => ({
   emotion: generateEmotion(),
   date: generateCommentDate(),
 });
+
+export const generateNewComment = () => {
+  // Новый комментарий имеет текст и эмодзи с 50% вероятностью
+  const text = getRandomBoolean() ? generateText() : '';
+  const emotion = getRandomBoolean() ? generateEmotion() : '';
+
+  return { text, emotion };
+};
 
 const getCommentById = (comments, id) => comments.find((comment) => comment.id === id);
 

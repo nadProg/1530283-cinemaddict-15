@@ -1,5 +1,5 @@
 import { generateFilm, getTopRatedFilms, getMostCommentedFilms  } from './mock/films.js';
-import { generateComment, getCommentsByIds } from './mock/comments.js';
+import { generateComment, generateNewComment, getCommentsByIds } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
 import { ClassName, COMMENTS_AMOUNT, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_NAMES, MAX_FILMS_AMOUNT, MIN_FILMS_AMOUNT } from './const.js';
 import { getRandomInteger, renderAfterEnd, renderBeforeEnd } from './utils.js';
@@ -11,6 +11,8 @@ import { createFilmCardTemplate } from './views/film-card.js';
 import { createShowMoreButtonTemplate } from './views/show-more-button.js';
 import { createFooterStatisticsTemplate } from './views/footer-statistics.js';
 import { createFilmDetailsTemplate } from './views/film-details.js';
+import { createCommentsListTemplate } from './views/comments-list.js';
+import { createNewCommentTemplate } from './views/new-comment.js';
 
 const filmsAmount = getRandomInteger(MIN_FILMS_AMOUNT, MAX_FILMS_AMOUNT);
 
@@ -28,6 +30,7 @@ const mostCommentedFilms = getMostCommentedFilms(films);
 
 const popupFilm = films[0];
 const popupFilmComments = getCommentsByIds(comments, popupFilm.comments);
+const newComment = generateNewComment();
 
 console.log(films, comments, filters);
 
@@ -62,8 +65,13 @@ mostCommentedFilms
 
 renderBeforeEnd(footerNode, createFooterStatisticsTemplate(allFilmsAmount));
 
-// renderBeforeEnd(bodyNode, createFilmDetailsTemplate(popupFilm, popupFilmComments));
-// bodyNode.classList.add(ClassName.HIDE_OVERFLOW);
+renderBeforeEnd(bodyNode, createFilmDetailsTemplate(popupFilm));
+bodyNode.classList.add(ClassName.HIDE_OVERFLOW);
+
+const popupCommentsContainerNode = document.querySelector('.film-details__comments-wrap');
+
+renderBeforeEnd(popupCommentsContainerNode, createCommentsListTemplate(popupFilmComments));
+renderBeforeEnd(popupCommentsContainerNode, createNewCommentTemplate(newComment));
 
 const onShowMoreButtonNodeClick = (evt) => {
   evt.preventDefault();
