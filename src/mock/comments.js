@@ -28,6 +28,8 @@ export const generateComment = (id) => ({
   date: generateCommentDate(),
 });
 
+export const generateComments = (amount) => new Array(amount).fill().map((item, index) => generateComment(index + 1));
+
 export const generateNewComment = () => {
   // Новый комментарий имеет текст и эмодзи с 50% вероятностью
   const text = getRandomBoolean() ? generateText() : '';

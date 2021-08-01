@@ -1,5 +1,5 @@
-import { generateFilm, getTopRatedFilms, getMostCommentedFilms  } from './mock/films.js';
-import { generateComment, generateNewComment, getCommentsByIds } from './mock/comments.js';
+import { generateFilms, getTopRatedFilms, getMostCommentedFilms  } from './mock/films.js';
+import { generateComments, getCommentsByIds, generateNewComment } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
 import { ClassName, COMMENTS_AMOUNT, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES, MAX_FILMS_AMOUNT, MIN_FILMS_AMOUNT } from './const.js';
 import { getRandomInteger, renderAfterEnd, renderBeforeEnd } from './utils.js';
@@ -19,8 +19,8 @@ import { createNewCommentTemplate } from './views/new-comment.js';
 
 const filmsAmount = getRandomInteger(MIN_FILMS_AMOUNT, MAX_FILMS_AMOUNT);
 
-const films = new Array(filmsAmount).fill().map((item, index) => generateFilm(index + 1));
-const comments = new Array(COMMENTS_AMOUNT).fill().map((item, index) => generateComment(index + 1));
+const films = generateFilms(filmsAmount);
+const comments = generateComments(COMMENTS_AMOUNT);
 
 const filters = generateFilters(films);
 const allFilmsAmount = getFilterCountByName(filters, 'all');
@@ -34,16 +34,26 @@ const popupFilmComments = getCommentsByIds(comments, popupFilm.comments);
 const newComment = generateNewComment();
 
 
-// Рендеринг моковых данных
+// Поиск основных узлов для рендеринга
 
 const bodyNode = document.body;
 const headerNode = bodyNode.querySelector(`.${ClassName.HEADER}`);
 const mainNode = bodyNode.querySelector(`.${ClassName.MAIN}`);
 const footerNode = bodyNode.querySelector(`.${ClassName.FOOTER}`);
 
+
+// Рендеринг звания пользователя в хедере
+
 renderBeforeEnd(headerNode, createProfileTemplate(historyFilmsAmount));
 
+
+// Рендеринг навигации с фильтрами
+
 renderBeforeEnd(mainNode, createNavigationTemplate(filters, filters[0].name));
+
+
+// Рендеринг основного экрана - сортировка, списки фильмов, кнопка "Show More"
+
 renderBeforeEnd(mainNode, createSortListTemplate(SORT_TYPES, SORT_TYPES[0]));
 renderBeforeEnd(mainNode, createFilmsTemplate());
 
@@ -65,12 +75,18 @@ mostCommentedFilms
   .slice(0, EXTRA_FILMS_AMOUNT)
   .forEach((film) => renderBeforeEnd(mostCommentedFilmsListNode, createFilmCardTemplate(film)));
 
+
+// Рендеринг статистики в футере
+
 renderBeforeEnd(footerNode, createFooterStatisticsTemplate(allFilmsAmount));
+
+
+// Рендеринг попапа для первого фильма из списка
 
 renderBeforeEnd(bodyNode, createFilmDetailsTemplate(popupFilm));
 bodyNode.classList.add(ClassName.HIDE_OVERFLOW);
 
-const popupCommentsContainerNode = document.querySelector('.film-details__comments-wrap');
+const popupCommentsContainerNode = document.querySelector(`.${ClassName.COMMENTS_CONTAINER}`);
 
 renderBeforeEnd(popupCommentsContainerNode, createCommentsListTemplate(popupFilmComments));
 renderBeforeEnd(popupCommentsContainerNode, createNewCommentTemplate(newComment));
@@ -97,6 +113,6 @@ const onShowMoreButtonNodeClick = (evt) => {
 shohMoreButtonNode.addEventListener('click', onShowMoreButtonNodeClick);
 
 
-// Эмитрирует клик для рендеринга первых пяти карточек фильмов
+// Вызов клика для рендеринга первых пяти карточек фильмов
 
 shohMoreButtonNode.click();

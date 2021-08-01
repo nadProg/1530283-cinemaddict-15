@@ -21,6 +21,7 @@ export const ClassName = {
   HIDE_OVERFLOW: 'hide-overflow',
   SORT_ITEM_ACTIVE: 'sort__button--active',
   FILMS_CONTAINER: 'films-list__container',
+  COMMENTS_CONTAINER: 'film-details__comments-wrap',
   SHOW_MORE_BUTTON: 'films-list__show-more',
   NAVIGATION_ITEM_ACTIVE: 'main-navigation__item--active',
   FILM_CARD_CONTROL_ACTIVE: 'film-card__controls-item--active',
