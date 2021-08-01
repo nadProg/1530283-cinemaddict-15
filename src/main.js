@@ -32,14 +32,14 @@ const mostCommentedFilms = getMostCommentedFilms(films);
 const popupFilm = films[0];
 const popupFilmComments = getCommentsByIds(comments, popupFilm.comments);
 const newComment = generateNewComment();
-// console.log(films, comments, filters);
+
 
 // Рендеринг моковых данных
 
 const bodyNode = document.body;
-const headerNode = bodyNode.querySelector('.header');
-const mainNode = bodyNode.querySelector('.main');
-const footerNode = bodyNode.querySelector('.footer');
+const headerNode = bodyNode.querySelector(`.${ClassName.HEADER}`);
+const mainNode = bodyNode.querySelector(`.${ClassName.MAIN}`);
+const footerNode = bodyNode.querySelector(`.${ClassName.FOOTER}`);
 
 renderBeforeEnd(headerNode, createProfileTemplate(historyFilmsAmount));
 
@@ -51,11 +51,11 @@ const [
   mainFilmsListNode,
   topRatedFilmsListNode,
   mostCommentedFilmsListNode,
-] = mainNode.querySelectorAll('.films-list__container');
+] = mainNode.querySelectorAll(`.${ClassName.FILMS_CONTAINER}`);
 
 renderAfterEnd(mainFilmsListNode, createShowMoreButtonTemplate());
 
-const shohMoreButtonNode = mainNode.querySelector('.films-list__show-more');
+const shohMoreButtonNode = mainNode.querySelector(`.${ClassName.SHOW_MORE_BUTTON}`);
 
 topRatedFilms
   .slice(0, EXTRA_FILMS_AMOUNT)
@@ -67,13 +67,13 @@ mostCommentedFilms
 
 renderBeforeEnd(footerNode, createFooterStatisticsTemplate(allFilmsAmount));
 
-// renderBeforeEnd(bodyNode, createFilmDetailsTemplate(popupFilm));
-// bodyNode.classList.add(ClassName.HIDE_OVERFLOW);
+renderBeforeEnd(bodyNode, createFilmDetailsTemplate(popupFilm));
+bodyNode.classList.add(ClassName.HIDE_OVERFLOW);
 
-// const popupCommentsContainerNode = document.querySelector('.film-details__comments-wrap');
+const popupCommentsContainerNode = document.querySelector('.film-details__comments-wrap');
 
-// renderBeforeEnd(popupCommentsContainerNode, createCommentsListTemplate(popupFilmComments));
-// renderBeforeEnd(popupCommentsContainerNode, createNewCommentTemplate(newComment));
+renderBeforeEnd(popupCommentsContainerNode, createCommentsListTemplate(popupFilmComments));
+renderBeforeEnd(popupCommentsContainerNode, createNewCommentTemplate(newComment));
 
 
 // Активация кнопки "Show More"
@@ -97,6 +97,6 @@ const onShowMoreButtonNodeClick = (evt) => {
 shohMoreButtonNode.addEventListener('click', onShowMoreButtonNodeClick);
 
 
-// Имитация клика для рендеринга первых пяти карточек фильмов
+// Эмитрирует клик для рендеринга первых пяти карточек фильмов
 
 shohMoreButtonNode.click();

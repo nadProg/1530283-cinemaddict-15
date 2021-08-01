@@ -15,11 +15,16 @@ export const Place = {
 };
 
 export const ClassName = {
+  MAIN: 'main',
+  HEADER: 'header',
+  FOOTER: 'footer',
   HIDE_OVERFLOW: 'hide-overflow',
+  SORT_ITEM_ACTIVE: 'sort__button--active',
+  FILMS_CONTAINER: 'films-list__container',
+  SHOW_MORE_BUTTON: 'films-list__show-more',
+  NAVIGATION_ITEM_ACTIVE: 'main-navigation__item--active',
   FILM_CARD_CONTROL_ACTIVE: 'film-card__controls-item--active',
   FILM_DETAILS_CONTROL_ACTIVE: 'film-details__control-button--active',
-  NAVIGATION_ITEM_ACTIVE: 'main-navigation__item--active',
-  SORT_ITEM_ACTIVE: 'sort__button--active',
 };
 
 export const RANKS = ['none', 'novice', 'fan', 'movieBuff'];
