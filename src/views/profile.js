@@ -1,9 +1,23 @@
-import { RANKS, RankTextContent, RankUpperLimit } from '../const.js';
+import { RANKS } from '../const.js';
+
+const rankToTextContent = {
+  none: '',
+  novice: 'Novice',
+  fan: 'Fan',
+  movieBuff: 'Movie Buff',
+};
+
+const rankToUpperLimit = {
+  none: 0,
+  novice: 10,
+  fan: 20,
+  movieBuff: Infinity,
+};
 
 const getProfileRank = (watchedFilmsAmount) => {
   for (const userRank of RANKS) {
-    if (watchedFilmsAmount <= RankUpperLimit[userRank]) {
-      return RankTextContent[userRank];
+    if (watchedFilmsAmount <= rankToUpperLimit[userRank]) {
+      return rankToTextContent[userRank];
     }
   }
 };

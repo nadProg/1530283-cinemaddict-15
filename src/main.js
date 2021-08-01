@@ -1,7 +1,7 @@
 import { generateFilm, getTopRatedFilms, getMostCommentedFilms  } from './mock/films.js';
 import { generateComment, generateNewComment, getCommentsByIds } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
-import { ClassName, COMMENTS_AMOUNT, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_NAMES, MAX_FILMS_AMOUNT, MIN_FILMS_AMOUNT } from './const.js';
+import { ClassName, COMMENTS_AMOUNT, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES, MAX_FILMS_AMOUNT, MIN_FILMS_AMOUNT } from './const.js';
 import { getRandomInteger, renderAfterEnd, renderBeforeEnd } from './utils.js';
 import { createProfileTemplate } from './views/profile.js';
 import { createNavigationTemplate } from './views/navigation.js';
@@ -14,9 +14,10 @@ import { createFilmDetailsTemplate } from './views/film-details.js';
 import { createCommentsListTemplate } from './views/comments-list.js';
 import { createNewCommentTemplate } from './views/new-comment.js';
 
-const filmsAmount = getRandomInteger(MIN_FILMS_AMOUNT, MAX_FILMS_AMOUNT);
 
-let renderedFilmsAmount = 0;
+// Генерация моковых данных
+
+const filmsAmount = getRandomInteger(MIN_FILMS_AMOUNT, MAX_FILMS_AMOUNT);
 
 const films = new Array(filmsAmount).fill().map((item, index) => generateFilm(index + 1));
 const comments = new Array(COMMENTS_AMOUNT).fill().map((item, index) => generateComment(index + 1));
@@ -31,8 +32,9 @@ const mostCommentedFilms = getMostCommentedFilms(films);
 const popupFilm = films[0];
 const popupFilmComments = getCommentsByIds(comments, popupFilm.comments);
 const newComment = generateNewComment();
+// console.log(films, comments, filters);
 
-console.log(films, comments, filters);
+// Рендеринг моковых данных
 
 const bodyNode = document.body;
 const headerNode = bodyNode.querySelector('.header');
@@ -42,7 +44,7 @@ const footerNode = bodyNode.querySelector('.footer');
 renderBeforeEnd(headerNode, createProfileTemplate(historyFilmsAmount));
 
 renderBeforeEnd(mainNode, createNavigationTemplate(filters, filters[0].name));
-renderBeforeEnd(mainNode, createSortListTemplate(SORT_NAMES, SORT_NAMES[0]));
+renderBeforeEnd(mainNode, createSortListTemplate(SORT_TYPES, SORT_TYPES[0]));
 renderBeforeEnd(mainNode, createFilmsTemplate());
 
 const [
@@ -65,13 +67,18 @@ mostCommentedFilms
 
 renderBeforeEnd(footerNode, createFooterStatisticsTemplate(allFilmsAmount));
 
-renderBeforeEnd(bodyNode, createFilmDetailsTemplate(popupFilm));
-bodyNode.classList.add(ClassName.HIDE_OVERFLOW);
+// renderBeforeEnd(bodyNode, createFilmDetailsTemplate(popupFilm));
+// bodyNode.classList.add(ClassName.HIDE_OVERFLOW);
 
-const popupCommentsContainerNode = document.querySelector('.film-details__comments-wrap');
+// const popupCommentsContainerNode = document.querySelector('.film-details__comments-wrap');
 
-renderBeforeEnd(popupCommentsContainerNode, createCommentsListTemplate(popupFilmComments));
-renderBeforeEnd(popupCommentsContainerNode, createNewCommentTemplate(newComment));
+// renderBeforeEnd(popupCommentsContainerNode, createCommentsListTemplate(popupFilmComments));
+// renderBeforeEnd(popupCommentsContainerNode, createNewCommentTemplate(newComment));
+
+
+// Активация кнопки "Show More"
+
+let renderedFilmsAmount = 0;
 
 const onShowMoreButtonNodeClick = (evt) => {
   evt.preventDefault();
@@ -88,4 +95,8 @@ const onShowMoreButtonNodeClick = (evt) => {
 };
 
 shohMoreButtonNode.addEventListener('click', onShowMoreButtonNodeClick);
+
+
+// Имитация клика для рендеринга первых пяти карточек фильмов
+
 shohMoreButtonNode.click();
