@@ -1,3 +1,6 @@
+export const MIN_FILMS_AMOUNT = 15;
+export const MAX_FILMS_AMOUNT = 25;
+
 export const FILMS_STEP = 5;
 
 export const EXTRA_FILMS_AMOUNT = 2;
@@ -22,3 +25,19 @@ export const ClassName = {
 };
 
 export const SORT_NAMES = ['default', 'date', 'rating'];
+
+export const RankTextContent = {
+  NONE: '',
+  NOVICE: 'Novice',
+  FAN: 'Fan',
+  MOVIE_BUFF: 'Movie Buff',
+};
+
+export const RankUpperLimit = {
+  NONE: 0,
+  NOVICE: 10,
+  FAN: 20,
+  MOVIE_BUFF: Infinity,
+};
+
+export const RANKS = ['NONE', 'NOVICE', 'FAN', 'MOVIE_BUFF'];

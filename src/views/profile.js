@@ -1,24 +1,16 @@
-const ProfileRating = {
-  NOVICE: 'Novice',
-  FAN: 'Fan',
-  MOVIE_BUFF: 'Movie Buff',
-};
+import { RANKS, RankTextContent, RankUpperLimit } from '../const.js';
 
-const getProfileRating = (watchedFilmsAmount) => {
-  if (watchedFilmsAmount <= 10) {
-    return ProfileRating.NOVICE;
+const getProfileRank = (watchedFilmsAmount) => {
+  for (const userRank of RANKS) {
+    if (watchedFilmsAmount <= RankUpperLimit[userRank]) {
+      return RankTextContent[userRank];
+    }
   }
-
-  if (watchedFilmsAmount <= 20) {
-    return ProfileRating.FAN;
-  }
-
-  return ProfileRating.MOVIE_BUFF;
 };
 
 export const createProfileTemplate = (watchedFilmsAmount) => `
   <section class="header__profile profile">
-    ${watchedFilmsAmount ? `<p class="profile__rating">${getProfileRating(watchedFilmsAmount)}</p>` : ''}
+    ${watchedFilmsAmount ? `<p class="profile__rating">${getProfileRank(watchedFilmsAmount)}</p>` : ''}
     <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
   </section>
 `;
