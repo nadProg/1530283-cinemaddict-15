@@ -1,4 +1,4 @@
-import { getReleaseDate, getRuntime, getCommentDate } from '../utils.js';
+import { getReleaseDate, getRuntime, getCommentDate, formatRating } from '../utils.js';
 
 const CONTROLS_ITEM_ACTIVE_CLASSNAME = 'film-details__control-button--active';
 
@@ -26,11 +26,24 @@ const createCommentTemplate = (comment) => {
 
 export const createFilmDetailsTemplate = (film, comments) => {
   const { filmInfo, userDetails } = film;
-  const { title, originalTitle, totalRating, description, genres, poster, release, runtime, director, writers, actors, ageRating } = filmInfo;
   const { isWatched, isFavorite, isToWatch } = userDetails;
+  const {
+    title,
+    originalTitle,
+    rating,
+    description,
+    genres,
+    poster,
+    releaseDate,
+    country,
+    runtime,
+    director,
+    writers,
+    actors,
+    ageRating,
+  } = filmInfo;
 
   const genresTemplate = genres.map((genre) => createGenreTemplate(genre)).join('');
-
   const commentsTemplate = comments.map((comment) => createCommentTemplate(comment)).join('');
 
   return `
@@ -55,7 +68,7 @@ export const createFilmDetailsTemplate = (film, comments) => {
                 </div>
 
                 <div class="film-details__rating">
-                  <p class="film-details__total-rating">${totalRating}</p>
+                  <p class="film-details__total-rating">${formatRating(rating)}</p>
                 </div>
               </div>
 
@@ -74,7 +87,7 @@ export const createFilmDetailsTemplate = (film, comments) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${getReleaseDate(release.date)}</td>
+                  <td class="film-details__cell">${getReleaseDate(releaseDate)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
@@ -82,7 +95,7 @@ export const createFilmDetailsTemplate = (film, comments) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
-                  <td class="film-details__cell">${release.releaseCountry}</td>
+                  <td class="film-details__cell">${country}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Genre${genres.length > 1 ? 's' : ''}</td>

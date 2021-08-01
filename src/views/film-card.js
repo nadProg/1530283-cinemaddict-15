@@ -1,4 +1,4 @@
-import { getFullYear, getRuntime } from '../utils.js';
+import { getFullYear, getRuntime, formatRating } from '../utils.js';
 
 const MAX_DESCRIPTION_LENGTH = 140;
 const CONTROLS_ITEM_ACTIVE_CLASSNAME = 'film-card__controls-item--active';
@@ -8,16 +8,16 @@ const trimDescription = (description) => description.length <= MAX_DESCRIPTION_L
 
 export const createFilmCardTemplate = (film) => {
   const { comments, filmInfo, userDetails } = film;
-  const { title, totalRating, description, genres, poster, release, runtime } = filmInfo;
+  const { title, rating, description, genres, poster, releaseDate, runtime } = filmInfo;
   const { isWatched, isFavorite, isToWatch } = userDetails;
   const mainGenre = genres[0];
 
   return `
     <article class="film-card">
       <h3 class="film-card__title">${title}</h3>
-      <p class="film-card__rating">${totalRating}</p>
+      <p class="film-card__rating">${formatRating(rating)}</p>
       <p class="film-card__info">
-        <span class="film-card__year">${getFullYear(release.date)}</span>
+        <span class="film-card__year">${getFullYear(releaseDate)}</span>
         <span class="film-card__duration">${getRuntime(runtime)}</span>
         <span class="film-card__genre">${mainGenre}</span>
       </p>

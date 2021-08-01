@@ -30,13 +30,13 @@ export const PEOPLE = [
 export const TITLES = [
   'High Barbaree',
   'Pitfall',
-  'Week-End with Father',
-  'East Side of Heaven',
+  'Santa Claus Conquers the Martians',
+  'The Man with the Golden Arm',
   'It Had to Be You',
   'The Happy Years',
   'The Man from Yesterday',
   'Under California Stars',
-  'Journey for Margaret',
+  'Popeye the Sailor Meets Sindbad the Sailor',
   'Love Is Better Than Ever',
   'The Secret Garden',
   'The Green Years',
@@ -67,3 +67,11 @@ export const GENRES = [
 ];
 
 export const AGE_RATINGS = [0, 6, 12, 18];
+
+export const COMMENT_PHRASES = [
+  'Interesting setting and a good cast',
+  'a film that changed my life, a true masterpiece, post-credit scene was just amazing omg.',
+  'Booooooooooring',
+  'Very very old. Meh',
+  'Almost two hours? Seriously?',
+];

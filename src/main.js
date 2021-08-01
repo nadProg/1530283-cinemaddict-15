@@ -8,8 +8,8 @@ import { createFooterStatisticsTemplate } from './views/footer-statistics.js';
 import { createFilmDetailsTemplate } from './views/film-details.js';
 
 import { generateFilm } from './mock/film.js';
-import { generateFilters, getFilterCount } from './mock/filters.js';
-import { generateComment, getCommentsFromIds } from './mock/comment.js';
+import { generateFilters, getFilterCountByName } from './mock/filters.js';
+import { generateComment, getCommentsByIds } from './mock/comment.js';
 import { getRandomInteger } from './utils.js';
 
 const HIDE_OVERFLOW_CLASS = 'hide-overflow';
@@ -39,7 +39,7 @@ const headerNode = bodyNode.querySelector('.header');
 const mainNode = bodyNode.querySelector('.main');
 const footerNode = bodyNode.querySelector('.footer');
 
-render(headerNode, createProfileTemplate(getFilterCount(filters, 'history')), BEFORE_END);
+render(headerNode, createProfileTemplate(getFilterCountByName(filters, 'history')), BEFORE_END);
 
 render(mainNode, createNavigationTemplate(filters), BEFORE_END);
 render(mainNode, createSortTemplate(), BEFORE_END);
@@ -55,7 +55,7 @@ render(mainFilmsListNode, createShowMoreButtonTemplate(), AFTER_END);
 
 const shohMoreButtonNode = mainNode.querySelector('.films-list__show-more');
 
-const topRatedFilms = [...films].sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
+const topRatedFilms = [...films].sort((a, b) => b.filmInfo.rating - a.filmInfo.rating);
 const mostCommentedFilms = [...films].sort((a, b) => b.comments.length - a.comments.length);
 
 topRatedFilms
@@ -66,10 +66,11 @@ mostCommentedFilms
   .slice(0, EXTRA_FILMS_AMOUNT)
   .forEach((film) => render(mostCommentedFilmsListNode, createFilmCardTemplate(film), BEFORE_END));
 
-render(footerNode, createFooterStatisticsTemplate(getFilterCount(filters, 'all')), BEFORE_END);
+render(footerNode, createFooterStatisticsTemplate(getFilterCountByName(filters, 'all')), BEFORE_END);
 
-// render(bodyNode, createFilmDetailsTemplate(films[0], getCommentsFromIds(comments, films[0].comments)), BEFORE_END);
-// bodyNode.classList.add(HIDE_OVERFLOW_CLASS);
+const popupFilm = films[0];
+render(bodyNode, createFilmDetailsTemplate(popupFilm, getCommentsByIds(comments, popupFilm.comments)), BEFORE_END);
+bodyNode.classList.add(HIDE_OVERFLOW_CLASS);
 
 const onShowMoreButtonNodeClick = (evt) => {
   evt.preventDefault();

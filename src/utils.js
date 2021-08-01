@@ -33,6 +33,6 @@ export const getReleaseDate = (date) => dayjs(date).format('DD MMMM YYYY');
 
 export const getRuntime = (minutesAmount) => dayjs().startOf('day').add(minutesAmount, 'minute').format('H[h] mm[m]');
 
-// export const getCommentDate = (date) => dayjs(date).format('YYYY/MM/DD HH:mm');
-
 export const getCommentDate = (date) => dayjs(date).fromNow();
+
+export const formatRating = (rating) => rating.toFixed(1);
