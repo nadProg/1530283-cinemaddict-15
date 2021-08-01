@@ -13,10 +13,6 @@ export const renderAfterEnd = (container, template) => render(container, templat
 
 export const renderBeforeEnd = (container, template) => render(container, template, Place.BEFORE_END);
 
-export const sortFilmsByRating = (films) => [...films].sort((a, b) => b.filmInfo.rating - a.filmInfo.rating);
-
-export const sortFilmsByComments = (films) => [...films].sort((a, b) => b.comments.length - a.comments.length);
-
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));

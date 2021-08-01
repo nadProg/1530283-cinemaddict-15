@@ -8,10 +8,10 @@ const getGenreTermTextContent = (genres) => genres.length > 1 ? 'Genres' : 'Genr
 const createGenreTemplate = (genre) => `<span class="film-details__genre">${genre}</span>`;
 
 const createCommentTemplate = (comment) => {
-  const { author, date, emotion, text } = comment;
+  const { author, date, emotion, text, id } = comment;
 
   return `
-    <li class="film-details__comment">
+    <li class="film-details__comment" data-comment-id=${id}>
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
       </span>
@@ -28,7 +28,7 @@ const createCommentTemplate = (comment) => {
 };
 
 export const createFilmDetailsTemplate = (film, comments) => {
-  const { filmInfo, userDetails } = film;
+  const { filmInfo, userDetails, id } = film;
   const { isWatched, isFavorite, isToWatch } = userDetails;
   const {
     title,
@@ -50,7 +50,7 @@ export const createFilmDetailsTemplate = (film, comments) => {
   const commentsTemplate = comments.map((comment) => createCommentTemplate(comment)).join('');
 
   return `
-    <section class="film-details">
+    <section class="film-details" data-film-id=${id}>
       <form class="film-details__inner" action="" method="get">
         <div class="film-details__top-container">
           <div class="film-details__close">
@@ -114,7 +114,8 @@ export const createFilmDetailsTemplate = (film, comments) => {
 
           <section class="film-details__controls">
             <button type="button" class="film-details__control-button film-details__control-button--watchlist ${setActiveClassName(isToWatch)}" id="watchlist" name="watchlist">Add to watchlist</button>
-            <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched  ${setActiveClassName(isWatched)}" id="watched" name="watched">Already watched</button>
+            <button type="button" class="film-details__control-button film-details__control-button--watched ${setActiveClassName(isWatched)}"
+            id="watched" name="watched">Already watched</button>
             <button type="button" class="film-details__control-button film-details__control-button--favorite  ${setActiveClassName(isFavorite)}" id="favorite" name="favorite">Add to favorites</button>
           </section>
         </div>

@@ -7,13 +7,13 @@ const trimDescription = (description) => description.length <= MAX_DESCRIPTION_L
   description : `${description.slice(0, MAX_DESCRIPTION_LENGTH)}...`;
 
 export const createFilmCardTemplate = (film) => {
-  const { comments, filmInfo, userDetails } = film;
+  const { comments, filmInfo, userDetails, id } = film;
   const { title, rating, description, genres, poster, releaseDate, runtime } = filmInfo;
   const { isWatched, isFavorite, isToWatch } = userDetails;
   const mainGenre = genres[0];
 
   return `
-    <article class="film-card">
+    <article class="film-card" data-film-id=${id}>
       <h3 class="film-card__title">${title}</h3>
       <p class="film-card__rating">${formatRating(rating)}</p>
       <p class="film-card__info">

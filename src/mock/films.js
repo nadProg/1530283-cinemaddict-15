@@ -108,3 +108,7 @@ export const generateFilm = (id) => {
     },
   });
 };
+
+export const getTopRatedFilms = (films) => [...films].sort((a, b) => b.filmInfo.rating - a.filmInfo.rating);
+
+export const getMostCommentedFilms = (films) => [...films].sort((a, b) => b.comments.length - a.comments.length);

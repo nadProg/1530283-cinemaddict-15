@@ -22,10 +22,10 @@ const generateCommentDate = () => {
 
 export const generateComment = (id) => ({
   id,
-  author: generateAuthor(),
   text: generateText(),
-  date: generateCommentDate(),
+  author: generateAuthor(),
   emotion: generateEmotion(),
+  date: generateCommentDate(),
 });
 
 const getCommentById = (comments, id) => comments.find((comment) => comment.id === id);

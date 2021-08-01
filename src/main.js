@@ -1,8 +1,8 @@
-import { generateFilm } from './mock/film.js';
-import { generateComment, getCommentsByIds } from './mock/comment.js';
+import { generateFilm, getTopRatedFilms, getMostCommentedFilms  } from './mock/films.js';
+import { generateComment, getCommentsByIds } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
 import { ClassName, COMMENTS_AMOUNT, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_NAMES } from './const.js';
-import { getRandomInteger, renderAfterEnd, renderBeforeEnd, sortFilmsByRating, sortFilmsByComments } from './utils.js';
+import { getRandomInteger, renderAfterEnd, renderBeforeEnd } from './utils.js';
 import { createProfileTemplate } from './views/profile.js';
 import { createNavigationTemplate } from './views/navigation.js';
 import { createSortListTemplate } from './views/sort-list.js';
@@ -23,8 +23,8 @@ const filters = generateFilters(films);
 const allFilmsAmount = getFilterCountByName(filters, 'all');
 const historyFilmsAmount = getFilterCountByName(filters, 'history');
 
-const topRatedFilms = sortFilmsByRating(films);
-const mostCommentedFilms = sortFilmsByComments(films);
+const topRatedFilms = getTopRatedFilms(films);
+const mostCommentedFilms = getMostCommentedFilms(films);
 
 const popupFilm = films[0];
 const popupFilmComments = getCommentsByIds(comments, popupFilm.comments);
