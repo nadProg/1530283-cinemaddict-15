@@ -3,12 +3,12 @@ import { generateFilms, getTopRatedFilms, getMostCommentedFilms  } from './mock/
 import { generateComments, getCommentsByIds, generateNewComment } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
 import { ClassName, COMMENTS_AMOUNT, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES, MAX_FILMS_AMOUNT, MIN_FILMS_AMOUNT } from './const.js';
-import { getRandomInteger, renderAfterEnd, renderBeforeEnd, render } from './utils.js';
+import { getRandomInteger, render } from './utils.js';
 import ProfileView from './views/profile.js';
 import NavigationView from './views/navigation.js';
 import FilmsBoardView from './views/films-board.js';
 import FilmsListView from './views/films-list.js';
-import FilmsListContainerView from './views/film-list-container.js';
+import FilmsContainerView from './views/films-container.js';
 import SortBarView from './views/sort-bar.js';
 import FilmCardView from './views/film-card.js';
 import ShowMoreButtonView from './views/show-more-button.js';
@@ -16,7 +16,6 @@ import FooterStatisticView from './views/footer-statistic.js';
 import { createFilmDetailsTemplate } from './views/film-details.js';
 import { createCommentsListTemplate } from './views/comments-list.js';
 import { createNewCommentTemplate } from './views/new-comment.js';
-import FilmsBoard from './views/films-board.js';
 
 
 // Генерация моковых данных
@@ -74,39 +73,64 @@ const renderFilmCard = (container, film) => {
   render(container, filmCardComponent.getElement(), Place.BEFORE_END);
 };
 
-const renderFilmsList = (container, films) => {
-  const filmsListContainerComponent = new FilmsListContainerView();
-
-  films.forEach((film) => {
-    renderFilmCard(filmsListContainerComponent.getElement(), film);
-  });
-
-  render(container, filmsListContainerComponent.getElement(), Place.BEFORE_END);
-};
-
-
 const renderFilmsBoard = (container) => {
   const filmsBoardComponent = new FilmsBoardView();
 
-  const mainFilmsList = new FilmsListView('All movies. Upcoming');
-  const topRatedFilmsList = new FilmsListView('Top rated', 'extra');
-  const mostCommentedFilmsList = new FilmsListView('Most commented', 'extra');
+  const mainFilmsListComponent = new FilmsListView('All movies. Upcoming');
+  const topRatedFilmsListComponent = new FilmsListView('Top rated', 'extra');
+  const mostCommentedFilmsListComponent = new FilmsListView('Most commented', 'extra');
 
-  render(filmsBoardComponent.getElement(), mainFilmsList.getElement(), Place.BEFORE_END);
-  render(filmsBoardComponent.getElement(), topRatedFilmsList.getElement(), Place.BEFORE_END);
-  render(filmsBoardComponent.getElement(), mostCommentedFilmsList.getElement(), Place.BEFORE_END);
+  const mainFilmsContainerComponent = new FilmsContainerView();
+  const topRatedFilmsContainerComponent = new FilmsContainerView();
+  const mostCommentedFilmsContainerComponent = new FilmsContainerView();
 
-  renderFilmsList(mainFilmsList.getElement(), mockFilms);
-  renderFilmsList(topRatedFilmsList.getElement(), topRatedFilms.slice(0, EXTRA_FILMS_AMOUNT));
-  renderFilmsList(mostCommentedFilmsList.getElement(), mostCommentedFilms.slice(0, EXTRA_FILMS_AMOUNT));
+  const showMoreButtonComponent = new ShowMoreButtonView();
+
+  render(filmsBoardComponent.getElement(), mainFilmsListComponent.getElement(), Place.BEFORE_END);
+  render(filmsBoardComponent.getElement(), topRatedFilmsListComponent.getElement(), Place.BEFORE_END);
+  render(filmsBoardComponent.getElement(), mostCommentedFilmsListComponent.getElement(), Place.BEFORE_END);
+
+  render(mainFilmsListComponent.getElement(), mainFilmsContainerComponent.getElement(), Place.BEFORE_END);
+  render(topRatedFilmsListComponent.getElement(), topRatedFilmsContainerComponent.getElement(), Place.BEFORE_END);
+  render(mostCommentedFilmsListComponent.getElement(), mostCommentedFilmsContainerComponent.getElement(), Place.BEFORE_END);
+
+  let renderedFilmsAmount = 0;
+
+  const onShowMoreButtonClick = (evt) => {
+    evt.preventDefault();
+
+    mockFilms
+      .slice(renderedFilmsAmount, renderedFilmsAmount + FILMS_STEP)
+      .forEach((film) => {
+        renderFilmCard(mainFilmsContainerComponent.getElement(), film);
+      });
+
+    renderedFilmsAmount += FILMS_STEP;
+
+    if (renderedFilmsAmount >= filmsAmount) {
+      showMoreButtonComponent.getElement().remove();
+      showMoreButtonComponent.removeElement();
+    }
+  };
+
+  render(mainFilmsListComponent.getElement(), showMoreButtonComponent.getElement(), Place.BEFORE_END);
+  showMoreButtonComponent.getElement().addEventListener('click', onShowMoreButtonClick);
+  showMoreButtonComponent.getElement().click();
+
+  topRatedFilms
+    .slice(0, EXTRA_FILMS_AMOUNT)
+    .forEach((film) => {
+      renderFilmCard(topRatedFilmsContainerComponent.getElement(), film);
+    });
+
+  mostCommentedFilms
+    .slice(0, EXTRA_FILMS_AMOUNT)
+    .forEach((film) => {
+      renderFilmCard(mostCommentedFilmsContainerComponent.getElement(), film);
+    });
 
   render(container, filmsBoardComponent.getElement(), Place.BEFORE_END);
 };
-
-
-// renderAfterEnd(mainFilmsListNode, createShowMoreButtonTemplate());
-
-// const shohMoreButtonNode = mainElement.querySelector(`.${ClassName.SHOW_MORE_BUTTON}`);
 
 
 // Функция рендеринга статистики в футере
@@ -129,24 +153,6 @@ const renderFooterStatisctic = (container, amount) => {
 
 
 // Активация кнопки "Show More"
-
-// let renderedFilmsAmount = 0;
-
-// const onShowMoreButtonNodeClick = (evt) => {
-//   evt.preventDefault();
-
-//   films
-//     .slice(renderedFilmsAmount, renderedFilmsAmount + FILMS_STEP)
-//     .forEach((film) => renderBeforeEnd(mainFilmsListNode, createFilmCardTemplate(film)));
-
-//   renderedFilmsAmount += FILMS_STEP;
-
-//   if (renderedFilmsAmount >= filmsAmount) {
-//     shohMoreButtonNode.remove();
-//   }
-// };
-
-// shohMoreButtonNode.addEventListener('click', onShowMoreButtonNodeClick);
 
 
 // Вызов клика для рендеринга первых пяти карточек фильмов
