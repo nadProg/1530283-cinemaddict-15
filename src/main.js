@@ -13,7 +13,7 @@ import SortBarView from './views/sort-bar.js';
 import FilmCardView from './views/film-card.js';
 import ShowMoreButtonView from './views/show-more-button.js';
 import FooterStatisticView from './views/footer-statistic.js';
-import { createFilmDetailsTemplate } from './views/film-details.js';
+import FilmDetailsView from './views/film-details.js';
 import { createCommentsListTemplate } from './views/comments-list.js';
 import { createNewCommentTemplate } from './views/new-comment.js';
 
@@ -58,6 +58,26 @@ const renderNavigation = (container, filters, activeItem) => {
 };
 
 
+// *****
+
+const renderFilmDetails = (film, comments) => {
+  const filmDetailsComponent = new FilmDetailsView(film);
+
+  filmDetailsComponent.getElement().querySelector(`.${ClassName.FILM_DETAILS_CLOSE_BTN}`)
+    .addEventListener('click', () => {
+      filmDetailsComponent.getElement().remove();
+      filmDetailsComponent.removeElement();
+      bodyElement.classList.remove(ClassName.HIDE_OVERFLOW);
+    });
+
+  bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
+  render(bodyElement, filmDetailsComponent.getElement(), Place.BEFORE_END);
+};
+
+
+// *****
+
+
 // Рендеринг основного экрана - сортировка, списки фильмов, кнопка "Show More"
 
 const renderSortBar = (container, types, activeType) => {
@@ -67,6 +87,14 @@ const renderSortBar = (container, types, activeType) => {
 
 const renderFilmCard = (container, film) => {
   const filmCardComponent = new FilmCardView(film);
+  console.log(film);
+  filmCardComponent.getElement().querySelector(`.${ClassName.FILM_CARD_POSTER}`)
+    .addEventListener('click', () => renderFilmDetails(film));
+  filmCardComponent.getElement().querySelector(`.${ClassName.FILM_CARD_TITLE}`)
+    .addEventListener('click', () => renderFilmDetails(film));
+  filmCardComponent.getElement().querySelector(`.${ClassName.FILM_CARD_COMMENTS}`)
+    .addEventListener('click', () => renderFilmDetails(film));
+
   render(container, filmCardComponent.getElement(), Place.BEFORE_END);
 };
 

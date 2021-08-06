@@ -27,6 +27,10 @@ export const ClassName = {
   SHOW_MORE_BUTTON: 'films-list__show-more',
   NAVIGATION_ITEM_ACTIVE: 'main-navigation__item--active',
   FILM_CARD_CONTROL_ACTIVE: 'film-card__controls-item--active',
+  FILM_CARD_POSTER: 'film-card__poster',
+  FILM_CARD_TITLE: 'film-card__title',
+  FILM_CARD_COMMENTS: 'film-card__comments',
+  FILM_DETAILS_CLOSE_BTN: 'film-details__close-btn',
   FILM_DETAILS_CONTROL_ACTIVE: 'film-details__control-button--active',
 };
 
