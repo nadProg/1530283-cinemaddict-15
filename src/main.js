@@ -29,9 +29,6 @@ const mockFilters = generateFilters(mockFilms);
 const allFilmsAmount = getFilterCountByName(mockFilters, 'all');
 const historyFilmsAmount = getFilterCountByName(mockFilters, 'history');
 
-const topRatedFilms = getTopRatedFilms(mockFilms);
-const mostCommentedFilms = getMostCommentedFilms(mockFilms);
-
 const popupFilm = mockFilms[0];
 const popupFilmComments = getCommentsByIds(comments, popupFilm.comments);
 const newComment = generateNewComment();
@@ -73,7 +70,7 @@ const renderFilmCard = (container, film) => {
   render(container, filmCardComponent.getElement(), Place.BEFORE_END);
 };
 
-const renderFilmsBoard = (container) => {
+const renderFilmsBoard = (container, films) => {
   const filmsBoardComponent = new FilmsBoardView();
 
   const mainFilmsListComponent = new FilmsListView('All movies. Upcoming');
@@ -99,7 +96,7 @@ const renderFilmsBoard = (container) => {
   const onShowMoreButtonClick = (evt) => {
     evt.preventDefault();
 
-    mockFilms
+    films
       .slice(renderedFilmsAmount, renderedFilmsAmount + FILMS_STEP)
       .forEach((film) => {
         renderFilmCard(mainFilmsContainerComponent.getElement(), film);
@@ -117,13 +114,13 @@ const renderFilmsBoard = (container) => {
   showMoreButtonComponent.getElement().addEventListener('click', onShowMoreButtonClick);
   showMoreButtonComponent.getElement().click();
 
-  topRatedFilms
+  getTopRatedFilms(films)
     .slice(0, EXTRA_FILMS_AMOUNT)
     .forEach((film) => {
       renderFilmCard(topRatedFilmsContainerComponent.getElement(), film);
     });
 
-  mostCommentedFilms
+  getMostCommentedFilms(films)
     .slice(0, EXTRA_FILMS_AMOUNT)
     .forEach((film) => {
       renderFilmCard(mostCommentedFilmsContainerComponent.getElement(), film);
@@ -152,20 +149,12 @@ const renderFooterStatisctic = (container, amount) => {
 // renderBeforeEnd(popupCommentsContainerNode, createNewCommentTemplate(newComment));
 
 
-// Активация кнопки "Show More"
-
-
-// Вызов клика для рендеринга первых пяти карточек фильмов
-
-// shohMoreButtonNode.click();
-
-
 // Рендеринг
 
 renderProfile(headerElement, historyFilmsAmount);
 renderNavigation(mainElement, mockFilters, mockFilters[0].name);
 
 renderSortBar(mainElement, SORT_TYPES, SORT_TYPES[0]);
-renderFilmsBoard(mainElement);
+renderFilmsBoard(mainElement, mockFilms);
 
 renderFooterStatisctic(footerElement, allFilmsAmount);
