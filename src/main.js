@@ -90,6 +90,8 @@ const renderFilmsBoard = (container) => {
   render(filmsBoardComponent.getElement(), mostCommentedFilmsList.getElement(), Place.BEFORE_END);
 
   renderFilmsList(mainFilmsList.getElement(), mockFilms);
+  renderFilmsList(topRatedFilmsList.getElement(), topRatedFilms.slice(0, EXTRA_FILMS_AMOUNT));
+  renderFilmsList(mostCommentedFilmsList.getElement(), mostCommentedFilms.slice(0, EXTRA_FILMS_AMOUNT));
 
   render(container, filmsBoardComponent.getElement(), Place.BEFORE_END);
 };
