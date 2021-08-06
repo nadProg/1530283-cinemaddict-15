@@ -9,9 +9,9 @@ import NavigationView from './views/navigation.js';
 import FilmsBoardView from './views/films-board.js';
 import FilmsListView from './views/films-list.js';
 import FilmsListContainerView from './views/film-list-container.js';
-import { createSortListTemplate } from './views/sort-list.js';
+import SortBarView from './views/sort-bar.js';
 import FilmCardView from './views/film-card.js';
-import { createShowMoreButtonTemplate } from './views/show-more-button.js';
+import ShowMoreButtonView from './views/show-more-button.js';
 import FooterStatisticView from './views/footer-statistic.js';
 import { createFilmDetailsTemplate } from './views/film-details.js';
 import { createCommentsListTemplate } from './views/comments-list.js';
@@ -61,7 +61,15 @@ const renderNavigation = (container, filters, activeItem) => {
   render(container, navigationComponent.getElement(), Place.BEFORE_END);
 };
 
-const renderFilm = (container, film) => {
+
+// Рендеринг основного экрана - сортировка, списки фильмов, кнопка "Show More"
+
+const renderSortBar = (container, types, activeType) => {
+  const sortBarComponent = new SortBarView(types, activeType);
+  render(container, sortBarComponent.getElement(), Place.BEFORE_END);
+};
+
+const renderFilmCard = (container, film) => {
   const filmCardComponent = new FilmCardView(film);
   render(container, filmCardComponent.getElement(), Place.BEFORE_END);
 };
@@ -70,8 +78,7 @@ const renderFilmsList = (container, films) => {
   const filmsListContainerComponent = new FilmsListContainerView();
 
   films.forEach((film) => {
-    const filmCardComponent = new FilmCardView(film);
-    render(filmsListContainerComponent.getElement(), filmCardComponent.getElement(), Place.BEFORE_END);
+    renderFilmCard(filmsListContainerComponent.getElement(), film);
   });
 
   render(container, filmsListContainerComponent.getElement(), Place.BEFORE_END);
@@ -96,28 +103,10 @@ const renderFilmsBoard = (container) => {
   render(container, filmsBoardComponent.getElement(), Place.BEFORE_END);
 };
 
-// Рендеринг основного экрана - сортировка, списки фильмов, кнопка "Show More"
-
-// renderBeforeEnd(mainElement, createSortListTemplate(SORT_TYPES, SORT_TYPES[0]));
-// renderBeforeEnd(mainElement, createFilmsTemplate());
-
-// const [
-//   mainFilmsListNode,
-//   topRatedFilmsListNode,
-//   mostCommentedFilmsListNode,
-// ] = mainElement.querySelectorAll(`.${ClassName.FILMS_CONTAINER}`);
 
 // renderAfterEnd(mainFilmsListNode, createShowMoreButtonTemplate());
 
 // const shohMoreButtonNode = mainElement.querySelector(`.${ClassName.SHOW_MORE_BUTTON}`);
-
-// topRatedFilms
-//   .slice(0, EXTRA_FILMS_AMOUNT)
-//   .forEach((film) => renderBeforeEnd(topRatedFilmsListNode, createFilmCardTemplate(film)));
-
-// mostCommentedFilms
-//   .slice(0, EXTRA_FILMS_AMOUNT)
-//   .forEach((film) => renderBeforeEnd(mostCommentedFilmsListNode, createFilmCardTemplate(film)));
 
 
 // Функция рендеринга статистики в футере
@@ -170,6 +159,7 @@ const renderFooterStatisctic = (container, amount) => {
 renderProfile(headerElement, historyFilmsAmount);
 renderNavigation(mainElement, mockFilters, mockFilters[0].name);
 
+renderSortBar(mainElement, SORT_TYPES, SORT_TYPES[0]);
 renderFilmsBoard(mainElement);
 
 renderFooterStatisctic(footerElement, allFilmsAmount);
