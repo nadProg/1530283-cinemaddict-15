@@ -1,4 +1,5 @@
-import { ClassName } from '../const';
+import { createElement } from '../utils.js';
+import { ClassName } from '../const.js';
 
 const setActiveClassName = (condition) => condition ? ClassName.NAVIGATION_ITEM_ACTIVE : '';
 
@@ -17,7 +18,7 @@ const createFiltersTemplate = (filter, isChecked) => {
   return `<a href="#${name}" class="main-navigation__item ${setActiveClassName(isChecked)}">${textContent}</a>`;
 };
 
-export const createNavigationTemplate = (filters = [], activeItem) => {
+const createNavigationTemplate = (filters, activeItem) => {
   const isStatsChecked = activeItem === 'stats';
   const filtersTemplate = filters.map((filter) => createFiltersTemplate(filter, filter.name === activeItem)).join('');
   return `
@@ -29,3 +30,28 @@ export const createNavigationTemplate = (filters = [], activeItem) => {
     </nav>
   `;
 };
+
+export default class Navigation {
+  constructor(filters = [], activeItem) {
+    this._filters = filters;
+    this._activeItem = activeItem,
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createNavigationTemplate(this._filters, this._activeItem);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

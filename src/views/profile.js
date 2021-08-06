@@ -1,3 +1,4 @@
+import { createElement } from '../utils.js';
 import { RANKS } from '../const.js';
 
 const rankToTextContent = {
@@ -22,9 +23,33 @@ const getProfileRank = (watchedFilmsAmount) => {
   }
 };
 
-export const createProfileTemplate = (watchedFilmsAmount) => `
+const createProfileTemplate = (watchedFilmsAmount) => `
   <section class="header__profile profile">
     ${watchedFilmsAmount ? `<p class="profile__rating">${getProfileRank(watchedFilmsAmount)}</p>` : ''}
     <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
   </section>
 `;
+
+export default class Profile {
+  constructor(watchedFilmsAmount) {
+    this._watchedFilmsAmount = watchedFilmsAmount;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createProfileTemplate(this._watchedFilmsAmount);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -12,6 +12,8 @@ export const MAX_DESCRIPTION_LENGTH = 140;
 export const Place = {
   AFTER_END: 'afterend',
   BEFORE_END: 'beforeend',
+  AFTER_BEGIN: 'afterbegin',
+  BEFORE_BEGIN: 'beforebegin',
 };
 
 export const ClassName = {

@@ -1,15 +1,16 @@
+import { Place } from './const.js';
 import { generateFilms, getTopRatedFilms, getMostCommentedFilms  } from './mock/films.js';
 import { generateComments, getCommentsByIds, generateNewComment } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
 import { ClassName, COMMENTS_AMOUNT, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES, MAX_FILMS_AMOUNT, MIN_FILMS_AMOUNT } from './const.js';
-import { getRandomInteger, renderAfterEnd, renderBeforeEnd } from './utils.js';
-import { createProfileTemplate } from './views/profile.js';
-import { createNavigationTemplate } from './views/navigation.js';
+import { getRandomInteger, renderAfterEnd, renderBeforeEnd, render } from './utils.js';
+import ProfileView from './views/profile.js';
+import NavigationView from './views/navigation.js';
 import { createSortListTemplate } from './views/sort-list.js';
 import { createFilmsTemplate } from './views/films.js';
 import { createFilmCardTemplate } from './views/film-card.js';
 import { createShowMoreButtonTemplate } from './views/show-more-button.js';
-import { createFooterStatisticsTemplate } from './views/footer-statistics.js';
+import FooterStatisticView from './views/footer-statistic.js';
 import { createFilmDetailsTemplate } from './views/film-details.js';
 import { createCommentsListTemplate } from './views/comments-list.js';
 import { createNewCommentTemplate } from './views/new-comment.js';
@@ -19,100 +20,118 @@ import { createNewCommentTemplate } from './views/new-comment.js';
 
 const filmsAmount = getRandomInteger(MIN_FILMS_AMOUNT, MAX_FILMS_AMOUNT);
 
-const films = generateFilms(filmsAmount);
+const mockFilms = generateFilms(filmsAmount);
 const comments = generateComments(COMMENTS_AMOUNT);
 
-const filters = generateFilters(films);
-const allFilmsAmount = getFilterCountByName(filters, 'all');
-const historyFilmsAmount = getFilterCountByName(filters, 'history');
+const mockFilters = generateFilters(mockFilms);
+const allFilmsAmount = getFilterCountByName(mockFilters, 'all');
+const historyFilmsAmount = getFilterCountByName(mockFilters, 'history');
 
-const topRatedFilms = getTopRatedFilms(films);
-const mostCommentedFilms = getMostCommentedFilms(films);
+const topRatedFilms = getTopRatedFilms(mockFilms);
+const mostCommentedFilms = getMostCommentedFilms(mockFilms);
 
-const popupFilm = films[0];
+const popupFilm = mockFilms[0];
 const popupFilmComments = getCommentsByIds(comments, popupFilm.comments);
 const newComment = generateNewComment();
 
 
 // Поиск основных узлов для рендеринга
 
-const bodyNode = document.body;
-const headerNode = bodyNode.querySelector(`.${ClassName.HEADER}`);
-const mainNode = bodyNode.querySelector(`.${ClassName.MAIN}`);
-const footerNode = bodyNode.querySelector(`.${ClassName.FOOTER}`);
+const bodyElement = document.body;
+const headerElement = bodyElement.querySelector(`.${ClassName.HEADER}`);
+const mainElement = bodyElement.querySelector(`.${ClassName.MAIN}`);
+const footerElement = bodyElement.querySelector(`.${ClassName.FOOTER}`);
 
 
-// Рендеринг звания пользователя в хедере
+// Функция рендеринга звания пользователя в хедере
 
-renderBeforeEnd(headerNode, createProfileTemplate(historyFilmsAmount));
+const renderProfile = (container, watchedFilmsAmount) => {
+  const profileComponent = new ProfileView(watchedFilmsAmount);
+  render(container, profileComponent.getElement(), Place.BEFORE_END);
+};
 
 
-// Рендеринг навигации с фильтрами
+// Функция рендеринга навигации с фильтрами
 
-renderBeforeEnd(mainNode, createNavigationTemplate(filters, filters[0].name));
+const renderNavigation = (container, filters, activeItem) => {
+  const navigationComponent = new NavigationView(filters, activeItem);
+  render(container, navigationComponent.getElement(), Place.BEFORE_END);
+};
 
 
 // Рендеринг основного экрана - сортировка, списки фильмов, кнопка "Show More"
 
-renderBeforeEnd(mainNode, createSortListTemplate(SORT_TYPES, SORT_TYPES[0]));
-renderBeforeEnd(mainNode, createFilmsTemplate());
+// renderBeforeEnd(mainElement, createSortListTemplate(SORT_TYPES, SORT_TYPES[0]));
+// renderBeforeEnd(mainElement, createFilmsTemplate());
 
-const [
-  mainFilmsListNode,
-  topRatedFilmsListNode,
-  mostCommentedFilmsListNode,
-] = mainNode.querySelectorAll(`.${ClassName.FILMS_CONTAINER}`);
+// const [
+//   mainFilmsListNode,
+//   topRatedFilmsListNode,
+//   mostCommentedFilmsListNode,
+// ] = mainElement.querySelectorAll(`.${ClassName.FILMS_CONTAINER}`);
 
-renderAfterEnd(mainFilmsListNode, createShowMoreButtonTemplate());
+// renderAfterEnd(mainFilmsListNode, createShowMoreButtonTemplate());
 
-const shohMoreButtonNode = mainNode.querySelector(`.${ClassName.SHOW_MORE_BUTTON}`);
+// const shohMoreButtonNode = mainElement.querySelector(`.${ClassName.SHOW_MORE_BUTTON}`);
 
-topRatedFilms
-  .slice(0, EXTRA_FILMS_AMOUNT)
-  .forEach((film) => renderBeforeEnd(topRatedFilmsListNode, createFilmCardTemplate(film)));
+// topRatedFilms
+//   .slice(0, EXTRA_FILMS_AMOUNT)
+//   .forEach((film) => renderBeforeEnd(topRatedFilmsListNode, createFilmCardTemplate(film)));
 
-mostCommentedFilms
-  .slice(0, EXTRA_FILMS_AMOUNT)
-  .forEach((film) => renderBeforeEnd(mostCommentedFilmsListNode, createFilmCardTemplate(film)));
+// mostCommentedFilms
+//   .slice(0, EXTRA_FILMS_AMOUNT)
+//   .forEach((film) => renderBeforeEnd(mostCommentedFilmsListNode, createFilmCardTemplate(film)));
 
 
-// Рендеринг статистики в футере
+// Функция рендеринга статистики в футере
 
-renderBeforeEnd(footerNode, createFooterStatisticsTemplate(allFilmsAmount));
+const renderFooterStatisctic = (container, amount) => {
+  const footerStatisticComponent = new FooterStatisticView(amount);
+  render(container, footerStatisticComponent.getElement(), Place.BEFORE_END);
+};
 
 
 // Рендеринг попапа для первого фильма из списка
 
-renderBeforeEnd(bodyNode, createFilmDetailsTemplate(popupFilm));
-bodyNode.classList.add(ClassName.HIDE_OVERFLOW);
+// renderBeforeEnd(bodyNode, createFilmDetailsTemplate(popupFilm));
+// bodyNode.classList.add(ClassName.HIDE_OVERFLOW);
 
-const popupCommentsContainerNode = document.querySelector(`.${ClassName.COMMENTS_CONTAINER}`);
+// const popupCommentsContainerNode = document.querySelector(`.${ClassName.COMMENTS_CONTAINER}`);
 
-renderBeforeEnd(popupCommentsContainerNode, createCommentsListTemplate(popupFilmComments));
-renderBeforeEnd(popupCommentsContainerNode, createNewCommentTemplate(newComment));
+// renderBeforeEnd(popupCommentsContainerNode, createCommentsListTemplate(popupFilmComments));
+// renderBeforeEnd(popupCommentsContainerNode, createNewCommentTemplate(newComment));
 
 
 // Активация кнопки "Show More"
 
-let renderedFilmsAmount = 0;
+// let renderedFilmsAmount = 0;
 
-const onShowMoreButtonNodeClick = (evt) => {
-  evt.preventDefault();
+// const onShowMoreButtonNodeClick = (evt) => {
+//   evt.preventDefault();
 
-  films
-    .slice(renderedFilmsAmount, renderedFilmsAmount + FILMS_STEP)
-    .forEach((film) => renderBeforeEnd(mainFilmsListNode, createFilmCardTemplate(film)));
+//   films
+//     .slice(renderedFilmsAmount, renderedFilmsAmount + FILMS_STEP)
+//     .forEach((film) => renderBeforeEnd(mainFilmsListNode, createFilmCardTemplate(film)));
 
-  renderedFilmsAmount += FILMS_STEP;
+//   renderedFilmsAmount += FILMS_STEP;
 
-  if (renderedFilmsAmount >= filmsAmount) {
-    shohMoreButtonNode.remove();
-  }
-};
+//   if (renderedFilmsAmount >= filmsAmount) {
+//     shohMoreButtonNode.remove();
+//   }
+// };
 
-shohMoreButtonNode.addEventListener('click', onShowMoreButtonNodeClick);
+// shohMoreButtonNode.addEventListener('click', onShowMoreButtonNodeClick);
 
 
 // Вызов клика для рендеринга первых пяти карточек фильмов
 
-shohMoreButtonNode.click();
+// shohMoreButtonNode.click();
+
+
+// Рендеринг
+
+renderProfile(headerElement, historyFilmsAmount);
+renderNavigation(mainElement, mockFilters, mockFilters[0].name);
+
+
+renderFooterStatisctic(footerElement, allFilmsAmount);

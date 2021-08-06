@@ -1,17 +1,41 @@
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Place } from './const';
+import { Place } from './const.js';
 
 dayjs.extend(relativeTime);
 
-const render = (container, template, place) => {
+export const render = (container, element, place) => {
+  switch (place) {
+    case Place.BEFORE_END:
+      container.append(element);
+      break;
+    case Place.AFTER_BEGIN:
+      container.prepend(element);
+      break;
+    case Place.BEFORE_BEGIN:
+      container.before(element);
+      break;
+    case Place.AFTER_END:
+      container.after(element);
+      break;
+  }
+};
+
+export const createElement = (template) => {
+  const newElement = document.createElement('div');
+  newElement.innerHTML = template;
+
+  return newElement.firstElementChild;
+};
+
+const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-export const renderAfterEnd = (container, template) => render(container, template, Place.AFTER_END);
+export const renderAfterEnd = (container, template) => renderTemplate(container, template, Place.AFTER_END);
 
-export const renderBeforeEnd = (container, template) => render(container, template, Place.BEFORE_END);
+export const renderBeforeEnd = (container, template) => renderTemplate(container, template, Place.BEFORE_END);
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
