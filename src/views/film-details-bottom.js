@@ -1,15 +1,16 @@
-
 import { createElement } from '../utils.js';
 
-const createCommentsListTemplate = () => '<ul class="film-details__comments-list"></ul>';
+const createFilmDetailsBottomTemplate = () => '<div class="film-details__bottom-container"></div>';
 
-export default class CommentsList {
-  constructor() {
+export default class FilmDetailsBottom {
+  constructor(film) {
+    this._film = film;
+
     this._element = null;
   }
 
   getTemplate() {
-    return createCommentsListTemplate();
+    return createFilmDetailsBottomTemplate(this._film);
   }
 
   getElement() {

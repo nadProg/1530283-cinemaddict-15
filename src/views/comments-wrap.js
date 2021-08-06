@@ -1,15 +1,17 @@
 
 import { createElement } from '../utils.js';
 
-const createCommentsListTemplate = () => '<ul class="film-details__comments-list"></ul>';
+const createCommentsWrapTemplate = () => '<section class="film-details__comments-wrap"></section>';
 
-export default class CommentsList {
-  constructor() {
+export default class CommentsWrap {
+  constructor(film) {
+    this._film = film;
+
     this._element = null;
   }
 
   getTemplate() {
-    return createCommentsListTemplate();
+    return createCommentsWrapTemplate(this._film);
   }
 
   getElement() {

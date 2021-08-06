@@ -14,8 +14,12 @@ import FilmCardView from './views/film-card.js';
 import ShowMoreButtonView from './views/show-more-button.js';
 import FooterStatisticView from './views/footer-statistic.js';
 import FilmDetailsView from './views/film-details.js';
-import { createCommentsListTemplate } from './views/comments-list.js';
-import { createNewCommentTemplate } from './views/new-comment.js';
+import FilmDetailsBottomView from './views/film-details-bottom.js';
+import CommentsWrapView from './views/comments-wrap.js';
+import CommentsTitleView from './views/comments-title.js';
+import CommentsListView from './views/comments-list.js';
+import CommentView from './views/comment.js';
+import NewCommentView from './views/new-comment.js';
 
 
 // Генерация моковых данных
@@ -23,16 +27,13 @@ import { createNewCommentTemplate } from './views/new-comment.js';
 const filmsAmount = getRandomInteger(MIN_FILMS_AMOUNT, MAX_FILMS_AMOUNT);
 
 const mockFilms = generateFilms(filmsAmount);
-const comments = generateComments(COMMENTS_AMOUNT);
+const mockComments = generateComments(COMMENTS_AMOUNT);
+const mockNewComment = generateNewComment();
 
 const mockFilters = generateFilters(mockFilms);
+
 const allFilmsAmount = getFilterCountByName(mockFilters, 'all');
 const historyFilmsAmount = getFilterCountByName(mockFilters, 'history');
-
-const popupFilm = mockFilms[0];
-const popupFilmComments = getCommentsByIds(comments, popupFilm.comments);
-const newComment = generateNewComment();
-
 
 // Поиск основных узлов для рендеринга
 
@@ -60,8 +61,32 @@ const renderNavigation = (container, filters, activeItem) => {
 
 // *****
 
-const renderFilmDetails = (film, comments) => {
+const renderComments = (container, comments) => {
+  const commentTitleComponent = new CommentsTitleView(comments.length);
+  const commentsListComponent = new CommentsListView();
+
+  comments.forEach((comment) => {
+    const commentComponent = new CommentView(comment);
+    render(commentsListComponent.getElement(), commentComponent.getElement(), Place.BEFORE_END);
+  });
+
+  render(container, commentTitleComponent.getElement(), Place.BEFORE_END);
+  render(container, commentsListComponent.getElement(), Place.BEFORE_END);
+};
+
+const renderFilmDetails = (film) => {
   const filmDetailsComponent = new FilmDetailsView(film);
+  const filmDetailsBottomComponent = new FilmDetailsBottomView();
+  const commentsWrapComponent = new CommentsWrapView();
+  const newCommentComponent = new NewCommentView(mockNewComment);
+
+  render(filmDetailsComponent.getElement(), filmDetailsBottomComponent.getElement(), Place.BEFORE_END);
+  render(filmDetailsBottomComponent.getElement(), commentsWrapComponent.getElement(), Place.BEFORE_END);
+
+  const filmComments = getCommentsByIds(mockComments, film.comments);
+  renderComments(commentsWrapComponent.getElement(), filmComments);
+
+  render(commentsWrapComponent.getElement(), newCommentComponent.getElement(), Place.BEFORE_END);
 
   filmDetailsComponent.getElement().querySelector(`.${ClassName.FILM_DETAILS_CLOSE_BTN}`)
     .addEventListener('click', () => {
@@ -87,13 +112,17 @@ const renderSortBar = (container, types, activeType) => {
 
 const renderFilmCard = (container, film) => {
   const filmCardComponent = new FilmCardView(film);
-  console.log(film);
+
+  const showFilmDetails = () => {
+    renderFilmDetails(film );
+  };
+
   filmCardComponent.getElement().querySelector(`.${ClassName.FILM_CARD_POSTER}`)
-    .addEventListener('click', () => renderFilmDetails(film));
+    .addEventListener('click', () => showFilmDetails());
   filmCardComponent.getElement().querySelector(`.${ClassName.FILM_CARD_TITLE}`)
-    .addEventListener('click', () => renderFilmDetails(film));
+    .addEventListener('click', () => showFilmDetails());
   filmCardComponent.getElement().querySelector(`.${ClassName.FILM_CARD_COMMENTS}`)
-    .addEventListener('click', () => renderFilmDetails(film));
+    .addEventListener('click', () => showFilmDetails(film));
 
   render(container, filmCardComponent.getElement(), Place.BEFORE_END);
 };
@@ -167,9 +196,6 @@ const renderFooterStatisctic = (container, amount) => {
 
 
 // Рендеринг попапа для первого фильма из списка
-
-// renderBeforeEnd(bodyNode, createFilmDetailsTemplate(popupFilm));
-// bodyNode.classList.add(ClassName.HIDE_OVERFLOW);
 
 // const popupCommentsContainerNode = document.querySelector(`.${ClassName.COMMENTS_CONTAINER}`);
 

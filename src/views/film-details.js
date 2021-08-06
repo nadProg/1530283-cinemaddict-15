@@ -99,10 +99,6 @@ export const createFilmDetailsTemplate = (film) => {
             <button type="button" class="film-details__control-button film-details__control-button--favorite  ${setActiveClassName(isFavorite)}" id="favorite" name="favorite">Add to favorites</button>
           </section>
         </div>
-
-        <div class="film-details__bottom-container">
-          <section class="film-details__comments-wrap"></section>
-        </div>
       </form>
     </section>
   `;
