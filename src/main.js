@@ -1,8 +1,7 @@
-import { Place } from './const.js';
 import { generateFilms, getTopRatedFilms, getMostCommentedFilms  } from './mock/films.js';
 import { generateComments, getCommentsByIds, generateNewComment } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
-import { ClassName, COMMENTS_AMOUNT, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES, MAX_FILMS_AMOUNT, MIN_FILMS_AMOUNT } from './const.js';
+import { ClassName, Place, COMMENTS_AMOUNT, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES, MAX_FILMS_AMOUNT, MIN_FILMS_AMOUNT } from './const.js';
 import { getRandomInteger, render } from './utils.js';
 import ProfileView from './views/profile.js';
 import NavigationView from './views/navigation.js';
@@ -35,6 +34,7 @@ const mockFilters = generateFilters(mockFilms);
 const allFilmsAmount = getFilterCountByName(mockFilters, 'all');
 const historyFilmsAmount = getFilterCountByName(mockFilters, 'history');
 
+
 // Поиск основных узлов для рендеринга
 
 const bodyElement = document.body;
@@ -59,34 +59,40 @@ const renderNavigation = (container, filters, activeItem) => {
 };
 
 
-// *****
+// Функция рендеринга блока комментариев
 
-const renderComments = (container, comments) => {
+const renderComment = (container, comment) => {
+  const commentComponent = new CommentView(comment);
+  render(container, commentComponent.getElement(), Place.BEFORE_END);
+};
+
+const renderComments = (container, comments, newComment) => {
   const commentTitleComponent = new CommentsTitleView(comments.length);
   const commentsListComponent = new CommentsListView();
+  const newCommentComponent = new NewCommentView(newComment);
 
   comments.forEach((comment) => {
-    const commentComponent = new CommentView(comment);
-    render(commentsListComponent.getElement(), commentComponent.getElement(), Place.BEFORE_END);
+    renderComment(commentsListComponent.getElement(), comment);
   });
 
   render(container, commentTitleComponent.getElement(), Place.BEFORE_END);
   render(container, commentsListComponent.getElement(), Place.BEFORE_END);
+  render(container, newCommentComponent.getElement(), Place.BEFORE_END);
 };
+
+
+// Функция рендеринга попапа
 
 const renderFilmDetails = (film) => {
   const filmDetailsComponent = new FilmDetailsView(film);
   const filmDetailsBottomComponent = new FilmDetailsBottomView();
   const commentsWrapComponent = new CommentsWrapView();
-  const newCommentComponent = new NewCommentView(mockNewComment);
+
+  const filmComments = getCommentsByIds(mockComments, film.comments);
 
   render(filmDetailsComponent.getElement(), filmDetailsBottomComponent.getElement(), Place.BEFORE_END);
   render(filmDetailsBottomComponent.getElement(), commentsWrapComponent.getElement(), Place.BEFORE_END);
-
-  const filmComments = getCommentsByIds(mockComments, film.comments);
-  renderComments(commentsWrapComponent.getElement(), filmComments);
-
-  render(commentsWrapComponent.getElement(), newCommentComponent.getElement(), Place.BEFORE_END);
+  renderComments(commentsWrapComponent.getElement(), filmComments, mockNewComment);
 
   filmDetailsComponent.getElement().querySelector(`.${ClassName.FILM_DETAILS_CLOSE_BTN}`)
     .addEventListener('click', () => {
@@ -100,15 +106,15 @@ const renderFilmDetails = (film) => {
 };
 
 
-// *****
-
-
-// Рендеринг основного экрана - сортировка, списки фильмов, кнопка "Show More"
+// Функция рендеринга блока управления сортировкой
 
 const renderSortBar = (container, types, activeType) => {
   const sortBarComponent = new SortBarView(types, activeType);
   render(container, sortBarComponent.getElement(), Place.BEFORE_END);
 };
+
+
+// Функция рендеринга карточки фильма
 
 const renderFilmCard = (container, film) => {
   const filmCardComponent = new FilmCardView(film);
@@ -126,6 +132,12 @@ const renderFilmCard = (container, film) => {
 
   render(container, filmCardComponent.getElement(), Place.BEFORE_END);
 };
+
+
+// Функция рендеринга блока с карточками фильмов:
+//  - основной список с кнопкой Show More
+//  - блок Top Rated
+//  - блок Most Commented
 
 const renderFilmsBoard = (container, films) => {
   const filmsBoardComponent = new FilmsBoardView();
@@ -193,14 +205,6 @@ const renderFooterStatisctic = (container, amount) => {
   const footerStatisticComponent = new FooterStatisticView(amount);
   render(container, footerStatisticComponent.getElement(), Place.BEFORE_END);
 };
-
-
-// Рендеринг попапа для первого фильма из списка
-
-// const popupCommentsContainerNode = document.querySelector(`.${ClassName.COMMENTS_CONTAINER}`);
-
-// renderBeforeEnd(popupCommentsContainerNode, createCommentsListTemplate(popupFilmComments));
-// renderBeforeEnd(popupCommentsContainerNode, createNewCommentTemplate(newComment));
 
 
 // Рендеринг
