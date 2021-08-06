@@ -6,6 +6,9 @@ import { ClassName, COMMENTS_AMOUNT, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES,
 import { getRandomInteger, renderAfterEnd, renderBeforeEnd, render } from './utils.js';
 import ProfileView from './views/profile.js';
 import NavigationView from './views/navigation.js';
+import FilmsBoardView from './views/films-board.js';
+import FilmsListView from './views/films-list.js';
+import FilmsListContainerView from './views/film-list-container.js';
 import { createSortListTemplate } from './views/sort-list.js';
 import { createFilmsTemplate } from './views/films.js';
 import { createFilmCardTemplate } from './views/film-card.js';
@@ -14,6 +17,7 @@ import FooterStatisticView from './views/footer-statistic.js';
 import { createFilmDetailsTemplate } from './views/film-details.js';
 import { createCommentsListTemplate } from './views/comments-list.js';
 import { createNewCommentTemplate } from './views/new-comment.js';
+import FilmsBoard from './views/films-board.js';
 
 
 // Генерация моковых данных
@@ -58,6 +62,32 @@ const renderNavigation = (container, filters, activeItem) => {
   render(container, navigationComponent.getElement(), Place.BEFORE_END);
 };
 
+const renderFilm = (container, film) => {
+
+};
+
+const renderFilmsList = (container, films) => {
+  const filmsListContainerComponent = new FilmsListContainerView();
+
+  // рендер фильмов в промежуточный контайнер
+
+  render(container, filmsListContainerComponent.getElement(), Place.BEFORE_END);
+};
+
+
+const renderFilmsBoard = (container) => {
+  const filmsBoardComponent = new FilmsBoardView();
+
+  const mainFilmsList = new FilmsListView('All movies. Upcoming');
+  const topRatedFilmsList = new FilmsListView('Top rated', 'extra');
+  const mostCommentedFilmsList = new FilmsListView('Most commented', 'extra');
+
+  render(filmsBoardComponent.getElement(), mainFilmsList.getElement(), Place.BEFORE_END);
+  render(filmsBoardComponent.getElement(), topRatedFilmsList.getElement(), Place.BEFORE_END);
+  render(filmsBoardComponent.getElement(), mostCommentedFilmsList.getElement(), Place.BEFORE_END);
+
+  render(container, filmsBoardComponent.getElement(), Place.BEFORE_END);
+};
 
 // Рендеринг основного экрана - сортировка, списки фильмов, кнопка "Show More"
 
@@ -133,5 +163,6 @@ const renderFooterStatisctic = (container, amount) => {
 renderProfile(headerElement, historyFilmsAmount);
 renderNavigation(mainElement, mockFilters, mockFilters[0].name);
 
+renderFilmsBoard(mainElement);
 
 renderFooterStatisctic(footerElement, allFilmsAmount);
