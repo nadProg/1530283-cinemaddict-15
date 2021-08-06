@@ -10,8 +10,7 @@ import FilmsBoardView from './views/films-board.js';
 import FilmsListView from './views/films-list.js';
 import FilmsListContainerView from './views/film-list-container.js';
 import { createSortListTemplate } from './views/sort-list.js';
-import { createFilmsTemplate } from './views/films.js';
-import { createFilmCardTemplate } from './views/film-card.js';
+import FilmCardView from './views/film-card.js';
 import { createShowMoreButtonTemplate } from './views/show-more-button.js';
 import FooterStatisticView from './views/footer-statistic.js';
 import { createFilmDetailsTemplate } from './views/film-details.js';
@@ -63,13 +62,17 @@ const renderNavigation = (container, filters, activeItem) => {
 };
 
 const renderFilm = (container, film) => {
-
+  const filmCardComponent = new FilmCardView(film);
+  render(container, filmCardComponent.getElement(), Place.BEFORE_END);
 };
 
 const renderFilmsList = (container, films) => {
   const filmsListContainerComponent = new FilmsListContainerView();
 
-  // рендер фильмов в промежуточный контайнер
+  films.forEach((film) => {
+    const filmCardComponent = new FilmCardView(film);
+    render(filmsListContainerComponent.getElement(), filmCardComponent.getElement(), Place.BEFORE_END);
+  });
 
   render(container, filmsListContainerComponent.getElement(), Place.BEFORE_END);
 };
@@ -85,6 +88,8 @@ const renderFilmsBoard = (container) => {
   render(filmsBoardComponent.getElement(), mainFilmsList.getElement(), Place.BEFORE_END);
   render(filmsBoardComponent.getElement(), topRatedFilmsList.getElement(), Place.BEFORE_END);
   render(filmsBoardComponent.getElement(), mostCommentedFilmsList.getElement(), Place.BEFORE_END);
+
+  renderFilmsList(mainFilmsList.getElement(), mockFilms);
 
   render(container, filmsBoardComponent.getElement(), Place.BEFORE_END);
 };
