@@ -75,3 +75,37 @@ export const COMMENT_PHRASES = [
   'Very very old. Meh',
   'Almost two hours? Seriously?',
 ];
+
+export const MIN_FILMS_AMOUNT = 15;
+export const MAX_FILMS_AMOUNT = 20;
+
+export const MAX_FILM_PHRASE_AMOUNT = 5;
+
+export const MIN_RATING = 1;
+export const MAX_RATING = 10;
+
+export const MIN_GENRES_AMOUNT = 1;
+export const MAX_GENRES_AMOUNT = 3;
+
+export const MIN_RUNTIME = 30;
+export const MAX_RUNTIME = 160;
+
+export const MAX_WRITERS_AMOUNT = 3;
+
+export const MIN_ACTORS_AMOUNT = 3;
+export const MAX_ACTORS_AMOUNT = 6;
+
+export const MIN_WATCHING_DAY_SHIFT = 5;
+export const MAX_WATCHING_DAY_SHIFT = 60;
+
+export const MIN_RELEASE_YEAR_SHIFT = 40;
+export const MAX_RELEASE_YEAR_SHIFT = 80;
+export const MAX_RELEASE_DAY_SHIFT = 180;
+
+export const COMMENTS_AMOUNT = 100;
+
+export const MIN_COMMENT_DAY_SHIFT = 0;
+export const MAX_COMMENT_DAY_SHIFT = 180;
+
+export const MIN_COMMENT_MINUTE_SHIFT = 0;
+export const MAX_COMMENT_MINUTE_SHIFT = 700;

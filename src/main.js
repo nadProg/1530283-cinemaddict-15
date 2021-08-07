@@ -1,8 +1,8 @@
 import { generateFilms, getTopRatedFilms, getMostCommentedFilms  } from './mock/films.js';
 import { generateComments, getCommentsByIds, generateNewComment } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
-import { ClassName, Place, COMMENTS_AMOUNT, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES, MAX_FILMS_AMOUNT, MIN_FILMS_AMOUNT } from './const.js';
-import { getRandomInteger, render } from './utils.js';
+import { ClassName, Place, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES } from './const.js';
+import { render } from './utils.js';
 import ProfileView from './views/profile.js';
 import NavigationView from './views/navigation.js';
 import FilmsBoardView from './views/films-board.js';
@@ -23,10 +23,8 @@ import NewCommentView from './views/new-comment.js';
 
 // Генерация моковых данных
 
-const filmsAmount = getRandomInteger(MIN_FILMS_AMOUNT, MAX_FILMS_AMOUNT);
-
-const mockFilms = generateFilms(filmsAmount);
-const mockComments = generateComments(COMMENTS_AMOUNT);
+const mockFilms = generateFilms();
+const mockComments = generateComments();
 const mockNewComment = generateNewComment();
 
 const mockFilters = generateFilters(mockFilms);
@@ -173,7 +171,7 @@ const renderFilmsBoard = (container, films) => {
 
     renderedFilmsAmount += FILMS_STEP;
 
-    if (renderedFilmsAmount >= filmsAmount) {
+    if (renderedFilmsAmount >= films.length) {
       showMoreButtonComponent.getElement().remove();
       showMoreButtonComponent.removeElement();
     }

@@ -1,11 +1,6 @@
-export const MIN_FILMS_AMOUNT = 15;
-export const MAX_FILMS_AMOUNT = 20;
-
 export const FILMS_STEP = 5;
 
 export const EXTRA_FILMS_AMOUNT = 2;
-
-export const COMMENTS_AMOUNT = 100;
 
 export const MAX_DESCRIPTION_LENGTH = 140;
 
