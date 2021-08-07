@@ -1,17 +1,20 @@
-export const MIN_FILMS_AMOUNT = 15;
-export const MAX_FILMS_AMOUNT = 20;
+export const ESCAPE_CODE = 'Escape';
 
 export const FILMS_STEP = 5;
 
 export const EXTRA_FILMS_AMOUNT = 2;
 
-export const COMMENTS_AMOUNT = 100;
-
 export const MAX_DESCRIPTION_LENGTH = 140;
 
+export const RANKS = ['none', 'novice', 'fan', 'movieBuff'];
+
+export const SORT_ITEMS = ['default', 'date', 'rating'];
+
+export const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
+
 export const Place = {
-  AFTER_END: 'afterend',
   BEFORE_END: 'beforeend',
+  AFTER_BEGIN: 'afterbegin',
 };
 
 export const ClassName = {
@@ -25,11 +28,27 @@ export const ClassName = {
   SHOW_MORE_BUTTON: 'films-list__show-more',
   NAVIGATION_ITEM_ACTIVE: 'main-navigation__item--active',
   FILM_CARD_CONTROL_ACTIVE: 'film-card__controls-item--active',
+  FILM_CARD_POSTER: 'film-card__poster',
+  FILM_CARD_TITLE: 'film-card__title',
+  FILM_CARD_COMMENTS: 'film-card__comments',
+  FILM_DETAILS_CLOSE_BTN: 'film-details__close-btn',
   FILM_DETAILS_CONTROL_ACTIVE: 'film-details__control-button--active',
 };
 
-export const RANKS = ['none', 'novice', 'fan', 'movieBuff'];
-
-export const SORT_TYPES = ['default', 'date', 'rating'];
-
-export const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
+export const FilmsListOption = {
+  EMPTY: {
+    title: 'There are no movies in our database',
+  },
+  MAIN: {
+    title: 'All movies. Upcoming',
+    isTitleVisiallyHidden: true,
+  },
+  TOP_RATED: {
+    title: 'Top rated',
+    isExtra: true,
+  },
+  MOST_COMMENTED: {
+    title: 'Most commented',
+    isExtra: true,
+  },
+};

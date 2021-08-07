@@ -1,22 +1,25 @@
 import dayjs from 'dayjs';
 import { EMOTIONS } from '../const.js';
-import { PEOPLE, COMMENT_PHRASES } from './mock-const.js';
+import * as CommentMock from './mock-const.js';
 import { getRandomItemFromArray, getRandomInteger, getRandomBoolean } from '../utils.js';
 
-const MIN_COMMENT_DAY_SHIFT = 0;
-const MAX_COMMENT_DAY_SHIFT = 180;
-const MIN_COMMENT_MINUTE_SHIFT = 0;
-const MAX_COMMENT_MINUTE_SHIFT = 700;
-
-const generateAuthor = () => getRandomItemFromArray(PEOPLE);
+const generateAuthor = () => getRandomItemFromArray(CommentMock.PEOPLE);
 
 const generateEmotion = () => getRandomItemFromArray(EMOTIONS);
 
-const generateText = () => getRandomItemFromArray(COMMENT_PHRASES);
+const generateText = () => getRandomItemFromArray(CommentMock.COMMENT_PHRASES);
 
 const generateCommentDate = () => {
-  const commentDayShift = getRandomInteger(MIN_COMMENT_DAY_SHIFT, MAX_COMMENT_DAY_SHIFT);
-  const commentMinuteShift = getRandomInteger(MIN_COMMENT_MINUTE_SHIFT, MAX_COMMENT_MINUTE_SHIFT);
+  const commentDayShift = getRandomInteger(
+    CommentMock.MIN_COMMENT_DAY_SHIFT,
+    CommentMock.MAX_COMMENT_DAY_SHIFT,
+  );
+
+  const commentMinuteShift = getRandomInteger(
+    CommentMock.MIN_COMMENT_MINUTE_SHIFT,
+    CommentMock.MAX_COMMENT_MINUTE_SHIFT,
+  );
+
   return dayjs().subtract(commentDayShift, 'day').subtract(commentMinuteShift, 'minute').toDate();
 };
 
@@ -28,7 +31,10 @@ export const generateComment = (id) => ({
   date: generateCommentDate(),
 });
 
-export const generateComments = (amount) => new Array(amount).fill().map((item, index) => generateComment(index + 1));
+export const generateComments = () => {
+  const amount = CommentMock.COMMENTS_AMOUNT;
+  return new Array(amount).fill().map((item, index) => generateComment(index + 1));
+};
 
 export const generateNewComment = () => {
   // Новый комментарий имеет текст и эмодзи с 50% вероятностью

@@ -1,14 +1,15 @@
+
 import { createElement } from '../utils.js';
 
-export const createShowMoreButtonTemplate = () => '<button class="films-list__show-more">Show more</button>';
+const createCommentsContainerTemplate = () => '<section class="film-details__comments-wrap"></section>';
 
-export default class ShowMoreButton {
+export default class CommentsWrap {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createShowMoreButtonTemplate();
+    return createCommentsContainerTemplate();
   }
 
   getElement() {

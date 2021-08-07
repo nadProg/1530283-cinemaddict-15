@@ -1,3 +1,4 @@
+import { createElement } from '../utils.js';
 import { EMOTIONS } from '../const';
 
 const createEmotionInputTemplate = (emotion, isChecked) => {
@@ -31,3 +32,27 @@ export const createNewCommentTemplate = ({ text, emotion: currentEmotion }) => {
     </div>
   `;
 };
+
+export default class NewComment {
+  constructor(newComment) {
+    this._newComment = newComment;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createNewCommentTemplate(this._newComment );
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

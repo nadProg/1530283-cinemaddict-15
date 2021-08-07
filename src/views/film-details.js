@@ -1,5 +1,5 @@
 import { ClassName } from '../const.js';
-import { getReleaseDate, getRuntime, formatRating, formatItems } from '../utils.js';
+import { createElement, getReleaseDate, getRuntime, formatRating, formatItems } from '../utils.js';
 
 const setActiveClassName = (condition) => condition ? ClassName.FILM_DETAILS_CONTROL_ACTIVE : '';
 
@@ -98,11 +98,31 @@ export const createFilmDetailsTemplate = (film) => {
             <button type="button" class="film-details__control-button film-details__control-button--favorite  ${setActiveClassName(isFavorite)}" id="favorite" name="favorite">Add to favorites</button>
           </section>
         </div>
-
-        <div class="film-details__bottom-container">
-          <section class="film-details__comments-wrap"></section>
-        </div>
       </form>
     </section>
   `;
 };
+
+export default class FilmDetails {
+  constructor(film) {
+    this._film = film;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
