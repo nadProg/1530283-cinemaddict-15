@@ -219,14 +219,14 @@ const renderEmptyBoard = (container) => {
 
 // Функция рендеринга основного экрана приложения
 
-const renderMainScreen = (contaner, films) => {
+const renderMainScreen = (container, films) => {
   if (!films.length) {
-    renderEmptyBoard(contaner);
+    renderEmptyBoard(container);
     return;
   }
 
-  renderSortBar(contaner, SORT_ITEMS, SORT_ITEMS[0]);
-  renderFilmsBoard(contaner, films);
+  renderSortBar(container, SORT_ITEMS, SORT_ITEMS[0]);
+  renderFilmsBoard(container, films);
 };
 
 
