@@ -1,7 +1,7 @@
 import { generateFilms, getTopRatedFilms, getMostCommentedFilms  } from './mock/films.js';
 import { generateComments, getCommentsByIds, generateNewComment } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
-import { ClassName, Place, FilmListOption, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES } from './const.js';
+import { ClassName, Place, FilmsListOption, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES } from './const.js';
 import { render, remove, isEsc } from './utils.js';
 import ProfileView from './views/profile.js';
 import NavigationView from './views/navigation.js';
@@ -144,15 +144,15 @@ const renderFilmCard = (container, film) => {
 
 // Функция рендеринга блока с карточками фильмов:
 //  - основной список с кнопкой Show More
-//  - блок Top Rated
-//  - блок Most Commented
+//  - список Top Rated
+//  - список Most Commented
 
 const renderFilmsBoard = (container, films) => {
   const filmsBoardComponent = new FilmsBoardView();
 
-  const mainFilmsListComponent = new FilmsListView(FilmListOption.MAIN);
-  const topRatedFilmsListComponent = new FilmsListView(FilmListOption.TOP_RATED);
-  const mostCommentedFilmsListComponent = new FilmsListView(FilmListOption.MOST_COMMENTED);
+  const mainFilmsListComponent = new FilmsListView(FilmsListOption.MAIN);
+  const topRatedFilmsListComponent = new FilmsListView(FilmsListOption.TOP_RATED);
+  const mostCommentedFilmsListComponent = new FilmsListView(FilmsListOption.MOST_COMMENTED);
 
   const mainFilmsContainerComponent = new FilmsContainerView();
   const topRatedFilmsContainerComponent = new FilmsContainerView();
@@ -210,7 +210,7 @@ const renderFilmsBoard = (container, films) => {
 
 const renderEmptyBoard = (container) => {
   const filmsBoardComponent = new FilmsBoardView();
-  const mainFilmsListComponent = new FilmsListView(FilmListOption.EMPTY);
+  const mainFilmsListComponent = new FilmsListView(FilmsListOption.EMPTY);
 
   render(filmsBoardComponent.getElement(), mainFilmsListComponent.getElement(), Place.BEFORE_END);
   render(container, filmsBoardComponent.getElement(), Place.BEFORE_END);
@@ -238,11 +238,9 @@ const renderFooterStatisctic = (container, amount) => {
 };
 
 
-// Рендеринг
+// Рендеринг приложения
 
 renderProfile(headerElement, historyFilmsAmount);
 renderNavigation(mainElement, mockFilters, mockFilters[0].name);
-
 renderMainScreen(mainElement, mockFilms);
-
 renderFooterStatisctic(footerElement, allFilmsAmount);

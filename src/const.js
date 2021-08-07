@@ -6,11 +6,15 @@ export const EXTRA_FILMS_AMOUNT = 2;
 
 export const MAX_DESCRIPTION_LENGTH = 140;
 
+export const RANKS = ['none', 'novice', 'fan', 'movieBuff'];
+
+export const SORT_TYPES = ['default', 'date', 'rating'];
+
+export const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
+
 export const Place = {
-  AFTER_END: 'afterend',
   BEFORE_END: 'beforeend',
   AFTER_BEGIN: 'afterbegin',
-  BEFORE_BEGIN: 'beforebegin',
 };
 
 export const ClassName = {
@@ -31,13 +35,7 @@ export const ClassName = {
   FILM_DETAILS_CONTROL_ACTIVE: 'film-details__control-button--active',
 };
 
-export const RANKS = ['none', 'novice', 'fan', 'movieBuff'];
-
-export const SORT_TYPES = ['default', 'date', 'rating'];
-
-export const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
-
-export const FilmListOption = {
+export const FilmsListOption = {
   EMPTY: {
     title: 'There are no movies in our database',
   },
