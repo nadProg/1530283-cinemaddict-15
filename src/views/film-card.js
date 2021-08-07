@@ -1,6 +1,5 @@
-import { createElement } from '../utils.js';
 import { MAX_DESCRIPTION_LENGTH, ClassName } from '../const.js';
-import { getFullYear, getRuntime, formatRating } from '../utils.js';
+import { createElement, getFullYear, getRuntime, formatRating } from '../utils.js';
 
 const setActiveClassName = (condition) => condition ? ClassName.FILM_CARD_CONTROL_ACTIVE : '';
 

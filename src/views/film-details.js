@@ -1,6 +1,5 @@
-import { createElement } from '../utils.js';
 import { ClassName } from '../const.js';
-import { getReleaseDate, getRuntime, formatRating, formatItems } from '../utils.js';
+import { createElement, getReleaseDate, getRuntime, formatRating, formatItems } from '../utils.js';
 
 const setActiveClassName = (condition) => condition ? ClassName.FILM_DETAILS_CONTROL_ACTIVE : '';
 
