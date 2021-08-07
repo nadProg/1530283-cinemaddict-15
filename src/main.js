@@ -2,7 +2,7 @@ import { generateFilms, getTopRatedFilms, getMostCommentedFilms  } from './mock/
 import { generateComments, getCommentsByIds, generateNewComment } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
 import { ClassName, Place, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES } from './const.js';
-import { render, remove } from './utils.js';
+import { render, remove, isEsc } from './utils.js';
 import ProfileView from './views/profile.js';
 import NavigationView from './views/navigation.js';
 import FilmsBoardView from './views/films-board.js';
@@ -88,20 +88,28 @@ const renderFilmDetails = (container, film) => {
 
   const filmComments = getCommentsByIds(mockComments, film.comments);
 
-  const hideFilmDetails = () => {
-    remove(filmDetailsComponent);
-    bodyElement.classList.remove(ClassName.HIDE_OVERFLOW);
+  const onDocumentKeydown = (evt) => {
+    if (isEsc(evt)) {
+      evt.preventDefault();
+      hideFilmDetails();
+    }
   };
 
   render(filmDetailsComponent.getElement(), filmDetailsBottomComponent.getElement(), Place.BEFORE_END);
   render(filmDetailsBottomComponent.getElement(), commentsWrapComponent.getElement(), Place.BEFORE_END);
   renderComments(commentsWrapComponent.getElement(), filmComments, mockNewComment);
 
+  document.addEventListener('keydown', onDocumentKeydown);
   filmDetailsComponent.getElement().querySelector(`.${ClassName.FILM_DETAILS_CLOSE_BTN}`)
     .addEventListener('click', hideFilmDetails);
 
-  bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
   render(container, filmDetailsComponent.getElement(), Place.BEFORE_END);
+
+  function hideFilmDetails() {
+    remove(filmDetailsComponent);
+    bodyElement.classList.remove(ClassName.HIDE_OVERFLOW);
+    document.removeEventListener('keydown', onDocumentKeydown);
+  }
 };
 
 
@@ -119,6 +127,7 @@ const renderFilmCard = (container, film) => {
   const filmCardComponent = new FilmCardView(film);
 
   const showFilmDetails = () => {
+    bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
     renderFilmDetails(bodyElement, film);
   };
 

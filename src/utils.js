@@ -1,9 +1,10 @@
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Place } from './const.js';
+import { Place, ESCAPE_CODE } from './const.js';
 
 dayjs.extend(relativeTime);
+
 
 export const render = (container, element, place) => {
   switch (place) {
@@ -27,6 +28,8 @@ export const createElement = (template) => {
 
   return newElement.firstElementChild;
 };
+
+export const isEsc = ({ code }) => code === ESCAPE_CODE;
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));

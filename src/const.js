@@ -1,3 +1,5 @@
+export const ESCAPE_CODE = 'Escape';
+
 export const FILMS_STEP = 5;
 
 export const EXTRA_FILMS_AMOUNT = 2;
