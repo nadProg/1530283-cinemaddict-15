@@ -3,7 +3,7 @@ import { createElement } from '../utils.js';
 
 const createCommentsWrapTemplate = (amount) => `
   <h3 class="film-details__comments-title">
-  Comments <span class="film-details__comments-count">${amount}</span>
+    Comments <span class="film-details__comments-count">${amount}</span>
   </h3>
 `;
 

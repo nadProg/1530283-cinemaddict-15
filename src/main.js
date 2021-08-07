@@ -1,7 +1,7 @@
 import { generateFilms, getTopRatedFilms, getMostCommentedFilms  } from './mock/films.js';
 import { generateComments, getCommentsByIds, generateNewComment } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
-import { ClassName, Place, FilmsListOption, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES } from './const.js';
+import { ClassName, Place, FilmsListOption, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_ITEMS } from './const.js';
 import { render, remove, isEsc } from './utils.js';
 import ProfileView from './views/profile.js';
 import NavigationView from './views/navigation.js';
@@ -14,7 +14,7 @@ import ShowMoreButtonView from './views/show-more-button.js';
 import FooterStatisticView from './views/footer-statistic.js';
 import FilmDetailsView from './views/film-details.js';
 import FilmDetailsBottomView from './views/film-details-bottom.js';
-import CommentsWrapView from './views/comments-wrap.js';
+import CommentsContainerView from './views/comments-container.js';
 import CommentsTitleView from './views/comments-title.js';
 import CommentsListView from './views/comments-list.js';
 import CommentView from './views/comment.js';
@@ -84,7 +84,7 @@ const renderComments = (container, comments, newComment) => {
 const renderFilmDetails = (container, film) => {
   const filmDetailsComponent = new FilmDetailsView(film);
   const filmDetailsBottomComponent = new FilmDetailsBottomView();
-  const commentsWrapComponent = new CommentsWrapView();
+  const commentsContainerViewComponent = new CommentsContainerView();
 
   const filmComments = getCommentsByIds(mockComments, film.comments);
 
@@ -96,8 +96,8 @@ const renderFilmDetails = (container, film) => {
   };
 
   render(filmDetailsComponent.getElement(), filmDetailsBottomComponent.getElement(), Place.BEFORE_END);
-  render(filmDetailsBottomComponent.getElement(), commentsWrapComponent.getElement(), Place.BEFORE_END);
-  renderComments(commentsWrapComponent.getElement(), filmComments, mockNewComment);
+  render(filmDetailsBottomComponent.getElement(), commentsContainerViewComponent.getElement(), Place.BEFORE_END);
+  renderComments(commentsContainerViewComponent.getElement(), filmComments, mockNewComment);
 
   document.addEventListener('keydown', onDocumentKeydown);
   filmDetailsComponent.getElement().querySelector(`.${ClassName.FILM_DETAILS_CLOSE_BTN}`)
@@ -115,8 +115,8 @@ const renderFilmDetails = (container, film) => {
 
 // Функция рендеринга блока управления сортировкой
 
-const renderSortBar = (container, types, activeType) => {
-  const sortBarComponent = new SortBarView(types, activeType);
+const renderSortBar = (container, items, activeItem) => {
+  const sortBarComponent = new SortBarView(items, activeItem);
   render(container, sortBarComponent.getElement(), Place.BEFORE_END);
 };
 
@@ -225,7 +225,7 @@ const renderMainScreen = (contaner, films) => {
     return;
   }
 
-  renderSortBar(contaner, SORT_TYPES, SORT_TYPES[0]);
+  renderSortBar(contaner, SORT_ITEMS, SORT_ITEMS[0]);
   renderFilmsBoard(contaner, films);
 };
 

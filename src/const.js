@@ -8,7 +8,7 @@ export const MAX_DESCRIPTION_LENGTH = 140;
 
 export const RANKS = ['none', 'novice', 'fan', 'movieBuff'];
 
-export const SORT_TYPES = ['default', 'date', 'rating'];
+export const SORT_ITEMS = ['default', 'date', 'rating'];
 
 export const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
 

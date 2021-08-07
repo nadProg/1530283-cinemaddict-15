@@ -3,9 +3,7 @@ import { createElement } from '../utils.js';
 const createFilmsBoardTemplate = () => '<section class="films"></section>';
 
 export default class FilmsBoard {
-  constructor(amount) {
-    this._amount = amount;
-
+  constructor() {
     this._element = null;
   }
 

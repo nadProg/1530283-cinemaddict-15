@@ -9,21 +9,21 @@ const createSortItemTemplate = (sortType, isChecked) => `
   </li>
 `;
 
-export const createSortBarTemplate = (sortTypes = [], activeSortType) => {
-  const sortItemsTemplate = sortTypes.map((sortType) => createSortItemTemplate(sortType, sortType === activeSortType)).join('');
+export const createSortBarTemplate = (sortItems = [], activeSortItem) => {
+  const sortItemsTemplate = sortItems.map((sortItem) => createSortItemTemplate(sortItem, sortItem === activeSortItem)).join('');
   return `<ul class="sort">${sortItemsTemplate}</ul>`;
 };
 
 export default class SortBar {
-  constructor(types, activeType) {
-    this._types = types;
-    this._activeType = activeType;
+  constructor(items, activeItem) {
+    this._items = items;
+    this._activeItem = activeItem;
 
     this._element = null;
   }
 
   getTemplate() {
-    return createSortBarTemplate(this._types, this._activeType);
+    return createSortBarTemplate(this._items, this._activeItem);
   }
 
   getElement() {

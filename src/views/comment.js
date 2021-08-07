@@ -22,14 +22,14 @@ const createCommentTemplate = (comment) => {
 };
 
 export default class Comment {
-  constructor(amount) {
-    this._amount = amount;
+  constructor(comment) {
+    this._comment = comment;
 
     this._element = null;
   }
 
   getTemplate() {
-    return createCommentTemplate(this._amount);
+    return createCommentTemplate(this._comment);
   }
 
   getElement() {

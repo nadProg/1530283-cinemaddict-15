@@ -1,21 +1,20 @@
 import { createElement } from '../utils.js';
 
-const createFilmsListTemplate = ({title, isExtra, isTitleVisiallyHidden }) => `
+const createFilmsListTemplate = ({ title, isExtra, isTitleVisiallyHidden }) => `
     <section class="films-list ${isExtra ? 'films-list--extra' : ''}">
       <h2 class="films-list__title ${isTitleVisiallyHidden ? 'visually-hidden' : ''}">${title}</h2>
     </section>
   `;
 
 export default class FilmsList {
-  constructor(title, type) {
-    this._title = title;
-    this._type = type;
+  constructor(options) {
+    this._options = options;
 
     this._element = null;
   }
 
   getTemplate() {
-    return createFilmsListTemplate(this._title, this._type);
+    return createFilmsListTemplate(this._options);
   }
 
   getElement() {

@@ -1,20 +1,20 @@
 import { createElement } from '../utils.js';
 
-export const createFooterStatisticTemplate = (amount) => `
+export const createFooterStatisticTemplate = (totalFilmsAmount) => `
   <section class="footer__statistics">
-    <p>${amount} movies inside</p>
+    <p>${totalFilmsAmount} movies inside</p>
   </section>
 `;
 
 export default class FooterStatistic {
-  constructor(amount) {
-    this._amount = amount;
+  constructor(totalFilmsAmount) {
+    this._totalFilmsAmount = totalFilmsAmount;
 
     this._element = null;
   }
 
   getTemplate() {
-    return createFooterStatisticTemplate(this._amount);
+    return createFooterStatisticTemplate(this._totalFilmsAmount);
   }
 
   getElement() {

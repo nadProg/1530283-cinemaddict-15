@@ -3,14 +3,12 @@ import { createElement } from '../utils.js';
 const createFilmDetailsBottomTemplate = () => '<div class="film-details__bottom-container"></div>';
 
 export default class FilmDetailsBottom {
-  constructor(film) {
-    this._film = film;
-
+  constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createFilmDetailsBottomTemplate(this._film);
+    return createFilmDetailsBottomTemplate();
   }
 
   getElement() {
