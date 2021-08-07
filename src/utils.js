@@ -5,7 +5,6 @@ import { Place, ESCAPE_CODE } from './const.js';
 
 dayjs.extend(relativeTime);
 
-
 export const render = (container, element, place) => {
   switch (place) {
     case Place.BEFORE_END:

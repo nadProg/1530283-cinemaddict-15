@@ -36,3 +36,21 @@ export const RANKS = ['none', 'novice', 'fan', 'movieBuff'];
 export const SORT_TYPES = ['default', 'date', 'rating'];
 
 export const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
+
+export const FilmListOption = {
+  EMPTY: {
+    title: 'There are no movies in our database',
+  },
+  MAIN: {
+    title: 'All movies. Upcoming',
+    isTitleVisiallyHidden: true,
+  },
+  TOP_RATED: {
+    title: 'Top rated',
+    isExtra: true,
+  },
+  MOST_COMMENTED: {
+    title: 'Most commented',
+    isExtra: true,
+  },
+};

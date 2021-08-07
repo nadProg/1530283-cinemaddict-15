@@ -1,7 +1,7 @@
 import { generateFilms, getTopRatedFilms, getMostCommentedFilms  } from './mock/films.js';
 import { generateComments, getCommentsByIds, generateNewComment } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
-import { ClassName, Place, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES } from './const.js';
+import { ClassName, Place, FilmListOption, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES } from './const.js';
 import { render, remove, isEsc } from './utils.js';
 import ProfileView from './views/profile.js';
 import NavigationView from './views/navigation.js';
@@ -150,21 +150,9 @@ const renderFilmCard = (container, film) => {
 const renderFilmsBoard = (container, films) => {
   const filmsBoardComponent = new FilmsBoardView();
 
-  const mainFilmsListOptions = films.length ?
-    {title: 'All movies. Upcoming', isTitleVisiallyHidden: true} :
-    {title: 'There are no movies in our database'};
-
-  const mainFilmsListComponent = new FilmsListView(mainFilmsListOptions);
-
-
-  if (!films.length) {
-    render(filmsBoardComponent.getElement(), mainFilmsListComponent.getElement(), Place.BEFORE_END);
-    render(container, filmsBoardComponent.getElement(), Place.BEFORE_END);
-    return;
-  }
-
-  const topRatedFilmsListComponent = new FilmsListView({title: 'Top rated', isExtra: true});
-  const mostCommentedFilmsListComponent = new FilmsListView({title: 'Most commented', isExtra: true});
+  const mainFilmsListComponent = new FilmsListView(FilmListOption.MAIN);
+  const topRatedFilmsListComponent = new FilmsListView(FilmListOption.TOP_RATED);
+  const mostCommentedFilmsListComponent = new FilmsListView(FilmListOption.MOST_COMMENTED);
 
   const mainFilmsContainerComponent = new FilmsContainerView();
   const topRatedFilmsContainerComponent = new FilmsContainerView();
@@ -218,13 +206,26 @@ const renderFilmsBoard = (container, films) => {
 };
 
 
+// Функция рендеринга блока без карточек фильмов
+
+const renderEmptyBoard = (container) => {
+  const filmsBoardComponent = new FilmsBoardView();
+  const mainFilmsListComponent = new FilmsListView(FilmListOption.EMPTY);
+
+  render(filmsBoardComponent.getElement(), mainFilmsListComponent.getElement(), Place.BEFORE_END);
+  render(container, filmsBoardComponent.getElement(), Place.BEFORE_END);
+};
+
+
 // Функция рендеринга основного экрана приложения
 
 const renderMainScreen = (contaner, films) => {
-  if (films.length) {
-    renderSortBar(contaner, SORT_TYPES, SORT_TYPES[0]);
+  if (!films.length) {
+    renderEmptyBoard(contaner);
+    return;
   }
 
+  renderSortBar(contaner, SORT_TYPES, SORT_TYPES[0]);
   renderFilmsBoard(contaner, films);
 };
 
