@@ -2,7 +2,7 @@ import { generateFilms, getTopRatedFilms, getMostCommentedFilms  } from './mock/
 import { generateComments, getCommentsByIds, generateNewComment } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
 import { ClassName, Place, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_TYPES } from './const.js';
-import { render } from './utils.js';
+import { render, remove } from './utils.js';
 import ProfileView from './views/profile.js';
 import NavigationView from './views/navigation.js';
 import FilmsBoardView from './views/films-board.js';
@@ -81,26 +81,27 @@ const renderComments = (container, comments, newComment) => {
 
 // Функция рендеринга попапа
 
-const renderFilmDetails = (film) => {
+const renderFilmDetails = (container, film) => {
   const filmDetailsComponent = new FilmDetailsView(film);
   const filmDetailsBottomComponent = new FilmDetailsBottomView();
   const commentsWrapComponent = new CommentsWrapView();
 
   const filmComments = getCommentsByIds(mockComments, film.comments);
 
+  const hideFilmDetails = () => {
+    remove(filmDetailsComponent);
+    bodyElement.classList.remove(ClassName.HIDE_OVERFLOW);
+  };
+
   render(filmDetailsComponent.getElement(), filmDetailsBottomComponent.getElement(), Place.BEFORE_END);
   render(filmDetailsBottomComponent.getElement(), commentsWrapComponent.getElement(), Place.BEFORE_END);
   renderComments(commentsWrapComponent.getElement(), filmComments, mockNewComment);
 
   filmDetailsComponent.getElement().querySelector(`.${ClassName.FILM_DETAILS_CLOSE_BTN}`)
-    .addEventListener('click', () => {
-      filmDetailsComponent.getElement().remove();
-      filmDetailsComponent.removeElement();
-      bodyElement.classList.remove(ClassName.HIDE_OVERFLOW);
-    });
+    .addEventListener('click', hideFilmDetails);
 
   bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
-  render(bodyElement, filmDetailsComponent.getElement(), Place.BEFORE_END);
+  render(container, filmDetailsComponent.getElement(), Place.BEFORE_END);
 };
 
 
@@ -118,15 +119,15 @@ const renderFilmCard = (container, film) => {
   const filmCardComponent = new FilmCardView(film);
 
   const showFilmDetails = () => {
-    renderFilmDetails(film );
+    renderFilmDetails(bodyElement, film);
   };
 
   filmCardComponent.getElement().querySelector(`.${ClassName.FILM_CARD_POSTER}`)
-    .addEventListener('click', () => showFilmDetails());
+    .addEventListener('click', showFilmDetails);
   filmCardComponent.getElement().querySelector(`.${ClassName.FILM_CARD_TITLE}`)
-    .addEventListener('click', () => showFilmDetails());
+    .addEventListener('click', showFilmDetails);
   filmCardComponent.getElement().querySelector(`.${ClassName.FILM_CARD_COMMENTS}`)
-    .addEventListener('click', () => showFilmDetails(film));
+    .addEventListener('click', showFilmDetails);
 
   render(container, filmCardComponent.getElement(), Place.BEFORE_END);
 };
@@ -140,9 +141,21 @@ const renderFilmCard = (container, film) => {
 const renderFilmsBoard = (container, films) => {
   const filmsBoardComponent = new FilmsBoardView();
 
-  const mainFilmsListComponent = new FilmsListView('All movies. Upcoming');
-  const topRatedFilmsListComponent = new FilmsListView('Top rated', 'extra');
-  const mostCommentedFilmsListComponent = new FilmsListView('Most commented', 'extra');
+  const mainFilmsListOptions = films.length ?
+    {title: 'All movies. Upcoming', isTitleVisiallyHidden: true} :
+    {title: 'There are no movies in our database'};
+
+  const mainFilmsListComponent = new FilmsListView(mainFilmsListOptions);
+
+
+  if (!films.length) {
+    render(filmsBoardComponent.getElement(), mainFilmsListComponent.getElement(), Place.BEFORE_END);
+    render(container, filmsBoardComponent.getElement(), Place.BEFORE_END);
+    return;
+  }
+
+  const topRatedFilmsListComponent = new FilmsListView({title: 'Top rated', isExtra: true});
+  const mostCommentedFilmsListComponent = new FilmsListView({title: 'Most commented', isExtra: true});
 
   const mainFilmsContainerComponent = new FilmsContainerView();
   const topRatedFilmsContainerComponent = new FilmsContainerView();
@@ -172,8 +185,7 @@ const renderFilmsBoard = (container, films) => {
     renderedFilmsAmount += FILMS_STEP;
 
     if (renderedFilmsAmount >= films.length) {
-      showMoreButtonComponent.getElement().remove();
-      showMoreButtonComponent.removeElement();
+      remove(showMoreButtonComponent);
     }
   };
 
@@ -197,6 +209,17 @@ const renderFilmsBoard = (container, films) => {
 };
 
 
+// Функция рендеринга основного экрана приложения
+
+const renderMainScreen = (contaner, films) => {
+  if (films.length) {
+    renderSortBar(contaner, SORT_TYPES, SORT_TYPES[0]);
+  }
+
+  renderFilmsBoard(contaner, films);
+};
+
+
 // Функция рендеринга статистики в футере
 
 const renderFooterStatisctic = (container, amount) => {
@@ -210,7 +233,6 @@ const renderFooterStatisctic = (container, amount) => {
 renderProfile(headerElement, historyFilmsAmount);
 renderNavigation(mainElement, mockFilters, mockFilters[0].name);
 
-renderSortBar(mainElement, SORT_TYPES, SORT_TYPES[0]);
-renderFilmsBoard(mainElement, mockFilms);
+renderMainScreen(mainElement, mockFilms);
 
 renderFooterStatisctic(footerElement, allFilmsAmount);

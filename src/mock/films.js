@@ -91,7 +91,10 @@ export const generateFilm = (id) => {
 };
 
 export const generateFilms = () => {
-  const amount = getRandomInteger(FilmMock.MIN_FILMS_AMOUNT, FilmMock.MAX_FILMS_AMOUNT);
+  // С вероятностью 25% фильмы отсутствуют
+  const amount = getRandomBoolean() && getRandomBoolean() ?
+    0 : getRandomInteger(FilmMock.MIN_FILMS_AMOUNT, FilmMock.MAX_FILMS_AMOUNT);
+
   return new Array(amount).fill().map((item, index) => generateFilm(index + 1));
 };
 

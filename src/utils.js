@@ -13,13 +13,12 @@ export const render = (container, element, place) => {
     case Place.AFTER_BEGIN:
       container.prepend(element);
       break;
-    case Place.BEFORE_BEGIN:
-      container.before(element);
-      break;
-    case Place.AFTER_END:
-      container.after(element);
-      break;
   }
+};
+
+export const remove = (component) => {
+  component.getElement().remove();
+  component.removeElement();
 };
 
 export const createElement = (template) => {
@@ -28,14 +27,6 @@ export const createElement = (template) => {
 
   return newElement.firstElementChild;
 };
-
-const renderTemplate = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-export const renderAfterEnd = (container, template) => renderTemplate(container, template, Place.AFTER_END);
-
-export const renderBeforeEnd = (container, template) => renderTemplate(container, template, Place.BEFORE_END);
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));

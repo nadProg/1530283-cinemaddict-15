@@ -1,8 +1,8 @@
 import { createElement } from '../utils.js';
 
-const createFilmsListTemplate = (title, type) => `
-    <section class="films-list ${type === 'extra' ? 'films-list--extra' : ''}">
-      <h2 class="films-list__title ${type !== 'extra' ? 'visually-hidden' : ''}">${title}</h2>
+const createFilmsListTemplate = ({title, isExtra, isTitleVisiallyHidden }) => `
+    <section class="films-list ${isExtra ? 'films-list--extra' : ''}">
+      <h2 class="films-list__title ${isTitleVisiallyHidden ? 'visually-hidden' : ''}">${title}</h2>
     </section>
   `;
 
