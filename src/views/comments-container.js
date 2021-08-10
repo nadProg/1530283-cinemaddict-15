@@ -1,26 +1,10 @@
 
-import { createElement } from '../utils.js';
+import AbstractView from './abstract.js';
 
 const createCommentsContainerTemplate = () => '<section class="film-details__comments-wrap"></section>';
 
-export default class CommentsContainer {
-  constructor() {
-    this._element = null;
-  }
-
+export default class CommentsContainer extends AbstractView {
   getTemplate() {
     return createCommentsContainerTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

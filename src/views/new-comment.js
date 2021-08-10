@@ -1,4 +1,4 @@
-import { createElement } from '../utils.js';
+import AbstractView from './abstract.js';
 import { EMOTIONS } from '../const';
 
 const createEmotionInputTemplate = (emotion, isChecked) => {
@@ -33,26 +33,14 @@ export const createNewCommentTemplate = ({ text, emotion: currentEmotion }) => {
   `;
 };
 
-export default class NewComment {
+export default class NewComment extends AbstractView {
   constructor(newComment) {
-    this._newComment = newComment;
+    super();
 
-    this._element = null;
+    this._newComment = newComment;
   }
 
   getTemplate() {
     return createNewCommentTemplate(this._newComment );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

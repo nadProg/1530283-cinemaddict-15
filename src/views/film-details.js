@@ -1,5 +1,6 @@
+import AbstractView from './abstract.js';
 import { ClassName } from '../const.js';
-import { createElement, getReleaseDate, getRuntime, formatRating, formatItems } from '../utils.js';
+import { getReleaseDate, getRuntime, formatRating, formatItems } from '../utils.js';
 
 const setActiveClassName = (condition) => condition ? ClassName.FILM_DETAILS_CONTROL_ACTIVE : '';
 
@@ -103,26 +104,14 @@ export const createFilmDetailsTemplate = (film) => {
   `;
 };
 
-export default class FilmDetails {
+export default class FilmDetails extends AbstractView {
   constructor(film) {
-    this._film = film;
+    super();
 
-    this._element = null;
+    this._film = film;
   }
 
   getTemplate() {
     return createFilmDetailsTemplate(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

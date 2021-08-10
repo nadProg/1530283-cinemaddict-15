@@ -1,4 +1,4 @@
-import { createElement } from '../utils.js';
+import AbstractView from './abstract.js';
 import { ClassName } from '../const.js';
 
 const setActiveClassName = (condition) => condition ? ClassName.NAVIGATION_ITEM_ACTIVE : '';
@@ -31,27 +31,15 @@ const createNavigationTemplate = (filters, activeItem) => {
   `;
 };
 
-export default class Navigation {
+export default class Navigation extends AbstractView {
   constructor(filters = [], activeItem) {
-    this._filters = filters;
-    this._activeItem = activeItem,
+    super();
 
-    this._element = null;
+    this._filters = filters;
+    this._activeItem = activeItem;
   }
 
   getTemplate() {
     return createNavigationTemplate(this._filters, this._activeItem);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

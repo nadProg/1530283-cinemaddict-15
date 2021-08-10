@@ -1,4 +1,4 @@
-import { createElement } from '../utils.js';
+import AbstractView from './abstract.js';
 import { ClassName } from '../const.js';
 
 const setActiveClassName = (condition) => condition ? ClassName.SORT_ITEM_ACTIVE : '';
@@ -14,27 +14,15 @@ export const createSortBarTemplate = (sortItems = [], activeSortItem) => {
   return `<ul class="sort">${sortItemsTemplate}</ul>`;
 };
 
-export default class SortBar {
+export default class SortBar extends AbstractView {
   constructor(items, activeItem) {
+    super();
+
     this._items = items;
     this._activeItem = activeItem;
-
-    this._element = null;
   }
 
   getTemplate() {
     return createSortBarTemplate(this._items, this._activeItem);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,4 +1,4 @@
-import { createElement } from '../utils.js';
+import AbstractView from './abstract.js';
 
 const createFilmsListTemplate = ({ title, isExtra, isTitleVisiallyHidden }) => `
     <section class="films-list ${isExtra ? 'films-list--extra' : ''}">
@@ -6,26 +6,14 @@ const createFilmsListTemplate = ({ title, isExtra, isTitleVisiallyHidden }) => `
     </section>
   `;
 
-export default class FilmsList {
+export default class FilmsList extends AbstractView {
   constructor(options) {
-    this._options = options;
+    super();
 
-    this._element = null;
+    this._options = options;
   }
 
   getTemplate() {
     return createFilmsListTemplate(this._options);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,5 +1,6 @@
+import AbstractView from './abstract.js';
 import { MAX_DESCRIPTION_LENGTH, ClassName } from '../const.js';
-import { createElement, getFullYear, getRuntime, formatRating } from '../utils.js';
+import { getFullYear, getRuntime, formatRating } from '../utils.js';
 
 const setActiveClassName = (condition) => condition ? ClassName.FILM_CARD_CONTROL_ACTIVE : '';
 
@@ -33,26 +34,14 @@ export const createFilmCardTemplate = (film) => {
   `;
 };
 
-export default class FilmCard {
+export default class FilmCard extends AbstractView {
   constructor(film) {
-    this._film = film;
+    super();
 
-    this._element = null;
+    this._film = film;
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
