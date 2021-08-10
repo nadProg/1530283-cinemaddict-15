@@ -130,7 +130,9 @@ const renderFilmCard = (container, film) => {
     renderFilmDetails(bodyElement, film);
   };
 
-  filmCardComponent.setClickHandler(showFilmDetails);
+  filmCardComponent.setTitleClickHandler(showFilmDetails);
+  filmCardComponent.setPosterClickHandler(showFilmDetails);
+  filmCardComponent.setCommentsClickHandler(showFilmDetails);
 
   render(container, filmCardComponent, Place.BEFORE_END);
 };
