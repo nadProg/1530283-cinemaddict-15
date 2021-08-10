@@ -100,8 +100,7 @@ const renderFilmDetails = (container, film) => {
   renderComments(commentsContainerViewComponent.getElement(), filmComments, mockNewComment);
 
   document.addEventListener('keydown', onDocumentKeydown);
-  filmDetailsComponent.getElement().querySelector(`.${ClassName.FILM_DETAILS_CLOSE_BTN}`)
-    .addEventListener('click', hideFilmDetails);
+  filmDetailsComponent.setClickHandler(hideFilmDetails);
 
   render(container, filmDetailsComponent.getElement(), Place.BEFORE_END);
 
