@@ -1,11 +1,19 @@
-
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Place, ESCAPE_CODE } from './const.js';
+import AbstactView from './views/abstract.js';
 
 dayjs.extend(relativeTime);
 
 export const render = (container, element, place) => {
+  if (container instanceof AbstactView) {
+    container = container.getElement();
+  }
+
+  if (element instanceof AbstactView) {
+    element = element.getElement();
+  }
+
   switch (place) {
     case Place.BEFORE_END:
       container.append(element);
