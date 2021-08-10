@@ -3,7 +3,7 @@ import { createElement } from '../utils.js';
 
 const createCommentsContainerTemplate = () => '<section class="film-details__comments-wrap"></section>';
 
-export default class CommentsWrap {
+export default class CommentsContainer {
   constructor() {
     this._element = null;
   }
