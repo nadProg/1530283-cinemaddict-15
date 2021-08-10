@@ -1,32 +1,20 @@
 
-import { createElement } from '../utils.js';
+import AbstractView from './abstract.js';
 
-const createCommentsWrapTemplate = (amount) => `
+const createCommentsTitleTemplate = (amount) => `
   <h3 class="film-details__comments-title">
     Comments <span class="film-details__comments-count">${amount}</span>
   </h3>
 `;
 
-export default class CommentsTitle {
+export default class CommentsTitle extends AbstractView {
   constructor(amount) {
-    this._amount = amount;
+    super();
 
-    this._element = null;
+    this._amount = amount;
   }
 
   getTemplate() {
-    return createCommentsWrapTemplate(this._amount);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+    return createCommentsTitleTemplate(this._amount);
   }
 }
