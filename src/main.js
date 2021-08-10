@@ -170,9 +170,7 @@ const renderFilmsBoard = (container, films) => {
 
   let renderedFilmsAmount = 0;
 
-  const onShowMoreButtonClick = (evt) => {
-    evt.preventDefault();
-
+  const onShowMoreButtonClick = () => {
     films
       .slice(renderedFilmsAmount, renderedFilmsAmount + FILMS_STEP)
       .forEach((film) => {
@@ -187,7 +185,7 @@ const renderFilmsBoard = (container, films) => {
   };
 
   render(mainFilmsListComponent.getElement(), showMoreButtonComponent.getElement(), Place.BEFORE_END);
-  showMoreButtonComponent.getElement().addEventListener('click', onShowMoreButtonClick);
+  showMoreButtonComponent.setClickHandler(onShowMoreButtonClick);
   showMoreButtonComponent.getElement().click();
 
   getTopRatedFilms(films)
