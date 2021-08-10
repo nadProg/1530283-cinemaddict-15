@@ -2,7 +2,8 @@ import { generateFilms, getTopRatedFilms, getMostCommentedFilms  } from './mock/
 import { generateComments, getCommentsByIds, generateNewComment } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
 import { ClassName, Place, FilmsListOption, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_ITEMS } from './const.js';
-import { render, remove, isEsc } from './utils.js';
+import { isEsc } from './utils/common.js';
+import { render, remove } from './utils/render.js';
 import ProfileView from './views/profile.js';
 import NavigationView from './views/navigation.js';
 import FilmsBoardView from './views/films-board.js';

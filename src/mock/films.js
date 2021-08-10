@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { getRandomInteger, getRandomBoolean, getUniqueItemsFromArray, getRandomItemFromArray } from '../utils.js';
+import { getRandomInteger, getRandomBoolean, getUniqueItemsFromArray, getRandomItemFromArray } from '../utils/common.js';
 import * as FilmMock from './mock-const.js';
 
 

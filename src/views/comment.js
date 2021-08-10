@@ -1,6 +1,6 @@
 
 import AbstractView from './abstract.js';
-import { getCommentDate } from '../utils.js';
+import { getCommentDate } from '../utils/date.js';
 
 const createCommentTemplate = (comment) => {
   const { author, date, emotion, text, id } = comment;

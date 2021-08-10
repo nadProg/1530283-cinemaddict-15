@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { EMOTIONS } from '../const.js';
 import * as CommentMock from './mock-const.js';
-import { getRandomItemFromArray, getRandomInteger, getRandomBoolean } from '../utils.js';
+import { getRandomItemFromArray, getRandomInteger, getRandomBoolean } from '../utils/common.js';
 
 const generateAuthor = () => getRandomItemFromArray(CommentMock.PEOPLE);
 
