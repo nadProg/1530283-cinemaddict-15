@@ -131,12 +131,7 @@ const renderFilmCard = (container, film) => {
     renderFilmDetails(bodyElement, film);
   };
 
-  filmCardComponent.getElement().querySelector(`.${ClassName.FILM_CARD_POSTER}`)
-    .addEventListener('click', showFilmDetails);
-  filmCardComponent.getElement().querySelector(`.${ClassName.FILM_CARD_TITLE}`)
-    .addEventListener('click', showFilmDetails);
-  filmCardComponent.getElement().querySelector(`.${ClassName.FILM_CARD_COMMENTS}`)
-    .addEventListener('click', showFilmDetails);
+  filmCardComponent.setClickHandler(showFilmDetails);
 
   render(container, filmCardComponent.getElement(), Place.BEFORE_END);
 };
