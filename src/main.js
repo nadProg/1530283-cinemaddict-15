@@ -46,7 +46,7 @@ const footerElement = bodyElement.querySelector(`.${ClassName.FOOTER}`);
 
 const renderProfile = (container, watchedFilmsAmount) => {
   const profileView = new ProfileView(watchedFilmsAmount);
-  render(container, profileView, Place.BEFORE_END);
+  render(container, profileView);
 };
 
 
@@ -54,7 +54,7 @@ const renderProfile = (container, watchedFilmsAmount) => {
 
 const renderNavigation = (container, filters, activeItem) => {
   const navigationView = new NavigationView(filters, activeItem);
-  render(container, navigationView, Place.BEFORE_END);
+  render(container, navigationView);
 };
 
 
@@ -62,7 +62,7 @@ const renderNavigation = (container, filters, activeItem) => {
 
 const renderComment = (container, comment) => {
   const commentView = new CommentView(comment);
-  render(container, commentView, Place.BEFORE_END);
+  render(container, commentView);
 };
 
 const renderComments = (container, comments, newComment) => {
@@ -74,9 +74,9 @@ const renderComments = (container, comments, newComment) => {
     renderComment(commentsListView, comment);
   });
 
-  render(container, commentTitleView, Place.BEFORE_END);
-  render(container, commentsListView, Place.BEFORE_END);
-  render(container, newCommentView, Place.BEFORE_END);
+  render(container, commentTitleView);
+  render(container, commentsListView);
+  render(container, newCommentView);
 };
 
 
@@ -96,14 +96,14 @@ const renderFilmDetails = (container, film) => {
     }
   };
 
-  render(filmDetailsView, filmDetailsBottomView, Place.BEFORE_END);
-  render(filmDetailsBottomView, commentsContainerViewView, Place.BEFORE_END);
+  render(filmDetailsView, filmDetailsBottomView);
+  render(filmDetailsBottomView, commentsContainerViewView);
   renderComments(commentsContainerViewView, filmComments, mockNewComment);
 
   document.addEventListener('keydown', onDocumentKeydown);
   filmDetailsView.setClickHandler(hideFilmDetails);
 
-  render(container, filmDetailsView, Place.BEFORE_END);
+  render(container, filmDetailsView);
 
   function hideFilmDetails() {
     remove(filmDetailsView);
@@ -117,7 +117,7 @@ const renderFilmDetails = (container, film) => {
 
 const renderSortBar = (container, items, activeItem) => {
   const sortBarView = new SortBarView(items, activeItem);
-  render(container, sortBarView, Place.BEFORE_END);
+  render(container, sortBarView);
 };
 
 
@@ -135,7 +135,7 @@ const renderFilmCard = (container, film) => {
   filmCardView.setPosterClickHandler(showFilmDetails);
   filmCardView.setCommentsClickHandler(showFilmDetails);
 
-  render(container, filmCardView, Place.BEFORE_END);
+  render(container, filmCardView);
 };
 
 
@@ -157,13 +157,13 @@ const renderFilmsBoard = (container, films) => {
 
   const showMoreButtonView = new ShowMoreButtonView();
 
-  render(filmsBoardView, mainFilmsListView, Place.BEFORE_END);
-  render(filmsBoardView, topRatedFilmsListView, Place.BEFORE_END);
-  render(filmsBoardView, mostCommentedFilmsListView, Place.BEFORE_END);
+  render(filmsBoardView, mainFilmsListView);
+  render(filmsBoardView, topRatedFilmsListView);
+  render(filmsBoardView, mostCommentedFilmsListView);
 
-  render(mainFilmsListView, mainFilmsContainerView, Place.BEFORE_END);
-  render(topRatedFilmsListView, topRatedFilmsContainerView, Place.BEFORE_END);
-  render(mostCommentedFilmsListView, mostCommentedFilmsContainerView, Place.BEFORE_END);
+  render(mainFilmsListView, mainFilmsContainerView);
+  render(topRatedFilmsListView, topRatedFilmsContainerView);
+  render(mostCommentedFilmsListView, mostCommentedFilmsContainerView);
 
   let renderedFilmsAmount = 0;
 
@@ -181,7 +181,7 @@ const renderFilmsBoard = (container, films) => {
     }
   };
 
-  render(mainFilmsListView, showMoreButtonView, Place.BEFORE_END);
+  render(mainFilmsListView, showMoreButtonView);
   showMoreButtonView.setClickHandler(onShowMoreButtonClick);
   showMoreButtonView.getElement().click();
 
@@ -197,7 +197,7 @@ const renderFilmsBoard = (container, films) => {
       renderFilmCard(mostCommentedFilmsContainerView, film);
     });
 
-  render(container, filmsBoardView, Place.BEFORE_END);
+  render(container, filmsBoardView);
 };
 
 
@@ -207,8 +207,8 @@ const renderEmptyBoard = (container) => {
   const filmsBoardView = new FilmsBoardView();
   const mainFilmsListView = new FilmsListView(FilmsListOption.EMPTY);
 
-  render(filmsBoardView, mainFilmsListView, Place.BEFORE_END);
-  render(container, filmsBoardView, Place.BEFORE_END);
+  render(filmsBoardView, mainFilmsListView);
+  render(container, filmsBoardView);
 };
 
 
@@ -229,7 +229,7 @@ const renderMainScreen = (container, films) => {
 
 const renderFooterStatisctic = (container, amount) => {
   const footerStatisticView = new FooterStatisticView(amount);
-  render(container, footerStatisticView, Place.BEFORE_END);
+  render(container, footerStatisticView);
 };
 
 

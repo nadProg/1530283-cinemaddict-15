@@ -1,7 +1,7 @@
 import { Place } from '../const.js';
 import Abstact from '../views/abstract.js';
 
-export const render = (container, element, place) => {
+export const render = (container, element, place = Place.BEFORE_END) => {
   if (container instanceof Abstact) {
     container = container.getElement();
   }
