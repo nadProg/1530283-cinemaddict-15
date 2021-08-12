@@ -22,7 +22,7 @@ const createCommentTemplate = (comment) => {
   `;
 };
 
-export default class Comment extends AbstractView {
+export default class CommentView extends AbstractView {
   constructor(comment) {
     super();
 

@@ -6,7 +6,7 @@ export const createFooterStatisticTemplate = (totalFilmsAmount) => `
   </section>
 `;
 
-export default class FooterStatistic extends AbstractView {
+export default class FooterStatisticView extends AbstractView {
   constructor(totalFilmsAmount) {
     super();
 

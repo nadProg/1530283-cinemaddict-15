@@ -31,7 +31,7 @@ const createNavigationTemplate = (filters, activeItem) => {
   `;
 };
 
-export default class Navigation extends AbstractView {
+export default class NavigationView extends AbstractView {
   constructor(filters = [], activeItem) {
     super();
 

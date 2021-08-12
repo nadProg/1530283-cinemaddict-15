@@ -45,47 +45,47 @@ const footerElement = bodyElement.querySelector(`.${ClassName.FOOTER}`);
 // Функция рендеринга звания пользователя в хедере
 
 const renderProfile = (container, watchedFilmsAmount) => {
-  const profileComponent = new ProfileView(watchedFilmsAmount);
-  render(container, profileComponent, Place.BEFORE_END);
+  const profileView = new ProfileView(watchedFilmsAmount);
+  render(container, profileView, Place.BEFORE_END);
 };
 
 
 // Функция рендеринга навигации с фильтрами
 
 const renderNavigation = (container, filters, activeItem) => {
-  const navigationComponent = new NavigationView(filters, activeItem);
-  render(container, navigationComponent, Place.BEFORE_END);
+  const navigationView = new NavigationView(filters, activeItem);
+  render(container, navigationView, Place.BEFORE_END);
 };
 
 
 // Функция рендеринга блока комментариев
 
 const renderComment = (container, comment) => {
-  const commentComponent = new CommentView(comment);
-  render(container, commentComponent, Place.BEFORE_END);
+  const commentView = new CommentView(comment);
+  render(container, commentView, Place.BEFORE_END);
 };
 
 const renderComments = (container, comments, newComment) => {
-  const commentTitleComponent = new CommentsTitleView(comments.length);
-  const commentsListComponent = new CommentsListView();
-  const newCommentComponent = new NewCommentView(newComment);
+  const commentTitleView = new CommentsTitleView(comments.length);
+  const commentsListView = new CommentsListView();
+  const newCommentView = new NewCommentView(newComment);
 
   comments.forEach((comment) => {
-    renderComment(commentsListComponent, comment);
+    renderComment(commentsListView, comment);
   });
 
-  render(container, commentTitleComponent, Place.BEFORE_END);
-  render(container, commentsListComponent, Place.BEFORE_END);
-  render(container, newCommentComponent, Place.BEFORE_END);
+  render(container, commentTitleView, Place.BEFORE_END);
+  render(container, commentsListView, Place.BEFORE_END);
+  render(container, newCommentView, Place.BEFORE_END);
 };
 
 
 // Функция рендеринга попапа
 
 const renderFilmDetails = (container, film) => {
-  const filmDetailsComponent = new FilmDetailsView(film);
-  const filmDetailsBottomComponent = new FilmDetailsBottomView();
-  const commentsContainerViewComponent = new CommentsContainerView();
+  const filmDetailsView = new FilmDetailsView(film);
+  const filmDetailsBottomView = new FilmDetailsBottomView();
+  const commentsContainerViewView = new CommentsContainerView();
 
   const filmComments = getCommentsByIds(mockComments, film.comments);
 
@@ -96,17 +96,17 @@ const renderFilmDetails = (container, film) => {
     }
   };
 
-  render(filmDetailsComponent, filmDetailsBottomComponent, Place.BEFORE_END);
-  render(filmDetailsBottomComponent, commentsContainerViewComponent, Place.BEFORE_END);
-  renderComments(commentsContainerViewComponent, filmComments, mockNewComment);
+  render(filmDetailsView, filmDetailsBottomView, Place.BEFORE_END);
+  render(filmDetailsBottomView, commentsContainerViewView, Place.BEFORE_END);
+  renderComments(commentsContainerViewView, filmComments, mockNewComment);
 
   document.addEventListener('keydown', onDocumentKeydown);
-  filmDetailsComponent.setClickHandler(hideFilmDetails);
+  filmDetailsView.setClickHandler(hideFilmDetails);
 
-  render(container, filmDetailsComponent, Place.BEFORE_END);
+  render(container, filmDetailsView, Place.BEFORE_END);
 
   function hideFilmDetails() {
-    remove(filmDetailsComponent);
+    remove(filmDetailsView);
     bodyElement.classList.remove(ClassName.HIDE_OVERFLOW);
     document.removeEventListener('keydown', onDocumentKeydown);
   }
@@ -116,26 +116,26 @@ const renderFilmDetails = (container, film) => {
 // Функция рендеринга блока управления сортировкой
 
 const renderSortBar = (container, items, activeItem) => {
-  const sortBarComponent = new SortBarView(items, activeItem);
-  render(container, sortBarComponent, Place.BEFORE_END);
+  const sortBarView = new SortBarView(items, activeItem);
+  render(container, sortBarView, Place.BEFORE_END);
 };
 
 
 // Функция рендеринга карточки фильма
 
 const renderFilmCard = (container, film) => {
-  const filmCardComponent = new FilmCardView(film);
+  const filmCardView = new FilmCardView(film);
 
   const showFilmDetails = () => {
     bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
     renderFilmDetails(bodyElement, film);
   };
 
-  filmCardComponent.setTitleClickHandler(showFilmDetails);
-  filmCardComponent.setPosterClickHandler(showFilmDetails);
-  filmCardComponent.setCommentsClickHandler(showFilmDetails);
+  filmCardView.setTitleClickHandler(showFilmDetails);
+  filmCardView.setPosterClickHandler(showFilmDetails);
+  filmCardView.setCommentsClickHandler(showFilmDetails);
 
-  render(container, filmCardComponent, Place.BEFORE_END);
+  render(container, filmCardView, Place.BEFORE_END);
 };
 
 
@@ -145,25 +145,25 @@ const renderFilmCard = (container, film) => {
 //  - список Most Commented
 
 const renderFilmsBoard = (container, films) => {
-  const filmsBoardComponent = new FilmsBoardView();
+  const filmsBoardView = new FilmsBoardView();
 
-  const mainFilmsListComponent = new FilmsListView(FilmsListOption.MAIN);
-  const topRatedFilmsListComponent = new FilmsListView(FilmsListOption.TOP_RATED);
-  const mostCommentedFilmsListComponent = new FilmsListView(FilmsListOption.MOST_COMMENTED);
+  const mainFilmsListView = new FilmsListView(FilmsListOption.MAIN);
+  const topRatedFilmsListView = new FilmsListView(FilmsListOption.TOP_RATED);
+  const mostCommentedFilmsListView = new FilmsListView(FilmsListOption.MOST_COMMENTED);
 
-  const mainFilmsContainerComponent = new FilmsContainerView();
-  const topRatedFilmsContainerComponent = new FilmsContainerView();
-  const mostCommentedFilmsContainerComponent = new FilmsContainerView();
+  const mainFilmsContainerView = new FilmsContainerView();
+  const topRatedFilmsContainerView = new FilmsContainerView();
+  const mostCommentedFilmsContainerView = new FilmsContainerView();
 
-  const showMoreButtonComponent = new ShowMoreButtonView();
+  const showMoreButtonView = new ShowMoreButtonView();
 
-  render(filmsBoardComponent, mainFilmsListComponent, Place.BEFORE_END);
-  render(filmsBoardComponent, topRatedFilmsListComponent, Place.BEFORE_END);
-  render(filmsBoardComponent, mostCommentedFilmsListComponent, Place.BEFORE_END);
+  render(filmsBoardView, mainFilmsListView, Place.BEFORE_END);
+  render(filmsBoardView, topRatedFilmsListView, Place.BEFORE_END);
+  render(filmsBoardView, mostCommentedFilmsListView, Place.BEFORE_END);
 
-  render(mainFilmsListComponent, mainFilmsContainerComponent, Place.BEFORE_END);
-  render(topRatedFilmsListComponent, topRatedFilmsContainerComponent, Place.BEFORE_END);
-  render(mostCommentedFilmsListComponent, mostCommentedFilmsContainerComponent, Place.BEFORE_END);
+  render(mainFilmsListView, mainFilmsContainerView, Place.BEFORE_END);
+  render(topRatedFilmsListView, topRatedFilmsContainerView, Place.BEFORE_END);
+  render(mostCommentedFilmsListView, mostCommentedFilmsContainerView, Place.BEFORE_END);
 
   let renderedFilmsAmount = 0;
 
@@ -171,44 +171,44 @@ const renderFilmsBoard = (container, films) => {
     films
       .slice(renderedFilmsAmount, renderedFilmsAmount + FILMS_STEP)
       .forEach((film) => {
-        renderFilmCard(mainFilmsContainerComponent, film);
+        renderFilmCard(mainFilmsContainerView, film);
       });
 
     renderedFilmsAmount += FILMS_STEP;
 
     if (renderedFilmsAmount >= films.length) {
-      remove(showMoreButtonComponent);
+      remove(showMoreButtonView);
     }
   };
 
-  render(mainFilmsListComponent, showMoreButtonComponent, Place.BEFORE_END);
-  showMoreButtonComponent.setClickHandler(onShowMoreButtonClick);
-  showMoreButtonComponent.getElement().click();
+  render(mainFilmsListView, showMoreButtonView, Place.BEFORE_END);
+  showMoreButtonView.setClickHandler(onShowMoreButtonClick);
+  showMoreButtonView.getElement().click();
 
   getTopRatedFilms(films)
     .slice(0, EXTRA_FILMS_AMOUNT)
     .forEach((film) => {
-      renderFilmCard(topRatedFilmsContainerComponent, film);
+      renderFilmCard(topRatedFilmsContainerView, film);
     });
 
   getMostCommentedFilms(films)
     .slice(0, EXTRA_FILMS_AMOUNT)
     .forEach((film) => {
-      renderFilmCard(mostCommentedFilmsContainerComponent, film);
+      renderFilmCard(mostCommentedFilmsContainerView, film);
     });
 
-  render(container, filmsBoardComponent, Place.BEFORE_END);
+  render(container, filmsBoardView, Place.BEFORE_END);
 };
 
 
 // Функция рендеринга блока без карточек фильмов
 
 const renderEmptyBoard = (container) => {
-  const filmsBoardComponent = new FilmsBoardView();
-  const mainFilmsListComponent = new FilmsListView(FilmsListOption.EMPTY);
+  const filmsBoardView = new FilmsBoardView();
+  const mainFilmsListView = new FilmsListView(FilmsListOption.EMPTY);
 
-  render(filmsBoardComponent, mainFilmsListComponent, Place.BEFORE_END);
-  render(container, filmsBoardComponent, Place.BEFORE_END);
+  render(filmsBoardView, mainFilmsListView, Place.BEFORE_END);
+  render(container, filmsBoardView, Place.BEFORE_END);
 };
 
 
@@ -228,8 +228,8 @@ const renderMainScreen = (container, films) => {
 // Функция рендеринга статистики в футере
 
 const renderFooterStatisctic = (container, amount) => {
-  const footerStatisticComponent = new FooterStatisticView(amount);
-  render(container, footerStatisticComponent, Place.BEFORE_END);
+  const footerStatisticView = new FooterStatisticView(amount);
+  render(container, footerStatisticView, Place.BEFORE_END);
 };
 
 

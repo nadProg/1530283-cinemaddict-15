@@ -14,7 +14,7 @@ export const createSortBarTemplate = (sortItems = [], activeSortItem) => {
   return `<ul class="sort">${sortItemsTemplate}</ul>`;
 };
 
-export default class SortBar extends AbstractView {
+export default class SortBarView extends AbstractView {
   constructor(items, activeItem) {
     super();
 
