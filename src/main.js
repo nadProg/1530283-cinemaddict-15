@@ -1,7 +1,7 @@
 import { generateFilms, getTopRatedFilms, getMostCommentedFilms  } from './mock/films.js';
 import { generateComments, getCommentsByIds, generateNewComment } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
-import { ClassName, Place, FilmsListOption, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_ITEMS } from './const.js';
+import { ClassName, FilmsListOption, EXTRA_FILMS_AMOUNT, FILMS_STEP, SORT_ITEMS } from './const.js';
 import { isEsc } from './utils/common.js';
 import { render, remove } from './utils/render.js';
 import ProfileView from './views/profile.js';
@@ -139,6 +139,15 @@ const renderFilmCard = (container, film) => {
 };
 
 
+// Функция частичного рендеринга карточек фильмов
+
+const renderPartialFilms = (container, films, renderedAmount, step) => films
+  .slice(renderedAmount, renderedAmount + step)
+  .forEach((film) => {
+    renderFilmCard(container, film);
+  });
+
+
 // Функция рендеринга блока с карточками фильмов:
 //  - основной список с кнопкой Show More
 //  - список Top Rated
@@ -166,24 +175,22 @@ const renderFilmsBoard = (container, films) => {
   render(mostCommentedFilmsListView, mostCommentedFilmsContainerView);
 
   let renderedFilmsAmount = 0;
+  renderPartialFilms(mainFilmsContainerView, films, renderedFilmsAmount, FILMS_STEP);
+  renderedFilmsAmount = FILMS_STEP;
 
-  const onShowMoreButtonClick = () => {
-    films
-      .slice(renderedFilmsAmount, renderedFilmsAmount + FILMS_STEP)
-      .forEach((film) => {
-        renderFilmCard(mainFilmsContainerView, film);
-      });
+  if (renderedFilmsAmount < films.length) {
+    const onShowMoreButtonClick = () => {
+      renderPartialFilms(mainFilmsContainerView, films, renderedFilmsAmount, FILMS_STEP);
+      renderedFilmsAmount += FILMS_STEP;
 
-    renderedFilmsAmount += FILMS_STEP;
+      if (renderedFilmsAmount >= films.length) {
+        remove(showMoreButtonView);
+      }
+    };
 
-    if (renderedFilmsAmount >= films.length) {
-      remove(showMoreButtonView);
-    }
-  };
-
-  render(mainFilmsListView, showMoreButtonView);
-  showMoreButtonView.setClickHandler(onShowMoreButtonClick);
-  showMoreButtonView.getElement().click();
+    showMoreButtonView.setClickHandler(onShowMoreButtonClick);
+    render(mainFilmsListView, showMoreButtonView);
+  }
 
   getTopRatedFilms(films)
     .slice(0, EXTRA_FILMS_AMOUNT)
