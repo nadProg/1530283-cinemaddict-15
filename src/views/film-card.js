@@ -43,6 +43,7 @@ export default class FilmCardView extends AbstractView {
     this._titleClickHandler = this._titleClickHandler.bind(this);
     this._posterClickHandler = this._posterClickHandler.bind(this);
     this._commentsClickHandler = this._commentsClickHandler.bind(this);
+    this._addToWatchClickHandler = this._addToWatchClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -64,6 +65,11 @@ export default class FilmCardView extends AbstractView {
     this._callback.commentsClick();
   }
 
+  _addToWatchClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.addToWhatchClick();
+  }
+
   setTitleClickHandler(callback) {
     this._callback.titleClick = callback;
     this.getElement().querySelector(`.${ClassName.FILM_CARD_TITLE}`)
@@ -80,5 +86,11 @@ export default class FilmCardView extends AbstractView {
     this._callback.commentsClick = callback;
     this.getElement().querySelector(`.${ClassName.FILM_CARD_COMMENTS}`)
       .addEventListener('click', this._commentsClickHandler);
+  }
+
+  setAddToWatchClickHandler(callback) {
+    this._callback.addToWhatchClick = callback;
+    this.getElement().querySelector(`.${'film-card__controls-item--add-to-watchlist'}`)
+      .addEventListener('click', this._addToWatchClickHandler);
   }
 }

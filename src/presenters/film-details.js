@@ -47,10 +47,6 @@ export default class FilmDetailsPresenter {
   destroy() {
     remove(this._filmDetailsView);
   }
-
-  _render() {
-    render(this._filmDetailsContainer, this._filmDetailsView);
-  }
 }
 
 // const renderComment = (container, comment) => {

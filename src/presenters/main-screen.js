@@ -34,11 +34,12 @@ export default class MainScreenPresenter {
 
     this._showFilmDetails = this._showFilmDetails.bind(this);
     this._hideFilmDetails = this._hideFilmDetails.bind(this);
+    this._handleFilmChange = this._handleFilmChange.bind(this);
   }
 
   init(films) {
     this._films = [...films];
-    this._render();
+    this._renderMainScreen();
   }
 
   get _topRatedFilms() {
@@ -47,6 +48,18 @@ export default class MainScreenPresenter {
 
   get _mostCommentedFilms() {
     return [...this._films].sort(sortByComments).slice(0, EXTRA_FILMS_AMOUNT);
+  }
+
+  _handleFilmChange(updatedFilm) {
+    this.this._films = updateItem(this._films, updatedFilm);
+    // апдейт оригинальной копии
+    // this._sourcedBoardTasks = updateItem(this._sourcedBoardTasks, updatedFilm);
+
+    // апдейт мап презентеров - 3шт.
+    //  основной список, top rated, most commented
+    // попап
+
+    // this._taskPresenter.get(updatedTask.id).init(updatedTask);
   }
 
   _showFilmDetails(film) {
@@ -75,8 +88,8 @@ export default class MainScreenPresenter {
   }
 
   _renderFilmCard(filmCardContainer, film) {
-    const filmCardPresenter = new FilmCardPresenter(filmCardContainer);
-    filmCardPresenter.init(film, this._showFilmDetails);
+    const filmCardPresenter = new FilmCardPresenter(filmCardContainer, this._handleFilmChange, this._showFilmDetails);
+    filmCardPresenter.init(film);
   }
 
   _renderPartialMainFilms(from, to) {
@@ -121,7 +134,7 @@ export default class MainScreenPresenter {
     render(this._mainScreenContainer, this._filmsBoardView);
   }
 
-  _render() {
+  _renderMainScreen() {
     if (!this._films.length) {
       this._renderEmptyBoard();
       return;
