@@ -5,11 +5,11 @@ import FilmsBoardView from '../views/films-board.js';
 import FilmsListView from '../views/films-list.js';
 import FilmsContainerView from '../views/films-container.js';
 import ShowMoreButtonView from '../views/show-more-button.js';
-import FilmCardView from '../views/film-card.js';
+import FilmCardPresenter from './film-card.js';
 
 export default class MainScreenPresenter {
-  constructor(container) {
-    this._container = container;
+  constructor(mainScreenContainer) {
+    this._mainScreenContainer = mainScreenContainer;
     this._filmsCount = FILMS_STEP;
 
     this._sortBarView = new SortBarView(SORT_ITEMS, SORT_ITEMS[0]);
@@ -35,26 +35,16 @@ export default class MainScreenPresenter {
 
   _renderEmptyBoard() {
     render(this._filmsBoardView, this._epmtyListView);
-    render(this._container, this._filmsBoardView);
+    render(this._mainScreenContainer, this._filmsBoardView);
   }
 
   _renderSortBar() {
-    render(this._container, this._sortBarView);
+    render(this._mainScreenContainer, this._sortBarView);
   }
 
-  _renderFilmCard(container, film) {
-    const filmCardView = new FilmCardView(film);
-
-    // const showFilmDetails = () => {
-    //   bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
-    //   renderFilmDetails(bodyElement, film);
-    // };
-
-    // filmCardView.setTitleClickHandler(showFilmDetails);
-    // filmCardView.setPosterClickHandler(showFilmDetails);
-    // filmCardView.setCommentsClickHandler(showFilmDetails);
-
-    render(container, filmCardView);
+  _renderFilmCard(filmCardContainer, film) {
+    const filmCardPresenter = new FilmCardPresenter(filmCardContainer);
+    filmCardPresenter.init(film);
   }
 
   _renderPartialMainFilms(from, to) {
@@ -93,7 +83,7 @@ export default class MainScreenPresenter {
       this._renderShowMoreButtonClick();
     }
 
-    render(this._container, this._filmsBoardView);
+    render(this._mainScreenContainer, this._filmsBoardView);
   }
 
   _render() {
