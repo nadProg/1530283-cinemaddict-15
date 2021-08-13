@@ -1,4 +1,4 @@
-import { FilmsListOption, SORT_ITEMS, FILMS_STEP } from '../const.js';
+import { FilmsListOption, SORT_ITEMS, FILMS_STEP, ClassName } from '../const.js';
 import { render, remove } from '../utils/render.js';
 import SortBarView from '../views/sort-bar.js';
 import FilmsBoardView from '../views/films-board.js';
@@ -6,11 +6,15 @@ import FilmsListView from '../views/films-list.js';
 import FilmsContainerView from '../views/films-container.js';
 import ShowMoreButtonView from '../views/show-more-button.js';
 import FilmCardPresenter from './film-card.js';
+import FilmDetailsPresenter from './film-details.js';
+
+const bodyElement = document.body;
 
 export default class MainScreenPresenter {
   constructor(mainScreenContainer) {
     this._mainScreenContainer = mainScreenContainer;
     this._filmsCount = FILMS_STEP;
+    this._filmDetailsPresenter = null;
 
     this._sortBarView = new SortBarView(SORT_ITEMS, SORT_ITEMS[0]);
 
@@ -26,11 +30,30 @@ export default class MainScreenPresenter {
     this._mostCommentedFilmsContainerView = new FilmsContainerView();
 
     this._showMoreButtonView = new ShowMoreButtonView();
+
+    this._showFilmDetails = this._showFilmDetails.bind(this);
+    this._hideFilmDetails = this._hideFilmDetails.bind(this);
   }
 
   init(films) {
     this._films = [...films];
     this._render();
+  }
+
+  _showFilmDetails(film) {
+    bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
+    if (!this._filmDetailsPresenter) {
+      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement);
+    }
+    this._filmDetailsPresenter.init(film, this._hideFilmDetails);
+  }
+
+  _hideFilmDetails() {
+    bodyElement.classList.remove(ClassName.HIDE_OVERFLOW);
+    if (this._filmDetailsPresenter) {
+      this._filmDetailsPresenter.destroy();
+      this._filmDetailsPresenter = null;
+    }
   }
 
   _renderEmptyBoard() {
@@ -44,7 +67,7 @@ export default class MainScreenPresenter {
 
   _renderFilmCard(filmCardContainer, film) {
     const filmCardPresenter = new FilmCardPresenter(filmCardContainer);
-    filmCardPresenter.init(film);
+    filmCardPresenter.init(film, this._showFilmDetails);
   }
 
   _renderPartialMainFilms(from, to) {
