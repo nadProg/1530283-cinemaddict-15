@@ -63,16 +63,16 @@ export default class MainScreenPresenter {
   }
 
   _showFilmDetails(film) {
+    this._hideFilmDetails();
+
     bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
-    if (!this._filmDetailsPresenter) {
-      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement);
-    }
+    this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement);
     this._filmDetailsPresenter.init(film, this._hideFilmDetails);
   }
 
   _hideFilmDetails() {
-    bodyElement.classList.remove(ClassName.HIDE_OVERFLOW);
     if (this._filmDetailsPresenter) {
+      bodyElement.classList.remove(ClassName.HIDE_OVERFLOW);
       this._filmDetailsPresenter.destroy();
       this._filmDetailsPresenter = null;
     }

@@ -20,17 +20,16 @@ export default class FilmDetailsPresenter {
 
     this._filmDetailsView = new FilmDetailsView(this._film);
 
-    const onDocumentKeydown = (evt) => {
+    this._onDocumentKeydown = (evt) => {
       if (isEsc(evt)) {
         evt.preventDefault();
         hideFilmDetails();
       }
     };
 
-    document.addEventListener('keydown', onDocumentKeydown);
+    document.addEventListener('keydown', this._onDocumentKeydown);
     this._filmDetailsView.setCloseButtonClickHandler(() => {
       hideFilmDetails();
-      document.removeEventListener('keydown', onDocumentKeydown);
     });
 
     render(this._filmDetailsView, this._filmDetailsBottomView);
@@ -46,6 +45,7 @@ export default class FilmDetailsPresenter {
 
   destroy() {
     remove(this._filmDetailsView);
+    document.removeEventListener('keydown', this._onDocumentKeydown);
   }
 }
 
