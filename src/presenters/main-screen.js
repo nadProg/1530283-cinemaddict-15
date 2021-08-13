@@ -1,5 +1,6 @@
-import { FilmsListOption, SORT_ITEMS, FILMS_STEP, ClassName } from '../const.js';
+import { FilmsListOption, SORT_ITEMS, FILMS_STEP, EXTRA_FILMS_AMOUNT, ClassName } from '../const.js';
 import { render, remove } from '../utils/render.js';
+import { sortByRating, sortByComments } from '../utils/film.js';
 import SortBarView from '../views/sort-bar.js';
 import FilmsBoardView from '../views/films-board.js';
 import FilmsListView from '../views/films-list.js';
@@ -38,6 +39,14 @@ export default class MainScreenPresenter {
   init(films) {
     this._films = [...films];
     this._render();
+  }
+
+  get _topRatedFilms() {
+    return [...this._films].sort(sortByRating).slice(0, EXTRA_FILMS_AMOUNT);
+  }
+
+  get _mostCommentedFilms() {
+    return [...this._films].sort(sortByComments).slice(0, EXTRA_FILMS_AMOUNT);
   }
 
   _showFilmDetails(film) {
@@ -105,6 +114,9 @@ export default class MainScreenPresenter {
     if (this._filmsCount < this._films.length) {
       this._renderShowMoreButtonClick();
     }
+
+    this._topRatedFilms.forEach((film) => this._renderFilmCard(this._topRatedFilmsContainerView, film));
+    this._mostCommentedFilms.forEach((film) => this._renderFilmCard(this._mostCommentedFilmsContainerView, film));
 
     render(this._mainScreenContainer, this._filmsBoardView);
   }
