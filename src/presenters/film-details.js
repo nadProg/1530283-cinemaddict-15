@@ -53,6 +53,25 @@ export default class FilmDetailsPresenter {
   }
 }
 
+// const renderComment = (container, comment) => {
+//   const commentView = new CommentView(comment);
+//   render(container, commentView);
+// };
+
+// const renderComments = (container, comments, newComment) => {
+//   const commentTitleView = new CommentsTitleView(comments.length);
+//   const commentsListView = new CommentsListView();
+//   const newCommentView = new NewCommentView(newComment);
+
+//   comments.forEach((comment) => {
+//     renderComment(commentsListView, comment);
+//   });
+
+//   render(container, commentTitleView);
+//   render(container, commentsListView);
+//   render(container, newCommentView);
+// };
+
 // const renderFilmDetails = (container, film) => {
 //   const filmDetailsView = new FilmDetailsView(film);
 //   const filmDetailsBottomView = new FilmDetailsBottomView();
