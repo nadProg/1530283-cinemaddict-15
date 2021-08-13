@@ -21,6 +21,7 @@ import CommentsListView from './views/comments-list.js';
 import CommentView from './views/comment.js';
 import NewCommentView from './views/new-comment.js';
 
+import MainScreenPresenter from './presenters/main-screen.js';
 
 // Генерация моковых данных
 
@@ -244,5 +245,8 @@ const renderFooterStatisctic = (container, amount) => {
 
 renderProfile(headerElement, historyFilmsAmount);
 renderNavigation(mainElement, mockFilters, mockFilters[0].name);
-renderMainScreen(mainElement, mockFilms);
+// renderMainScreen(mainElement, mockFilms);
 renderFooterStatisctic(footerElement, allFilmsAmount);
+
+const mainScreenPresenter = new MainScreenPresenter(mainElement);
+mainScreenPresenter.init(mockFilms);
