@@ -1,6 +1,6 @@
 
 import { render, replace } from '../utils/render.js';
-// import { ClassName } from '../const.js';
+import { getCurrentDate } from '../utils/date.js';
 import FilmCardView from '../views/film-card.js';
 
 export default class FilmCardPresenter {
@@ -14,6 +14,8 @@ export default class FilmCardPresenter {
     this._handleCommentsClick = this._handleCommentsClick.bind(this);
 
     this._handleAddToWatchClick = this._handleAddToWatchClick.bind(this);
+    this._handleAddWatchedClick = this._handleAddWatchedClick.bind(this);
+    this._handleAddFavoriteClick = this._handleAddFavoriteClick.bind(this);
   }
 
   init(film) {
@@ -28,6 +30,8 @@ export default class FilmCardPresenter {
     this._filmCardView.setCommentsClickHandler(this._handleCommentsClick);
 
     this._filmCardView.setAddToWatchClickHandler(this._handleAddToWatchClick);
+    this._filmCardView.setAddWatchedClickHandler(this._handleAddWatchedClick);
+    this._filmCardView.setAddFavoriteClickHandler(this._handleAddFavoriteClick);
 
     if (prevFilmCard) {
       replace(this._filmCardView, prevFilmCard);
@@ -58,7 +62,24 @@ export default class FilmCardPresenter {
     });
   }
 
-  _render() {
-    r;
+  _handleAddWatchedClick() {
+    this._filmChange({
+      ...this._film,
+      userDetails: {
+        ...this._film.userDetails,
+        isWatched: !this._film.userDetails.isWatched,
+        watchingDate: !this._film.userDetails.isWatched ? getCurrentDate() : '',
+      },
+    });
+  }
+
+  _handleAddFavoriteClick() {
+    this._filmChange({
+      ...this._film,
+      userDetails: {
+        ...this._film.userDetails,
+        isFavorite: !this._film.userDetails.isFavorite,
+      },
+    });
   }
 }

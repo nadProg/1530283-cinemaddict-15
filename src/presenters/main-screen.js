@@ -55,6 +55,7 @@ export default class MainScreenPresenter {
   }
 
   _handleFilmChange(updatedFilm) {
+    console.log(updatedFilm);
     this._films = updateItem(this._films, updatedFilm);
 
     // апдейт оригинальной копии
