@@ -55,7 +55,6 @@ export default class MainScreenPresenter {
   }
 
   _handleFilmChange(updatedFilm) {
-    console.log(updatedFilm);
     this._films = updateItem(this._films, updatedFilm);
 
     // апдейт оригинальной копии
@@ -78,22 +77,23 @@ export default class MainScreenPresenter {
     if (this._filmDetailsPresenter) {
       this._filmDetailsPresenter.init(updatedFilm);
     }
+
+    window.scrollTo(pageXOffset, pageYOffset);
   }
 
   _showFilmDetails(film) {
-    this._hideFilmDetails();
+    if (!this._filmDetailsPresenter) {
+      bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
+      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._handleFilmChange, this._hideFilmDetails);
+    }
 
-    bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
-    this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._handleFilmChange, this._hideFilmDetails);
     this._filmDetailsPresenter.init(film);
   }
 
   _hideFilmDetails() {
-    if (this._filmDetailsPresenter) {
-      bodyElement.classList.remove(ClassName.HIDE_OVERFLOW);
-      this._filmDetailsPresenter.destroy();
-      this._filmDetailsPresenter = null;
-    }
+    bodyElement.classList.remove(ClassName.HIDE_OVERFLOW);
+    this._filmDetailsPresenter.destroy();
+    this._filmDetailsPresenter = null;
   }
 
   _renderEmptyBoard() {

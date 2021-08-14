@@ -31,6 +31,7 @@ export default class FilmDetailsPresenter {
 
   init(film) {
     const prevFilmDetailsView = this._filmDetailsView;
+    const scrollTop = prevFilmDetailsView ? this._filmDetailsView.scrollTop : null;
 
     this._film = film;
     this._filmComments = getCommentsByIds(mockComments, this._film.comments);
@@ -42,6 +43,7 @@ export default class FilmDetailsPresenter {
     if (prevFilmDetailsView) {
       document.removeEventListener('keydown', this._onDocumentKeydown);
       replace(this._filmDetailsView, prevFilmDetailsView);
+      this._filmDetailsView.scrollTop = scrollTop;
     } else {
       render(this._filmDetailsContainer, this._filmDetailsView);
     }
@@ -54,26 +56,6 @@ export default class FilmDetailsPresenter {
     };
 
     document.addEventListener('keydown', this._onDocumentKeydown);
-  }
-
-  reinitFilmInfo(updatedFilm) {
-    const prevFilmDetailsView = this._filmDetailsView;
-    this._film = updatedFilm;
-    this._renderFilm();
-
-    document.removeEventListener('keydown', this._onDocumentKeydown);
-
-    this._onDocumentKeydown = (evt) => {
-      if (isEsc(evt)) {
-        evt.preventDefault();
-        this._closeFilmDetails();
-      }
-    };
-
-    document.addEventListener('keydown', this._onDocumentKeydown);
-
-    render(this._filmDetailsBottomView, this._commentsContainerView);
-    replace(this._filmDetailsView, prevFilmDetailsView);
   }
 
   _handleAddToWatchClick() {

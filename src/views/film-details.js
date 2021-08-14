@@ -122,6 +122,14 @@ export default class FilmDetailsView extends AbstractView {
     return createFilmDetailsTemplate(this._film);
   }
 
+  get scrollTop() {
+    return this.getElement().scrollTop;
+  }
+
+  set scrollTop(value) {
+    this.getElement().scrollTop = value;
+  }
+
   _closeButtonClickHandler(evt) {
     evt.preventDefault();
     this._callback.closeButtonclick();
