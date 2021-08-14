@@ -29,9 +29,9 @@ export default class FilmCardPresenter {
     this._filmCardView.setPosterClickHandler(this._handlePosterClick);
     this._filmCardView.setCommentsClickHandler(this._handleCommentsClick);
 
-    this._filmCardView.setAddToWatchClickHandler(this._handleAddToWatchClick);
-    this._filmCardView.setAddWatchedClickHandler(this._handleAddWatchedClick);
-    this._filmCardView.setAddFavoriteClickHandler(this._handleAddFavoriteClick);
+    this._filmCardView.setAddToWatchButtonClickHandler(this._handleAddToWatchClick);
+    this._filmCardView.setAddWatchedButtonClickHandler(this._handleAddWatchedClick);
+    this._filmCardView.setAddFavoriteButtonClickHandler(this._handleAddFavoriteClick);
 
     if (prevFilmCard) {
       replace(this._filmCardView, prevFilmCard);
@@ -82,4 +82,5 @@ export default class FilmCardPresenter {
       },
     });
   }
+
 }

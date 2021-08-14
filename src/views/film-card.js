@@ -43,9 +43,9 @@ export default class FilmCardView extends AbstractView {
     this._titleClickHandler = this._titleClickHandler.bind(this);
     this._posterClickHandler = this._posterClickHandler.bind(this);
     this._commentsClickHandler = this._commentsClickHandler.bind(this);
-    this._addToWatchClickHandler = this._addToWatchClickHandler.bind(this);
-    this._addWatchedClickHandler = this._addWatchedClickHandler.bind(this);
-    this._addFavoriteClickHandler = this._addFavoriteClickHandler.bind(this);
+    this._addToWatchButtonClickHandler = this._addToWatchButtonClickHandler.bind(this);
+    this._addWatchedButtonClickHandler = this._addWatchedButtonClickHandler.bind(this);
+    this._addFavoriteButtonClickHandler = this._addFavoriteButtonClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -67,19 +67,19 @@ export default class FilmCardView extends AbstractView {
     this._callback.commentsClick();
   }
 
-  _addToWatchClickHandler(evt) {
+  _addToWatchButtonClickHandler(evt) {
     evt.preventDefault();
-    this._callback.addToWatchClick();
+    this._callback.addToWatchButtonClick();
   }
 
-  _addWatchedClickHandler(evt) {
+  _addWatchedButtonClickHandler(evt) {
     evt.preventDefault();
-    this._callback.addWatchedClick();
+    this._callback.addWatchedButtonClick();
   }
 
-  _addFavoriteClickHandler(evt) {
+  _addFavoriteButtonClickHandler(evt) {
     evt.preventDefault();
-    this._callback.addFavoriteClick();
+    this._callback.addFavoriteButtonClick();
   }
 
   setTitleClickHandler(callback) {
@@ -100,21 +100,21 @@ export default class FilmCardView extends AbstractView {
       .addEventListener('click', this._commentsClickHandler);
   }
 
-  setAddToWatchClickHandler(callback) {
-    this._callback.addToWatchClick = callback;
+  setAddToWatchButtonClickHandler(callback) {
+    this._callback.addToWatchButtonClick = callback;
     this.getElement().querySelector(`.${ClassName.FILM_CARD_CONTROL_TO_WATCH}`)
-      .addEventListener('click', this._addToWatchClickHandler);
+      .addEventListener('click', this._addToWatchButtonClickHandler);
   }
 
-  setAddWatchedClickHandler(callback) {
-    this._callback.addWatchedClick = callback;
+  setAddWatchedButtonClickHandler(callback) {
+    this._callback.addWatchedButtonClick = callback;
     this.getElement().querySelector(`.${ClassName.FILM_CARD_CONTROL_WATCHED}`)
-      .addEventListener('click', this._addWatchedClickHandler);
+      .addEventListener('click', this._addWatchedButtonClickHandler);
   }
 
-  setAddFavoriteClickHandler(callback) {
-    this._callback.addFavoriteClick = callback;
+  setAddFavoriteButtonClickHandler(callback) {
+    this._callback.addFavoriteButtonClick = callback;
     this.getElement().querySelector(`.${ClassName.FILM_CARD_CONTROL_FAVORITE}`)
-      .addEventListener('click', this._addFavoriteClickHandler);
+      .addEventListener('click', this._addFavoriteButtonClickHandler);
   }
 }
