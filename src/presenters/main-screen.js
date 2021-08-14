@@ -1,6 +1,7 @@
 import { FilmsListOption, SORT_ITEMS, FILMS_STEP, EXTRA_FILMS_AMOUNT, ClassName } from '../const.js';
 import { render, remove } from '../utils/render.js';
 import { sortByRating, sortByComments } from '../utils/film.js';
+import { updateItem } from '../utils/common.js';
 import SortBarView from '../views/sort-bar.js';
 import FilmsBoardView from '../views/films-board.js';
 import FilmsListView from '../views/films-list.js';
@@ -15,6 +16,9 @@ export default class MainScreenPresenter {
   constructor(mainScreenContainer) {
     this._mainScreenContainer = mainScreenContainer;
     this._filmsCount = FILMS_STEP;
+    this._mainFilmPresenter = new Map();
+    this._topRatedFilmPresenter = new Map();
+    this._mostCommentedFilmPresenter = new Map();
     this._filmDetailsPresenter = null;
 
     this._sortBarView = new SortBarView(SORT_ITEMS, SORT_ITEMS[0]);
@@ -51,15 +55,24 @@ export default class MainScreenPresenter {
   }
 
   _handleFilmChange(updatedFilm) {
-    this.this._films = updateItem(this._films, updatedFilm);
+    this._films = updateItem(this._films, updatedFilm);
+
     // апдейт оригинальной копии
     // this._sourcedBoardTasks = updateItem(this._sourcedBoardTasks, updatedFilm);
 
     // апдейт мап презентеров - 3шт.
     //  основной список, top rated, most commented
-    // попап
+    if (this._mainFilmPresenter.has(updatedFilm.id)) {
+      this._mainFilmPresenter.get(updatedFilm.id).init(updatedFilm);
+    }
 
-    // this._taskPresenter.get(updatedTask.id).init(updatedTask);
+    if (this._topRatedFilmPresenter.has(updatedFilm.id)) {
+      this._topRatedFilmPresenter.get(updatedFilm.id).init(updatedFilm);
+    }
+
+    if (this._mostCommentedFilmPresenter.has(updatedFilm.id)) {
+      this._mostCommentedFilmPresenter.get(updatedFilm.id).init(updatedFilm);
+    }
   }
 
   _showFilmDetails(film) {
@@ -87,15 +100,16 @@ export default class MainScreenPresenter {
     render(this._mainScreenContainer, this._sortBarView);
   }
 
-  _renderFilmCard(filmCardContainer, film) {
+  _renderFilmCard(filmCardContainer, film, type) {
     const filmCardPresenter = new FilmCardPresenter(filmCardContainer, this._handleFilmChange, this._showFilmDetails);
     filmCardPresenter.init(film);
+    this[`_${type}FilmPresenter`].set(film.id, filmCardPresenter);
   }
 
   _renderPartialMainFilms(from, to) {
     this._films.slice(from, to)
       .forEach((film) => {
-        this._renderFilmCard(this._mainFilmsContainerView, film);
+        this._renderFilmCard(this._mainFilmsContainerView, film, 'main');
       });
   }
 
@@ -128,8 +142,8 @@ export default class MainScreenPresenter {
       this._renderShowMoreButtonClick();
     }
 
-    this._topRatedFilms.forEach((film) => this._renderFilmCard(this._topRatedFilmsContainerView, film));
-    this._mostCommentedFilms.forEach((film) => this._renderFilmCard(this._mostCommentedFilmsContainerView, film));
+    this._topRatedFilms.forEach((film) => this._renderFilmCard(this._topRatedFilmsContainerView, film, 'topRated'));
+    this._mostCommentedFilms.forEach((film) => this._renderFilmCard(this._mostCommentedFilmsContainerView, film, 'mostCommented'));
 
     render(this._mainScreenContainer, this._filmsBoardView);
   }
