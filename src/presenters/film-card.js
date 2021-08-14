@@ -4,9 +4,9 @@ import { getCurrentDate } from '../utils/date.js';
 import FilmCardView from '../views/film-card.js';
 
 export default class FilmCardPresenter {
-  constructor(filmCardContainer, filmChange, showFilmDetails) {
+  constructor(filmCardContainer, changeFilm, showFilmDetails) {
     this._filmCardContainer = filmCardContainer;
-    this._filmChange = filmChange;
+    this._changeFilm = changeFilm;
     this._showFilmDetails = showFilmDetails;
 
     this._handleTitleClick = this._handleTitleClick.bind(this);
@@ -53,7 +53,7 @@ export default class FilmCardPresenter {
   }
 
   _handleAddToWatchClick() {
-    this._filmChange({
+    this._changeFilm({
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -63,7 +63,7 @@ export default class FilmCardPresenter {
   }
 
   _handleAddWatchedClick() {
-    this._filmChange({
+    this._changeFilm({
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -74,7 +74,7 @@ export default class FilmCardPresenter {
   }
 
   _handleAddFavoriteClick() {
-    this._filmChange({
+    this._changeFilm({
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -82,5 +82,4 @@ export default class FilmCardPresenter {
       },
     });
   }
-
 }

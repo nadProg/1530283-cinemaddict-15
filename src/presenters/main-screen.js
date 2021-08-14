@@ -74,14 +74,18 @@ export default class MainScreenPresenter {
     if (this._mostCommentedFilmPresenter.has(updatedFilm.id)) {
       this._mostCommentedFilmPresenter.get(updatedFilm.id).init(updatedFilm);
     }
+
+    if (this._filmDetailsPresenter) {
+      this._filmDetailsPresenter.init(updatedFilm);
+    }
   }
 
   _showFilmDetails(film) {
     this._hideFilmDetails();
 
     bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
-    this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement);
-    this._filmDetailsPresenter.init(film, this._hideFilmDetails);
+    this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._handleFilmChange, this._hideFilmDetails);
+    this._filmDetailsPresenter.init(film);
   }
 
   _hideFilmDetails() {

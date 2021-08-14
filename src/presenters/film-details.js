@@ -1,18 +1,26 @@
 import { isEsc } from '../utils/common.js';
+import { getCurrentDate } from '../utils/date.js';
 import { render, replace, remove } from '../utils/render.js';
 import FilmDetailsBottomView from '../views/film-details-bottom.js';
 import FilmDetailsView from '../views/film-details.js';
 import CommentsContainerView from '../views/comments-container.js';
 
 export default class FilmDetailsPresenter {
-  constructor(filmDetailsContainer) {
+  constructor(filmDetailsContainer, changeFilm, closeFilmDetails) {
     this._filmDetailsContainer = filmDetailsContainer;
+    this._changeFilm = changeFilm;
+    this._closeFilmDetails = closeFilmDetails;
+
     this._filmDetailsView = null;
     this._filmDetailsBottomView = new FilmDetailsBottomView();
     this._commentsContainerViewView = new CommentsContainerView();
+
+    this._handleAddToWatchClick = this._handleAddToWatchClick.bind(this);
+    this._handleAddWatchedClick = this._handleAddWatchedClick.bind(this);
+    this._handleAddFavoriteClick = this._handleAddFavoriteClick.bind(this);
   }
 
-  init(film, hideFilmDetails) {
+  init(film) {
     this._film = film;
     // this._filmComments = getCommentsByIds(mockComments, this._film.comments);
 
@@ -23,14 +31,16 @@ export default class FilmDetailsPresenter {
     this._onDocumentKeydown = (evt) => {
       if (isEsc(evt)) {
         evt.preventDefault();
-        hideFilmDetails();
+        this.closeFilmDetails();
       }
     };
 
     document.addEventListener('keydown', this._onDocumentKeydown);
-    this._filmDetailsView.setCloseButtonClickHandler(() => {
-      hideFilmDetails();
-    });
+    this._filmDetailsView.setCloseButtonClickHandler(this.closeFilmDetails);
+
+    this._filmDetailsView.setAddToWatchButtonClickHandler(this._handleAddToWatchClick);
+    this._filmDetailsView.setAddWatchedButtonClickHandler(this._handleAddWatchedClick);
+    this._filmDetailsView.setAddFavoriteButtonClickHandler(this._handleAddFavoriteClick);
 
     render(this._filmDetailsView, this._filmDetailsBottomView);
     render(this._filmDetailsBottomView, this._commentsContainerViewView);
@@ -41,6 +51,37 @@ export default class FilmDetailsPresenter {
     } else {
       render(this._filmDetailsContainer, this._filmDetailsView);
     }
+  }
+
+  _handleAddToWatchClick() {
+    this._changeFilm({
+      ...this._film,
+      userDetails: {
+        ...this._film.userDetails,
+        isToWatch: !this._film.userDetails.isToWatch,
+      },
+    });
+  }
+
+  _handleAddWatchedClick() {
+    this._changeFilm({
+      ...this._film,
+      userDetails: {
+        ...this._film.userDetails,
+        isWatched: !this._film.userDetails.isWatched,
+        watchingDate: !this._film.userDetails.isWatched ? getCurrentDate() : '',
+      },
+    });
+  }
+
+  _handleAddFavoriteClick() {
+    this._changeFilm({
+      ...this._film,
+      userDetails: {
+        ...this._film.userDetails,
+        isFavorite: !this._film.userDetails.isFavorite,
+      },
+    });
   }
 
   destroy() {

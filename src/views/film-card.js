@@ -43,6 +43,7 @@ export default class FilmCardView extends AbstractView {
     this._titleClickHandler = this._titleClickHandler.bind(this);
     this._posterClickHandler = this._posterClickHandler.bind(this);
     this._commentsClickHandler = this._commentsClickHandler.bind(this);
+
     this._addToWatchButtonClickHandler = this._addToWatchButtonClickHandler.bind(this);
     this._addWatchedButtonClickHandler = this._addWatchedButtonClickHandler.bind(this);
     this._addFavoriteButtonClickHandler = this._addFavoriteButtonClickHandler.bind(this);
