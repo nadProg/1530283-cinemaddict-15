@@ -57,11 +57,6 @@ export default class MainScreenPresenter {
   _handleFilmChange(updatedFilm) {
     this._films = updateItem(this._films, updatedFilm);
 
-    // апдейт оригинальной копии
-    // this._sourcedBoardTasks = updateItem(this._sourcedBoardTasks, updatedFilm);
-
-    // апдейт мап презентеров - 3шт.
-    //  основной список, top rated, most commented
     if (this._mainFilmPresenter.has(updatedFilm.id)) {
       this._mainFilmPresenter.get(updatedFilm.id).init(updatedFilm);
     }
@@ -78,7 +73,6 @@ export default class MainScreenPresenter {
       this._filmDetailsPresenter.init(updatedFilm);
     }
 
-    window.scrollTo(pageXOffset, pageYOffset);
   }
 
   _showFilmDetails(film) {

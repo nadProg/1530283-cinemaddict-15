@@ -11,18 +11,12 @@ import CommentView from '../views/comment.js';
 import NewCommentView from '../views/new-comment.js';
 
 export default class FilmDetailsPresenter {
-  constructor(filmDetailsContainer, changeFilm, closeFilmDetails) {
+  constructor(filmDetailsContainer, changeFilm, hideFilmDetails) {
     this._filmDetailsContainer = filmDetailsContainer;
     this._changeFilm = changeFilm;
-    this._closeFilmDetails = closeFilmDetails;
+    this._hideFilmDetails = hideFilmDetails;
 
-    this._filmDetailsView = null;
-    this._filmDetailsBottomView = new FilmDetailsBottomView();
-    this._commentsContainerView = new CommentsContainerView();
-    this._commentsTitleView = new CommentsTitleView();
-    this._commentsListView = new CommentsListView();
-
-    this._closeFilmDetails = this._closeFilmDetails.bind(this);
+    this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
 
     this._handleAddToWatchClick = this._handleAddToWatchClick.bind(this);
     this._handleAddWatchedClick = this._handleAddWatchedClick.bind(this);
@@ -51,11 +45,15 @@ export default class FilmDetailsPresenter {
     this._onDocumentKeydown = (evt) => {
       if (isEsc(evt)) {
         evt.preventDefault();
-        this._closeFilmDetails();
+        this._hideFilmDetails();
       }
     };
 
     document.addEventListener('keydown', this._onDocumentKeydown);
+  }
+
+  _handleCloseButtonClick() {
+    this._hideFilmDetails();
   }
 
   _handleAddToWatchClick() {
@@ -97,7 +95,7 @@ export default class FilmDetailsPresenter {
     this._filmDetailsView = new FilmDetailsView(this._film);
     this._filmDetailsBottomView = new FilmDetailsBottomView();
 
-    this._filmDetailsView.setCloseButtonClickHandler(this._closeFilmDetails);
+    this._filmDetailsView.setCloseButtonClickHandler(this._handleCloseButtonClick);
 
     this._filmDetailsView.setAddToWatchButtonClickHandler(this._handleAddToWatchClick);
     this._filmDetailsView.setAddWatchedButtonClickHandler(this._handleAddWatchedClick);
@@ -129,52 +127,3 @@ export default class FilmDetailsPresenter {
     document.removeEventListener('keydown', this._onDocumentKeydown);
   }
 }
-
-// const renderComment = (container, comment) => {
-//   const commentView = new CommentView(comment);
-//   render(container, commentView);
-// };
-
-// const renderComments = (container, comments, newComment) => {
-//   const commentTitleView = new CommentsTitleView(comments.length);
-//   const commentsListView = new CommentsListView();
-//   const newCommentView = new NewCommentView(newComment);
-
-//   comments.forEach((comment) => {
-//     renderComment(commentsListView, comment);
-//   });
-
-//   render(container, commentTitleView);
-//   render(container, commentsListView);
-//   render(container, newCommentView);
-// };
-
-// const renderFilmDetails = (container, film) => {
-//   const filmDetailsView = new FilmDetailsView(film);
-//   const filmDetailsBottomView = new FilmDetailsBottomView();
-//   const commentsContainerViewView = new CommentsContainerView();
-
-//   const filmComments = getCommentsByIds(mockComments, film.comments);
-
-//   const onDocumentKeydown = (evt) => {
-//     if (isEsc(evt)) {
-//       evt.preventDefault();
-//       hideFilmDetails();
-//     }
-//   };
-
-//   render(filmDetailsView, filmDetailsBottomView);
-//   render(filmDetailsBottomView, commentsContainerViewView);
-//   renderComments(commentsContainerViewView, filmComments, mockNewComment);
-
-//   document.addEventListener('keydown', onDocumentKeydown);
-//   filmDetailsView.setClickHandler(hideFilmDetails);
-
-//   render(container, filmDetailsView);
-
-//   function hideFilmDetails() {
-//     remove(filmDetailsView);
-//     bodyElement.classList.remove(ClassName.HIDE_OVERFLOW);
-//     document.removeEventListener('keydown', onDocumentKeydown);
-//   }
-// };
