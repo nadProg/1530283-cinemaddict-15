@@ -12,8 +12,8 @@ import MainScreenPresenter from './presenters/main-screen.js';
 // Генерация моковых данных
 
 const mockFilms = generateFilms();
-const mockComments = generateComments();
-const mockNewComment = generateNewComment();
+// const mockComments = generateComments();
+// const mockNewComment = generateNewComment();
 
 const mockFilters = generateFilters(mockFilms);
 
