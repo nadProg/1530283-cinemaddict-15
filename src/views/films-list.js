@@ -6,7 +6,7 @@ const createFilmsListTemplate = ({ title, isExtra, isTitleVisiallyHidden }) => `
     </section>
   `;
 
-export default class FilmsList extends AbstractView {
+export default class FilmsListView extends AbstractView {
   constructor(options) {
     super();
 

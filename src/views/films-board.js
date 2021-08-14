@@ -2,7 +2,7 @@ import AbstractView from './abstract.js';
 
 const createFilmsBoardTemplate = () => '<section class="films"></section>';
 
-export default class FilmsBoard extends AbstractView {
+export default class FilmsBoardView extends AbstractView {
   getTemplate() {
     return createFilmsBoardTemplate();
   }

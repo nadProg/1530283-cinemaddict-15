@@ -7,7 +7,7 @@ const createCommentsTitleTemplate = (amount) => `
   </h3>
 `;
 
-export default class CommentsTitle extends AbstractView {
+export default class CommentsTitleView extends AbstractView {
   constructor(amount) {
     super();
 

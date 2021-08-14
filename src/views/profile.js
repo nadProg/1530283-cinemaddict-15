@@ -30,7 +30,7 @@ const createProfileTemplate = (watchedFilmsAmount) => `
   </section>
 `;
 
-export default class Profile extends AbstractView {
+export default class ProfileView extends AbstractView {
   constructor(watchedFilmsAmount) {
     super();
 

@@ -33,7 +33,7 @@ export const createNewCommentTemplate = ({ text, emotion: currentEmotion }) => {
   `;
 };
 
-export default class NewComment extends AbstractView {
+export default class NewCommentView extends AbstractView {
   constructor(newComment) {
     super();
 
