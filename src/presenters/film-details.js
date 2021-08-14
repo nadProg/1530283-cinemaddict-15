@@ -15,6 +15,8 @@ export default class FilmDetailsPresenter {
     this._filmDetailsBottomView = new FilmDetailsBottomView();
     this._commentsContainerViewView = new CommentsContainerView();
 
+    this._closeFilmDetails = this._closeFilmDetails.bind(this);
+
     this._handleAddToWatchClick = this._handleAddToWatchClick.bind(this);
     this._handleAddWatchedClick = this._handleAddWatchedClick.bind(this);
     this._handleAddFavoriteClick = this._handleAddFavoriteClick.bind(this);
@@ -28,15 +30,7 @@ export default class FilmDetailsPresenter {
 
     this._filmDetailsView = new FilmDetailsView(this._film);
 
-    this._onDocumentKeydown = (evt) => {
-      if (isEsc(evt)) {
-        evt.preventDefault();
-        this.closeFilmDetails();
-      }
-    };
-
-    document.addEventListener('keydown', this._onDocumentKeydown);
-    this._filmDetailsView.setCloseButtonClickHandler(this.closeFilmDetails);
+    this._filmDetailsView.setCloseButtonClickHandler(this._closeFilmDetails);
 
     this._filmDetailsView.setAddToWatchButtonClickHandler(this._handleAddToWatchClick);
     this._filmDetailsView.setAddWatchedButtonClickHandler(this._handleAddWatchedClick);
@@ -47,10 +41,20 @@ export default class FilmDetailsPresenter {
     // renderComments(commentsContainerViewView, filmComments, mockNewComment);
 
     if (prevFilmDetailsView) {
+      document.removeEventListener('keydown', this._onDocumentKeydown);
       replace(this._filmDetailsView, prevFilmDetailsView);
     } else {
       render(this._filmDetailsContainer, this._filmDetailsView);
     }
+
+    this._onDocumentKeydown = (evt) => {
+      if (isEsc(evt)) {
+        evt.preventDefault();
+        this._closeFilmDetails();
+      }
+    };
+
+    document.addEventListener('keydown', this._onDocumentKeydown);
   }
 
   _handleAddToWatchClick() {
