@@ -13,9 +13,9 @@ export default class FilmCardPresenter {
     this._handlePosterClick = this._handlePosterClick.bind(this);
     this._handleCommentsClick = this._handleCommentsClick.bind(this);
 
-    this._handleAddToWatchClick = this._handleAddToWatchClick.bind(this);
-    this._handleAddWatchedClick = this._handleAddWatchedClick.bind(this);
-    this._handleAddFavoriteClick = this._handleAddFavoriteClick.bind(this);
+    this._handleAddToWatchButtonClick = this._handleAddToWatchButtonClick.bind(this);
+    this._handleAddWatchedButtonClick = this._handleAddWatchedButtonClick.bind(this);
+    this._handleAddFavoriteButtonClick = this._handleAddFavoriteButtonClick.bind(this);
   }
 
   init(film) {
@@ -29,9 +29,9 @@ export default class FilmCardPresenter {
     this._filmCardView.setPosterClickHandler(this._handlePosterClick);
     this._filmCardView.setCommentsClickHandler(this._handleCommentsClick);
 
-    this._filmCardView.setAddToWatchButtonClickHandler(this._handleAddToWatchClick);
-    this._filmCardView.setAddWatchedButtonClickHandler(this._handleAddWatchedClick);
-    this._filmCardView.setAddFavoriteButtonClickHandler(this._handleAddFavoriteClick);
+    this._filmCardView.setAddToWatchButtonClickHandler(this._handleAddToWatchButtonClick);
+    this._filmCardView.setAddWatchedButtonClickHandler(this._handleAddWatchedButtonClick);
+    this._filmCardView.setAddFavoriteButtonClickHandler(this._handleAddFavoriteButtonClick);
 
     if (prevFilmCard) {
       replace(this._filmCardView, prevFilmCard);
@@ -52,7 +52,7 @@ export default class FilmCardPresenter {
     this._showFilmDetails(this._film);
   }
 
-  _handleAddToWatchClick() {
+  _handleAddToWatchButtonClick() {
     this._changeFilm({
       ...this._film,
       userDetails: {
@@ -62,7 +62,7 @@ export default class FilmCardPresenter {
     });
   }
 
-  _handleAddWatchedClick() {
+  _handleAddWatchedButtonClick() {
     this._changeFilm({
       ...this._film,
       userDetails: {
@@ -73,7 +73,7 @@ export default class FilmCardPresenter {
     });
   }
 
-  _handleAddFavoriteClick() {
+  _handleAddFavoriteButtonClick() {
     this._changeFilm({
       ...this._film,
       userDetails: {

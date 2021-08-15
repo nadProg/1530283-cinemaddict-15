@@ -1,28 +1,29 @@
 import AbstractView from './abstract.js';
-import { ClassName } from '../const.js';
+import { ClassName, SortType } from '../const.js';
 
-const setActiveClassName = (condition) => condition ? ClassName.SORT_ITEM_ACTIVE : '';
+const setActiveClassName = (condition) => condition ? ClassName.SORT_BUTTON_ACTIVE : '';
 
 const createSortItemTemplate = (sortType, isChecked) => `
   <li>
-    <a href="#${sortType}" class="sort__button ${setActiveClassName(isChecked)}">Sort by ${sortType}</a>
+    <a href="#${sortType}" class="sort__button ${setActiveClassName(isChecked)}" data-sort-type="${sortType}">
+      Sort by ${sortType}
+    </a>
   </li>
 `;
 
-export const createSortBarTemplate = (sortItems = [], activeSortItem) => {
-  const sortItemsTemplate = sortItems.map((sortItem) => createSortItemTemplate(sortItem, sortItem === activeSortItem)).join('');
+export const createSortBarTemplate = (activeSortType) => {
+  const sortItemsTemplate = Object.values(SortType).map((sortType) => createSortItemTemplate(sortType, sortType === activeSortType)).join('');
   return `<ul class="sort">${sortItemsTemplate}</ul>`;
 };
 
 export default class SortBarView extends AbstractView {
-  constructor(items, activeItem) {
+  constructor(activeSortType = SortType.DEFAULT) {
     super();
 
-    this._items = items;
-    this._activeItem = activeItem;
+    this._activeSortType = activeSortType;
   }
 
   getTemplate() {
-    return createSortBarTemplate(this._items, this._activeItem);
+    return createSortBarTemplate(this._activeSortType);
   }
 }

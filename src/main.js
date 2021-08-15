@@ -1,19 +1,15 @@
 import { generateFilms } from './mock/films.js';
-import { generateComments, generateNewComment } from './mock/comments.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
 import { ClassName } from './const.js';
 import { render } from './utils/render.js';
 import ProfileView from './views/profile.js';
 import NavigationView from './views/navigation.js';
 import FooterStatisticView from './views/footer-statistic.js';
-
 import MainScreenPresenter from './presenters/main-screen.js';
 
 // Генерация моковых данных
 
 const mockFilms = generateFilms();
-// const mockComments = generateComments();
-// const mockNewComment = generateNewComment();
 
 const mockFilters = generateFilters(mockFilms);
 
@@ -59,5 +55,6 @@ const mainScreenPresenter = new MainScreenPresenter(mainElement);
 
 renderProfile(headerElement, historyFilmsAmount);
 renderNavigation(mainElement, mockFilters, mockFilters[0].name);
-mainScreenPresenter.init(mockFilms);
 renderFooterStatisctic(footerElement, allFilmsAmount);
+
+mainScreenPresenter.init(mockFilms);

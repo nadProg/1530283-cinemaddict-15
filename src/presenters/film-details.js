@@ -17,46 +17,31 @@ export default class FilmDetailsPresenter {
     this._hideFilmDetails = hideFilmDetails;
 
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
+    this._handleDocumentKeydown = this._handleDocumentKeydown.bind(this);
 
-    this._handleAddToWatchClick = this._handleAddToWatchClick.bind(this);
-    this._handleAddWatchedClick = this._handleAddWatchedClick.bind(this);
-    this._handleAddFavoriteClick = this._handleAddFavoriteClick.bind(this);
+    this._handleAddToWatchButtonClick = this._handleAddToWatchButtonClick.bind(this);
+    this._handleAddWatchedButtonClick = this._handleAddWatchedButtonClick.bind(this);
+    this._handleAddFavoriteButtonClick = this._handleAddFavoriteButtonClick.bind(this);
   }
 
   init(film) {
-    const prevFilmDetailsView = this._filmDetailsView;
-    const scrollTop = prevFilmDetailsView ? this._filmDetailsView.scrollTop : null;
-
     this._film = film;
     this._filmComments = getCommentsByIds(mockComments, this._film.comments);
-
-    this._renderFilm();
-    this._renderComments();
-    this._renderNewComment();
-
-    if (prevFilmDetailsView) {
-      document.removeEventListener('keydown', this._onDocumentKeydown);
-      replace(this._filmDetailsView, prevFilmDetailsView);
-      this._filmDetailsView.scrollTop = scrollTop;
-    } else {
-      render(this._filmDetailsContainer, this._filmDetailsView);
-    }
-
-    this._onDocumentKeydown = (evt) => {
-      if (isEsc(evt)) {
-        evt.preventDefault();
-        this._hideFilmDetails();
-      }
-    };
-
-    document.addEventListener('keydown', this._onDocumentKeydown);
+    this._renderFilmDetails();
   }
 
   _handleCloseButtonClick() {
     this._hideFilmDetails();
   }
 
-  _handleAddToWatchClick() {
+  _handleDocumentKeydown(evt) {
+    if (isEsc(evt)) {
+      evt.preventDefault();
+      this._hideFilmDetails();
+    }
+  }
+
+  _handleAddToWatchButtonClick() {
     this._changeFilm({
       ...this._film,
       userDetails: {
@@ -66,7 +51,7 @@ export default class FilmDetailsPresenter {
     });
   }
 
-  _handleAddWatchedClick() {
+  _handleAddWatchedButtonClick() {
     this._changeFilm({
       ...this._film,
       userDetails: {
@@ -77,7 +62,7 @@ export default class FilmDetailsPresenter {
     });
   }
 
-  _handleAddFavoriteClick() {
+  _handleAddFavoriteButtonClick() {
     this._changeFilm({
       ...this._film,
       userDetails: {
@@ -91,15 +76,15 @@ export default class FilmDetailsPresenter {
     render(this._commentsContainerView, new CommentView(comment));
   }
 
-  _renderFilm() {
+  _renderFilmInfo() {
     this._filmDetailsView = new FilmDetailsView(this._film);
     this._filmDetailsBottomView = new FilmDetailsBottomView();
 
     this._filmDetailsView.setCloseButtonClickHandler(this._handleCloseButtonClick);
 
-    this._filmDetailsView.setAddToWatchButtonClickHandler(this._handleAddToWatchClick);
-    this._filmDetailsView.setAddWatchedButtonClickHandler(this._handleAddWatchedClick);
-    this._filmDetailsView.setAddFavoriteButtonClickHandler(this._handleAddFavoriteClick);
+    this._filmDetailsView.setAddToWatchButtonClickHandler(this._handleAddToWatchButtonClick);
+    this._filmDetailsView.setAddWatchedButtonClickHandler(this._handleAddWatchedButtonClick);
+    this._filmDetailsView.setAddFavoriteButtonClickHandler(this._handleAddFavoriteButtonClick);
 
     render(this._filmDetailsView, this._filmDetailsBottomView);
   }
@@ -109,21 +94,41 @@ export default class FilmDetailsPresenter {
     this._commentsListView = new CommentsListView();
     this._commentsTitleView =  new CommentsTitleView(this._filmComments.length);
 
-    render(this._filmDetailsBottomView, this._commentsContainerView);
     render(this._commentsContainerView, this._commentsTitleView);
     render(this._commentsContainerView, this._commentsListView);
 
     this._filmComments.forEach((comment) => {
       render(this._commentsListView, new CommentView(comment));
     });
+
+    render(this._filmDetailsBottomView, this._commentsContainerView);
   }
 
   _renderNewComment() {
-    render(this._commentsListView, new NewCommentView({}));
+    render(this._commentsListView, new NewCommentView());
+  }
+
+  _renderFilmDetails() {
+    const prevFilmDetailsView = this._filmDetailsView;
+    const scrollTop = prevFilmDetailsView ? this._filmDetailsView.scrollTop : null;
+
+    this._renderFilmInfo();
+    this._renderComments();
+    this._renderNewComment();
+
+    if (prevFilmDetailsView) {
+      document.removeEventListener('keydown', this._handleDocumentKeydown);
+      replace(this._filmDetailsView, prevFilmDetailsView);
+      this._filmDetailsView.scrollTop = scrollTop;
+    } else {
+      render(this._filmDetailsContainer, this._filmDetailsView);
+    }
+
+    document.addEventListener('keydown', this._handleDocumentKeydown);
   }
 
   destroy() {
     remove(this._filmDetailsView);
-    document.removeEventListener('keydown', this._onDocumentKeydown);
+    document.removeEventListener('keydown', this._handleDocumentKeydown);
   }
 }

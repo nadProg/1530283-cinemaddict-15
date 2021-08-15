@@ -6,11 +6,18 @@ export const EXTRA_FILMS_AMOUNT = 2;
 
 export const MAX_DESCRIPTION_LENGTH = 140;
 
-export const RANKS = ['none', 'novice', 'fan', 'movieBuff'];
+export const SortType = {
+  DEFAULT: 'default',
+  DATE: 'date',
+  RATING: 'rating',
+};
 
-export const SORT_ITEMS = ['default', 'date', 'rating'];
-
-export const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
+export const Emotion = {
+  SMILE: 'smile',
+  SLEEPING: 'sleeping',
+  PUKE: 'puke',
+  ANGRY: 'angry',
+};
 
 export const Place = {
   BEFORE_END: 'beforeend',
@@ -22,7 +29,8 @@ export const ClassName = {
   HEADER: 'header',
   FOOTER: 'footer',
   HIDE_OVERFLOW: 'hide-overflow',
-  SORT_ITEM_ACTIVE: 'sort__button--active',
+  SORT_BUTTON: 'sort__button',
+  SORT_BUTTON_ACTIVE: 'sort__button--active',
   FILMS_CONTAINER: 'films-list__container',
   COMMENTS_CONTAINER: 'film-details__comments-wrap',
   SHOW_MORE_BUTTON: 'films-list__show-more',
@@ -41,20 +49,23 @@ export const ClassName = {
   FILM_DETAILS_CONTROL_ACTIVE: 'film-details__control-button--active',
 };
 
-export const FilmsListOption = {
+export const FilmListOption = {
   EMPTY: {
     title: 'There are no movies in our database',
   },
   MAIN: {
     title: 'All movies. Upcoming',
     isTitleVisiallyHidden: true,
+    type: 'main',
   },
   TOP_RATED: {
     title: 'Top rated',
     isExtra: true,
+    type: 'topRated',
   },
   MOST_COMMENTED: {
     title: 'Most commented',
     isExtra: true,
+    type: 'mostCommented',
   },
 };

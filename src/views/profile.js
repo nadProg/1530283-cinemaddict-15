@@ -1,5 +1,4 @@
 import AbstractView from './abstract.js';
-import { RANKS } from '../const.js';
 
 const rankToTextContent = {
   none: '',
@@ -16,9 +15,9 @@ const rankToUpperLimit = {
 };
 
 const getProfileRank = (watchedFilmsAmount) => {
-  for (const userRank of RANKS) {
-    if (watchedFilmsAmount <= rankToUpperLimit[userRank]) {
-      return rankToTextContent[userRank];
+  for (const [rank, upperLimit] of Object.entries(rankToUpperLimit)) {
+    if (watchedFilmsAmount <= upperLimit) {
+      return rankToTextContent[rank];
     }
   }
 };
