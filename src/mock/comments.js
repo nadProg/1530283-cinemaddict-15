@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
-import { EMOTIONS } from '../const.js';
+import { Emotion } from '../const.js';
 import * as CommentMock from './mock-const.js';
 import { getRandomItemFromArray, getRandomInteger, getRandomBoolean } from '../utils/common.js';
 
 const generateAuthor = () => getRandomItemFromArray(CommentMock.PEOPLE);
 
-const generateEmotion = () => getRandomItemFromArray(EMOTIONS);
+const generateEmotion = () => getRandomItemFromArray(Object.values(Emotion));
 
 const generateText = () => getRandomItemFromArray(CommentMock.COMMENT_PHRASES);
 
@@ -31,7 +31,7 @@ export const generateComment = (id) => ({
   date: generateCommentDate(),
 });
 
-export const generateComments = () => {
+const generateComments = () => {
   const amount = CommentMock.COMMENTS_AMOUNT;
   return new Array(amount).fill().map((item, index) => generateComment(index + 1));
 };
@@ -43,6 +43,8 @@ export const generateNewComment = () => {
 
   return { text, emotion };
 };
+
+export const mockComments = generateComments();
 
 const getCommentById = (comments, id) => comments.find((comment) => comment.id === id);
 

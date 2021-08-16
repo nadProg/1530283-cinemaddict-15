@@ -43,6 +43,10 @@ export default class FilmCardView extends AbstractView {
     this._titleClickHandler = this._titleClickHandler.bind(this);
     this._posterClickHandler = this._posterClickHandler.bind(this);
     this._commentsClickHandler = this._commentsClickHandler.bind(this);
+
+    this._addToWatchButtonClickHandler = this._addToWatchButtonClickHandler.bind(this);
+    this._addWatchedButtonClickHandler = this._addWatchedButtonClickHandler.bind(this);
+    this._addFavoriteButtonClickHandler = this._addFavoriteButtonClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -64,6 +68,21 @@ export default class FilmCardView extends AbstractView {
     this._callback.commentsClick();
   }
 
+  _addToWatchButtonClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.addToWatchButtonClick();
+  }
+
+  _addWatchedButtonClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.addWatchedButtonClick();
+  }
+
+  _addFavoriteButtonClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.addFavoriteButtonClick();
+  }
+
   setTitleClickHandler(callback) {
     this._callback.titleClick = callback;
     this.getElement().querySelector(`.${ClassName.FILM_CARD_TITLE}`)
@@ -80,5 +99,23 @@ export default class FilmCardView extends AbstractView {
     this._callback.commentsClick = callback;
     this.getElement().querySelector(`.${ClassName.FILM_CARD_COMMENTS}`)
       .addEventListener('click', this._commentsClickHandler);
+  }
+
+  setAddToWatchButtonClickHandler(callback) {
+    this._callback.addToWatchButtonClick = callback;
+    this.getElement().querySelector(`.${ClassName.FILM_CARD_CONTROL_TO_WATCH}`)
+      .addEventListener('click', this._addToWatchButtonClickHandler);
+  }
+
+  setAddWatchedButtonClickHandler(callback) {
+    this._callback.addWatchedButtonClick = callback;
+    this.getElement().querySelector(`.${ClassName.FILM_CARD_CONTROL_WATCHED}`)
+      .addEventListener('click', this._addWatchedButtonClickHandler);
+  }
+
+  setAddFavoriteButtonClickHandler(callback) {
+    this._callback.addFavoriteButtonClick = callback;
+    this.getElement().querySelector(`.${ClassName.FILM_CARD_CONTROL_FAVORITE}`)
+      .addEventListener('click', this._addFavoriteButtonClickHandler);
   }
 }

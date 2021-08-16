@@ -97,7 +97,3 @@ export const generateFilms = () => {
 
   return new Array(amount).fill().map((item, index) => generateFilm(index + 1));
 };
-
-export const getTopRatedFilms = (films) => [...films].sort((a, b) => b.filmInfo.rating - a.filmInfo.rating);
-
-export const getMostCommentedFilms = (films) => [...films].sort((a, b) => b.comments.length - a.comments.length);
