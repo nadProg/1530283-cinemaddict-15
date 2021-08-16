@@ -49,7 +49,7 @@ export const ClassName = {
   FILM_DETAILS_CONTROL_ACTIVE: 'film-details__control-button--active',
 };
 
-export const FilmListOption = {
+export const FilmsListOption = {
   EMPTY: {
     title: 'There are no movies in our database',
   },

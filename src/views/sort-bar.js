@@ -17,13 +17,31 @@ export const createSortBarTemplate = (activeSortType) => {
 };
 
 export default class SortBarView extends AbstractView {
-  constructor(activeSortType = SortType.DEFAULT) {
+  constructor(activeSortType) {
     super();
 
     this._activeSortType = activeSortType;
+
+    this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
     return createSortBarTemplate(this._activeSortType);
+  }
+
+  _sortTypeChangeHandler(evt) {
+    const button = evt.target.closest(`.${ClassName.SORT_BUTTON}`);
+
+    if (!button || !evt.currentTarget.contains(button)) {
+      return;
+    }
+
+    evt.preventDefault();
+    this._callback.sortTypeChange(button.dataset.sortType);
+  }
+
+  setSortTypeChangeHandler(callback) {
+    this._callback.sortTypeChange = callback;
+    this.getElement().addEventListener('click', this._sortTypeChangeHandler);
   }
 }
