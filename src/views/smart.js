@@ -15,7 +15,7 @@ export default class SmartView extends AbstractView {
 
     this._data = {
       ...this._data,
-      update,
+      ...update,
     };
 
     if (justDataUpdating) {
@@ -27,6 +27,7 @@ export default class SmartView extends AbstractView {
 
   updateElement() {
     const prevElement = this.getElement();
+    this.removeElement();
     replace(this.getElement(), prevElement);
     this.restoreHandlers();
   }

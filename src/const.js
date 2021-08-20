@@ -1,4 +1,7 @@
-export const ESCAPE_CODE = 'Escape';
+export const KeyCode = {
+  ENTER: 'Enter',
+  ESCAPE: 'Escape',
+};
 
 export const FILMS_STEP = 5;
 
@@ -68,4 +71,9 @@ export const FilmsListOption = {
     isExtra: true,
     type: 'mostCommented',
   },
+};
+
+export const NEW_COMMENT_DEFAULT = {
+  text: '',
+  currentEmotion: '',
 };

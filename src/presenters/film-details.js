@@ -16,6 +16,8 @@ export default class FilmDetailsPresenter {
     this._changeFilm = changeFilm;
     this._hideFilmDetails = hideFilmDetails;
 
+    this._createComment = this._createComment.bind(this);
+
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
     this._handleDocumentKeydown = this._handleDocumentKeydown.bind(this);
 
@@ -25,9 +27,20 @@ export default class FilmDetailsPresenter {
   }
 
   init(film) {
+    const prevFilmId = this._film ? this._film.id : null;
+
     this._film = film;
     this._filmComments = getCommentsByIds(mockComments, this._film.comments);
+
+    if (this._film.id !== prevFilmId) {
+      this._newCommentView = null;
+    }
+
     this._renderFilmDetails();
+  }
+
+  _createComment() {
+    // Будет создавать новый комментарий
   }
 
   _handleCloseButtonClick() {
@@ -105,7 +118,12 @@ export default class FilmDetailsPresenter {
   }
 
   _renderNewComment() {
-    render(this._commentsListView, new NewCommentView());
+    if (!this._newCommentView) {
+      this._newCommentView = new NewCommentView();
+      this._newCommentView.setSubmitHandler(this._createComment);
+    }
+
+    render(this._commentsListView, this._newCommentView);
   }
 
   _renderFilmDetails() {
