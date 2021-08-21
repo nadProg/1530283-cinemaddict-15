@@ -27,16 +27,17 @@ export default class FilmDetailsPresenter {
   }
 
   init(film) {
-    const prevFilmId = this._film ? this._film.id : null;
-
     this._film = film;
     this._filmComments = getCommentsByIds(mockComments, this._film.comments);
+    this._renderFilmDetails();
+  }
 
-    if (this._film.id !== prevFilmId) {
-      this._newCommentView = null;
+  get filmId() {
+    if (this._film) {
+      return this._film.id;
     }
 
-    this._renderFilmDetails();
+    throw new Error('Film Presenter has not been initialized');
   }
 
   _createComment() {

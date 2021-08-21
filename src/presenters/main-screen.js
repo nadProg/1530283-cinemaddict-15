@@ -115,6 +115,12 @@ export default class MainScreenPresenter {
   }
 
   _showFilmDetails(film) {
+    if (this._filmDetailsPresenter &&
+        this._filmDetailsPresenter.filmId !== film.id) {
+      this._filmDetailsPresenter.destroy();
+      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._handleFilmChange, this._hideFilmDetails);
+    }
+
     if (!this._filmDetailsPresenter) {
       bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
       this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._handleFilmChange, this._hideFilmDetails);
