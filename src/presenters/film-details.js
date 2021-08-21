@@ -41,7 +41,9 @@ export default class FilmDetailsPresenter {
   }
 
   _createComment() {
-    // Будет создавать новый комментарий
+    // Здесь будет создание новго комментария
+
+    this._newCommentView.reset();
   }
 
   _handleCloseButtonClick() {

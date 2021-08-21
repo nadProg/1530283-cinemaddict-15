@@ -33,8 +33,9 @@ export default class MainScreenPresenter {
 
   init(films) {
     // В будущем презентер будет также учитывать фильтрацию фильмов
-    // поэтому необходим будет массив this._allFilms
+    // поэтому необходим массив this._allFilms
     // для вычисления topRated и mostCommented блоков
+    // Скорее всего эта функциональность перейдет в модель
 
     this._allFilms = [...films];
     this._mainFilms = [...films];
