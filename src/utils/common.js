@@ -1,6 +1,8 @@
-import { ESCAPE_CODE } from '../const.js';
+import { KeyCode } from '../const.js';
 
-export const isEsc = ({ code }) => code === ESCAPE_CODE;
+export const isEsc = ({ code }) => code === KeyCode.ESCAPE;
+
+export const isEnter = ({ code }) => code === KeyCode.ENTER;
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));

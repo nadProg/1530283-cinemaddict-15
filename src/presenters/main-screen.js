@@ -32,20 +32,26 @@ export default class MainScreenPresenter {
   }
 
   init(films) {
-    this._films = [...films];
+    // В будущем презентер будет также учитывать фильтрацию фильмов
+    // поэтому необходим массив this._allFilms
+    // для вычисления topRated и mostCommented блоков
+    // Скорее всего эта функциональность перейдет в модель
+
+    this._allFilms = [...films];
+    this._mainFilms = [...films];
     this._defaultFilms = [...films];
     this._renderMainScreen();
   }
 
   get _topRatedFilms() {
-    return [...this._defaultFilms]
+    return this._allFilms
       .filter(hasRating)
       .sort(sortByRating)
       .slice(0, EXTRA_FILMS_AMOUNT);
   }
 
   get _mostCommentedFilms() {
-    return [...this._defaultFilms]
+    return this._allFilms
       .filter(hasComments)
       .sort(sortByComments)
       .slice(0, EXTRA_FILMS_AMOUNT);
@@ -54,13 +60,13 @@ export default class MainScreenPresenter {
   _sortFilms(sortType) {
     switch (sortType) {
       case SortType.DATE:
-        this._films = [...this._defaultFilms].sort(sortByDate);
+        this._mainFilms.sort(sortByDate);
         break;
       case SortType.RATING:
-        this._films = [...this._defaultFilms].sort(sortByRating);
+        this._mainFilms.sort(sortByRating);
         break;
       default:
-        this._films = [...this._defaultFilms];
+        this._mainFilms = [...this._defaultFilms];
         break;
     }
 
@@ -79,7 +85,8 @@ export default class MainScreenPresenter {
   }
 
   _handleFilmChange(updatedFilm) {
-    this._films = updateItem(this._films, updatedFilm);
+    this._allFilms = updateItem(this._allFilms, updatedFilm);
+    this._mainFilms = updateItem(this._mainFilms, updatedFilm);
     this._defaultFilms = updateItem(this._defaultFilms, updatedFilm);
 
     if (this._mainFilmPresenter.has(updatedFilm.id)) {
@@ -103,12 +110,18 @@ export default class MainScreenPresenter {
     this._renderPartialMainFilms(this._mainFilmsCount, this._mainFilmsCount + FILMS_STEP);
     this._mainFilmsCount += FILMS_STEP;
 
-    if (this._mainFilmsCount >= this._films.length) {
+    if (this._mainFilmsCount >= this._mainFilms.length) {
       remove(this._showMoreButtonView);
     }
   }
 
   _showFilmDetails(film) {
+    if (this._filmDetailsPresenter &&
+        this._filmDetailsPresenter.filmId !== film.id) {
+      this._filmDetailsPresenter.destroy();
+      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._handleFilmChange, this._hideFilmDetails);
+    }
+
     if (!this._filmDetailsPresenter) {
       bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
       this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._handleFilmChange, this._hideFilmDetails);
@@ -146,7 +159,7 @@ export default class MainScreenPresenter {
   }
 
   _renderPartialMainFilms(from, to) {
-    this._films.slice(from, to)
+    this._mainFilms.slice(from, to)
       .forEach((film) => {
         this._renderFilmCard(this._mainFilmsContainerView, film, FilmsListOption.MAIN.type);
       });
@@ -168,7 +181,7 @@ export default class MainScreenPresenter {
     this._mainFilmsCount = FILMS_STEP;
     this._renderPartialMainFilms(0, this._mainFilmsCount);
 
-    if (this._mainFilmsCount < this._films.length) {
+    if (this._mainFilmsCount < this._mainFilms.length) {
       this._renderShowMoreButtonClick();
     }
 
@@ -221,7 +234,7 @@ export default class MainScreenPresenter {
   }
 
   _renderMainScreen() {
-    if (this._films.length) {
+    if (this._allFilms.length) {
       this._renderSortBar();
       this._renderFilmsBoard();
     } else {
