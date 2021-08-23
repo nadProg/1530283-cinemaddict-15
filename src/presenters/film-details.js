@@ -1,7 +1,7 @@
 import { isEsc } from '../utils/common.js';
 import { getCurrentDate } from '../utils/date.js';
 import { render, replace, remove } from '../utils/render.js';
-import { mockComments, getCommentsByIds } from '../mock/comments.js';
+import { getFilmComments } from '../mock/films.js';
 import FilmDetailsBottomView from '../views/film-details-bottom.js';
 import FilmDetailsView from '../views/film-details.js';
 import CommentsContainerView from '../views/comments-container.js';
@@ -28,7 +28,7 @@ export default class FilmDetailsPresenter {
 
   init(film) {
     this._film = film;
-    this._filmComments = getCommentsByIds(mockComments, this._film.comments);
+    this._filmComments = getFilmComments(this._film.id);
     this._renderFilmDetails();
   }
 

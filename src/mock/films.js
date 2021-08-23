@@ -1,7 +1,10 @@
 import dayjs from 'dayjs';
+import { nanoid } from 'nanoid';
+import { generateComment, getCommentsByIds } from './comments.js';
 import { getRandomInteger, getRandomBoolean, getUniqueItemsFromArray, getRandomItemFromArray } from '../utils/common.js';
 import * as FilmMock from './mock-const.js';
 
+const films = new Map();
 
 const phrases = FilmMock.RAW_DESCRIPTION.split('. ')
   .map((string, index, array) => index + 1 < array.length ? `${string}.` : string);
@@ -52,19 +55,25 @@ const generateComments = () => {
     return [];
   }
 
-  const maxAmount = getRandomInteger(1, 5);
-  const nonUniqueComments = new Array(maxAmount).fill().map(() => getRandomInteger(1, 100));
-  return Array.from(new Set(nonUniqueComments));
+  const commentsAmount = getRandomInteger(1, 5);
+  const comments = [];
+
+  for (let i = 0; i < commentsAmount; i++) {
+    const comment = generateComment();
+    comments.push(comment.id);
+  }
+
+  return comments;
 };
 
-export const generateFilm = (id) => {
+export const generateFilm = () => {
   const title = generateTitle();
   const originalTitle = getRandomBoolean() ? title : generateTitle();
   const isWatched = getRandomBoolean();
   const watchingDate = isWatched ? generateWatchingDate() : '';
 
-  return ({
-    id,
+  const film = {
+    id: nanoid(),
     comments: generateComments(),
     filmInfo: {
       title,
@@ -87,13 +96,28 @@ export const generateFilm = (id) => {
       isFavorite: getRandomBoolean(),
       isToWatch: getRandomBoolean(),
     },
-  });
+  };
+
+  films.set(film.id, film);
+
+  return film;
 };
 
-export const generateFilms = () => {
+const getAllFilms = () => Array.from(films.values());
+
+const getFilmComments = (id) => getCommentsByIds(films.get(id).comments);
+
+const generateFilms = () => {
   // С вероятностью 25% фильмы отсутствуют
-  const amount = getRandomBoolean() && getRandomBoolean() ?
+  const filmsAmount = getRandomBoolean() && getRandomBoolean() ?
     0 : getRandomInteger(FilmMock.MIN_FILMS_AMOUNT, FilmMock.MAX_FILMS_AMOUNT);
 
-  return new Array(amount).fill().map((item, index) => generateFilm(index + 1));
+  for (let i = 0; i < filmsAmount; i++) {
+    const film = generateFilm();
+    films.set(film.id, film);
+  }
 };
+
+generateFilms();
+
+export { getAllFilms, getFilmComments };

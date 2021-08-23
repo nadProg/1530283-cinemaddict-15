@@ -1,4 +1,4 @@
-import { generateFilms } from './mock/films.js';
+import { getAllFilms } from './mock/films.js';
 import { generateFilters, getFilterCountByName } from './mock/filters.js';
 import { ClassName } from './const.js';
 import { render } from './utils/render.js';
@@ -9,7 +9,7 @@ import MainScreenPresenter from './presenters/main-screen.js';
 
 // Генерация моковых данных
 
-const mockFilms = generateFilms();
+const mockFilms = getAllFilms();
 
 const mockFilters = generateFilters(mockFilms);
 

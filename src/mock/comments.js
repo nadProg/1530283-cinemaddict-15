@@ -1,7 +1,10 @@
 import dayjs from 'dayjs';
+import { nanoid } from 'nanoid';
 import { Emotion } from '../const.js';
 import * as CommentMock from './mock-const.js';
-import { getRandomItemFromArray, getRandomInteger, getRandomBoolean } from '../utils/common.js';
+import { getRandomItemFromArray, getRandomInteger } from '../utils/common.js';
+
+const comments = new Map();
 
 const generateAuthor = () => getRandomItemFromArray(CommentMock.PEOPLE);
 
@@ -23,29 +26,22 @@ const generateCommentDate = () => {
   return dayjs().subtract(commentDayShift, 'day').subtract(commentMinuteShift, 'minute').toDate();
 };
 
-export const generateComment = (id) => ({
-  id,
-  text: generateText(),
-  author: generateAuthor(),
-  emotion: generateEmotion(),
-  date: generateCommentDate(),
-});
+const generateComment = () => {
+  const comment = {
+    id: nanoid(),
+    text: generateText(),
+    author: generateAuthor(),
+    emotion: generateEmotion(),
+    date: generateCommentDate(),
+  };
 
-const generateComments = () => {
-  const amount = CommentMock.COMMENTS_AMOUNT;
-  return new Array(amount).fill().map((item, index) => generateComment(index + 1));
+  comments.set(comment.id, comment);
+
+  return comment;
 };
 
-export const generateNewComment = () => {
-  // Новый комментарий имеет текст и эмодзи с 50% вероятностью
-  const text = getRandomBoolean() ? generateText() : '';
-  const emotion = getRandomBoolean() ? generateEmotion() : '';
+const getCommentById = (id) => comments.get(id);
 
-  return { text, emotion };
-};
+const getCommentsByIds = (ids) => ids.map((id) => getCommentById(id));
 
-export const mockComments = generateComments();
-
-const getCommentById = (comments, id) => comments.find((comment) => comment.id === id);
-
-export const getCommentsByIds = (comments, ids) => ids.map((id) => getCommentById(comments, id));
+export { generateComment, getCommentsByIds };
