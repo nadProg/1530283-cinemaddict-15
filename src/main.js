@@ -6,6 +6,7 @@ import ProfileView from './views/profile.js';
 import NavigationView from './views/navigation.js';
 import FooterStatisticView from './views/footer-statistic.js';
 import MainScreenPresenter from './presenters/main-screen.js';
+import FilmsModel from './models/films.js';
 
 // Генерация моковых данных
 
@@ -51,7 +52,9 @@ const renderFooterStatisctic = (container, amount) => {
 
 // Рендеринг приложения
 
-const mainScreenPresenter = new MainScreenPresenter(mainElement);
+const filmsModel = new FilmsModel(mockFilms);
+
+const mainScreenPresenter = new MainScreenPresenter(mainElement, filmsModel);
 
 renderProfile(headerElement, historyFilmsAmount);
 renderNavigation(mainElement, mockFilters, mockFilters[0].name);

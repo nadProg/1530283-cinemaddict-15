@@ -53,33 +53,39 @@ export default class FilmCardPresenter {
   }
 
   _handleAddToWatchButtonClick() {
-    this._changeFilm({
+    const updatedFilm = {
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
         isToWatch: !this._film.userDetails.isToWatch,
       },
-    });
+    };
+
+    this._changeFilm(null, null, updatedFilm);
   }
 
   _handleAddWatchedButtonClick() {
-    this._changeFilm({
+    const updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
         isWatched: !this._film.userDetails.isWatched,
         watchingDate: !this._film.userDetails.isWatched ? getCurrentDate() : '',
       },
-    });
+    };
+
+    this._changeFilm(null, null, updatedFilm);
   }
 
   _handleAddFavoriteButtonClick() {
-    this._changeFilm({
+    const updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
         isFavorite: !this._film.userDetails.isFavorite,
       },
-    });
+    };
+
+    this._changeFilm(null, null, updatedFilm);
   }
 }
