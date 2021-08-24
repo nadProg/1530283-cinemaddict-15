@@ -1,4 +1,5 @@
 import { isEsc } from '../utils/common.js';
+import { UserAction, UpdateType } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { render, replace, remove } from '../utils/render.js';
 import { getFilmComments } from '../mock/films.js';
@@ -66,7 +67,7 @@ export default class FilmDetailsPresenter {
       },
     };
 
-    this._changeFilm(null, null, updatedFilm);
+    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
   _handleAddWatchedButtonClick() {
@@ -79,7 +80,7 @@ export default class FilmDetailsPresenter {
       },
     };
 
-    this._changeFilm(null, null, updatedFilm);
+    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
   _handleAddFavoriteButtonClick() {
@@ -91,7 +92,7 @@ export default class FilmDetailsPresenter {
       },
     };
 
-    this._changeFilm(null, null, updatedFilm);
+    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
   _renderComment(comment) {

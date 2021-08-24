@@ -80,3 +80,20 @@ export const NEW_COMMENT_DEFAULT = {
   text: '',
   currentEmotion: '',
 };
+
+export const FilterType = {
+  ALL: 'all',
+  WATCHLIST: 'watchlist',
+  HISTORY: 'history',
+  FAVORITES: 'favorites',
+};
+
+export const UserAction = {
+  UPDATE_FILM_USER_DETAILS: 'update-film-user-details',
+};
+
+export const UpdateType = {
+  PATCH: 'patch',
+  MINOR: 'minor',
+  MAJOR: 'major',
+};

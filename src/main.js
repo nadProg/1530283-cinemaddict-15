@@ -3,10 +3,11 @@ import { generateFilters, getFilterCountByName } from './mock/filters.js';
 import { ClassName } from './const.js';
 import { render } from './utils/render.js';
 import ProfileView from './views/profile.js';
-import NavigationView from './views/navigation.js';
 import FooterStatisticView from './views/footer-statistic.js';
+import NavigationPresenter from './presenters/navigation.js';
 import MainScreenPresenter from './presenters/main-screen.js';
 import FilmsModel from './models/films.js';
+import FilterModel from './models/filter.js';
 
 // Генерация моковых данных
 
@@ -34,14 +35,6 @@ const renderProfile = (container, watchedFilmsAmount) => {
 };
 
 
-// Функция рендеринга навигации с фильтрами
-
-const renderNavigation = (container, filters, activeItem) => {
-  const navigationView = new NavigationView(filters, activeItem);
-  render(container, navigationView);
-};
-
-
 // Функция рендеринга статистики в футере
 
 const renderFooterStatisctic = (container, amount) => {
@@ -52,12 +45,14 @@ const renderFooterStatisctic = (container, amount) => {
 
 // Рендеринг приложения
 
+const filterModel = new FilterModel();
 const filmsModel = new FilmsModel(mockFilms);
 
-const mainScreenPresenter = new MainScreenPresenter(mainElement, filmsModel);
+const navigationPresenter = new NavigationPresenter(mainElement, filterModel, filmsModel);
+const mainScreenPresenter = new MainScreenPresenter(mainElement, filmsModel, filterModel);
 
 renderProfile(headerElement, historyFilmsAmount);
-renderNavigation(mainElement, mockFilters, mockFilters[0].name);
 renderFooterStatisctic(footerElement, allFilmsAmount);
 
+navigationPresenter.init();
 mainScreenPresenter.init(mockFilms);

@@ -15,3 +15,13 @@ export const getMostCommentedFilms = (films) => [...films].sort((a, b) => b.comm
 export const hasComments = (film) => film.comments.length > 0;
 
 export const hasRating = (film) => film.filmInfo.rating > 0;
+
+export const filter = {
+  all: (films) => [...films],
+  watchlist: (films) => films
+    .filter((film) => film.userDetails.isToWatch),
+  history: (films) => films
+    .filter((film) => film.userDetails.isWatched),
+  favorites: (films) => films
+    .filter((film) => film.userDetails.isFavorite),
+};
