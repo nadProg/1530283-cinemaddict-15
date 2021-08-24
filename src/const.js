@@ -56,9 +56,6 @@ export const ClassName = {
 };
 
 export const FilmsListOption = {
-  EMPTY: {
-    title: 'There are no movies in our database',
-  },
   MAIN: {
     title: 'All movies. Upcoming',
     isTitleVisiallyHidden: true,
@@ -82,18 +79,25 @@ export const NEW_COMMENT_DEFAULT = {
 };
 
 export const FilterType = {
-  ALL: 'all',
-  WATCHLIST: 'watchlist',
-  HISTORY: 'history',
-  FAVORITES: 'favorites',
+  ALL: 'ALL',
+  WATCHLIST: 'WATCHLIST',
+  HISTORY: 'HISTORY',
+  FAVORITES: 'FAVORITES',
+};
+
+export const filterTypeToEmptyTitle = {
+  ALL: 'There are no movies in our database',
+  WATCHLIST: 'There ara no movies to watch now',
+  HISTORY: 'There ara no watched movies now',
+  FAVORITES: 'There ara no favorite movies now',
 };
 
 export const UserAction = {
-  UPDATE_FILM_USER_DETAILS: 'update-film-user-details',
+  UPDATE_FILM_USER_DETAILS: 'UPDATE_FILM_USER_DETAILS',
 };
 
 export const UpdateType = {
-  PATCH: 'patch',
-  MINOR: 'minor',
-  MAJOR: 'major',
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
 };

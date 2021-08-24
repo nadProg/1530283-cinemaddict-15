@@ -17,11 +17,11 @@ export const hasComments = (film) => film.comments.length > 0;
 export const hasRating = (film) => film.filmInfo.rating > 0;
 
 export const filter = {
-  all: (films) => [...films],
-  watchlist: (films) => films
+  ALL: (films) => [...films],
+  WATCHLIST: (films) => films
     .filter((film) => film.userDetails.isToWatch),
-  history: (films) => films
+  HISTORY: (films) => films
     .filter((film) => film.userDetails.isWatched),
-  favorites: (films) => films
+  FAVORITES: (films) => films
     .filter((film) => film.userDetails.isFavorite),
 };

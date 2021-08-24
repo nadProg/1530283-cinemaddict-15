@@ -1,4 +1,4 @@
-import { FilmsListOption, SortType, FILMS_STEP, EXTRA_FILMS_AMOUNT, ClassName, UpdateType } from '../const.js';
+import { FilmsListOption, SortType, FILMS_STEP, EXTRA_FILMS_AMOUNT, ClassName, UpdateType, filterTypeToEmptyTitle } from '../const.js';
 import { render, remove, replace } from '../utils/render.js';
 import { sortByRating, sortByDate, filter } from '../utils/film.js';
 import SortBarView from '../views/sort-bar.js';
@@ -76,6 +76,7 @@ export default class MainScreenPresenter {
     this._currentSortType = sortType;
 
     this._renderSortBar();
+    this._mainFilmsCount = FILMS_STEP;
     this._renderMainFilmsList({ update: true });
   }
 
@@ -143,11 +144,6 @@ export default class MainScreenPresenter {
     this._filmDetailsPresenter = null;
   }
 
-  // _renderEmptyBoard() {
-  //   this._filmsBoardView = new FilmsBoardView();
-  //   render(this._filmsBoardView, new FilmsListView(FilmsListOption.EMPTY));
-  // }
-
   _renderSortBar() {
     const prevSortBarView = this._sortBarView;
     this._sortBarView = new SortBarView(this._currentSortType);
@@ -203,18 +199,8 @@ export default class MainScreenPresenter {
   _renderExtraFilmsList(option) {
     const { type } = option;
     const extraFilms = this[`_${type}Films`];
-    // this[`_${type}FilmsListView`];
 
-    // if (!extraFilms.length) {
     this[`_${type}FilmPresenter`].clear();
-
-    //   if (prevExtraFilmsListView) {
-    //     remove(prevExtraFilmsListView);
-    //     this[`_${type}FilmsListView`] = null;
-    //   }
-
-    //   return;
-    // }
 
     this[`_${type}FilmsListView`] = new FilmsListView(option);
     this[`_${type}FilmsContainerView`] = new FilmsContainerView();
@@ -228,19 +214,8 @@ export default class MainScreenPresenter {
       this._renderFilmCard(currentExtraFilmsContainerView, film, type);
     });
 
-    // if (prevExtraFilmsListView) {
-    //   replace(currentExtraFilmsListView, prevExtraFilmsListView);
-    // } else {
     render(this._filmsBoardView, currentExtraFilmsListView);
-    // }
   }
-
-  // _renderFilmsBoard() {
-  //   this._filmsBoardView = new FilmsBoardView();
-  //   this._renderMainFilmsList();
-  //   this._renderExtraFilmsList(FilmsListOption.TOP_RATED);
-  //   this._renderExtraFilmsList(FilmsListOption.MOST_COMMENTED);
-  // }
 
   _renderMainScreen({ resetFilmsCount = false} = {}) {
     if (resetFilmsCount) {
@@ -262,7 +237,7 @@ export default class MainScreenPresenter {
       this._renderSortBar();
       this._renderMainFilmsList();
     } else {
-      render(this._filmsBoardView, new FilmsListView(FilmsListOption.EMPTY));
+      render(this._filmsBoardView, new FilmsListView({title: filterTypeToEmptyTitle[this._filterModel.getFilter()]}));
     }
 
     if (this._allFilms.length) {
