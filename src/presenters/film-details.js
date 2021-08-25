@@ -26,6 +26,8 @@ export default class FilmDetailsPresenter {
     this._handleAddWatchedButtonClick = this._handleAddWatchedButtonClick.bind(this);
     this._handleAddFavoriteButtonClick = this._handleAddFavoriteButtonClick.bind(this);
 
+    this._handleDeleteButtonClick = this._handleDeleteButtonClick.bind(this);
+
     this._handleModelEvent = this._handleModelEvent.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
@@ -98,6 +100,14 @@ export default class FilmDetailsPresenter {
     this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
+  _handleDeleteButtonClick(id) {
+    const payload = {
+      commentId: id,
+      film: this._film,
+    };
+    this._changeFilm(UserAction.DELETE_COMMENT, UpdateType.MINOR, payload);
+  }
+
   _renderComment(comment) {
     render(this._commentsContainerView, new CommentView(comment));
   }
@@ -126,7 +136,9 @@ export default class FilmDetailsPresenter {
     render(this._commentsContainerView, this._commentsListView);
 
     filmComments.forEach((comment) => {
-      render(this._commentsListView, new CommentView(comment));
+      const commentsView = new CommentView(comment);
+      commentsView.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
+      render(this._commentsListView, commentsView);
     });
 
     render(this._filmDetailsBottomView, this._commentsContainerView);

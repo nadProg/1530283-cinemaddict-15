@@ -94,6 +94,8 @@ export const filterTypeToEmptyTitle = {
 
 export const UserAction = {
   UPDATE_FILM_USER_DETAILS: 'UPDATE_FILM_USER_DETAILS',
+  DELETE_COMMENT: 'DELETE_COMMENT',
+  CREATE_COMMENT: 'CREATE_COMMENT',
 };
 
 export const UpdateType = {

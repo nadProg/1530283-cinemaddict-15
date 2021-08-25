@@ -26,7 +26,7 @@ export default class FilmsModel extends AbstractObserver{
   }
 
   getFilmComments(id) {
-    const { comments } = this._films.find((film) => film.id = id);
+    const { comments } = this._films.find((film) => film.id === id);
     return getCommentsByIds(comments);
   }
 
