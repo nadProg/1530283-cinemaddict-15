@@ -45,9 +45,15 @@ const getCommentById = (id) => comments.get(id);
 
 const getCommentsByIds = (ids) => ids.map((id) => getCommentById(id));
 
-const createComment = (payload) => {
+const createComment = ({ text, emotion }) => {
+  if (!text || !emotion) {
+    throw new Error('Comment invalid');
+  }
+
   const newComment = {
-    ...payload,
+    text,
+    emotion,
+    author: 'Me',
     id: nanoid(),
     date: new Date(),
   };

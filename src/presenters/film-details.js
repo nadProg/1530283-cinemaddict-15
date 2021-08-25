@@ -1,4 +1,4 @@
-import { isEsc } from '../utils/common.js';
+import { isEsc, isEnter } from '../utils/common.js';
 import { UserAction, UpdateType } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { render, replace, remove } from '../utils/render.js';
@@ -17,8 +17,6 @@ export default class FilmDetailsPresenter {
     this._changeFilm = changeFilm;
     this._hideFilmDetails = hideFilmDetails;
 
-    this._createComment = this._createComment.bind(this);
-
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
     this._handleDocumentKeydown = this._handleDocumentKeydown.bind(this);
 
@@ -26,6 +24,7 @@ export default class FilmDetailsPresenter {
     this._handleAddWatchedButtonClick = this._handleAddWatchedButtonClick.bind(this);
     this._handleAddFavoriteButtonClick = this._handleAddFavoriteButtonClick.bind(this);
 
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleDeleteButtonClick = this._handleDeleteButtonClick.bind(this);
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -46,10 +45,17 @@ export default class FilmDetailsPresenter {
     throw new Error('Film Presenter has not been initialized');
   }
 
-  _createComment() {
-    // Здесь будет создание новго комментария
-
-    this._newCommentView.reset();
+  _handleFormSubmit() {
+    const payload = {
+      newComment: this._newCommentView.getData(),
+      film: this._film,
+    };
+    try {
+      this._changeFilm(UserAction.CREATE_COMMENT, UpdateType.MINOR, payload);
+      this._newCommentView.reset();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   _handleCloseButtonClick() {
@@ -57,6 +63,11 @@ export default class FilmDetailsPresenter {
   }
 
   _handleDocumentKeydown(evt) {
+    if ((isEnter(evt) && evt.ctrlKey)) {
+      this._handleFormSubmit();
+      return;
+    }
+
     if (isEsc(evt)) {
       evt.preventDefault();
       this._hideFilmDetails();
@@ -147,7 +158,7 @@ export default class FilmDetailsPresenter {
   _renderNewComment() {
     if (!this._newCommentView) {
       this._newCommentView = new NewCommentView();
-      this._newCommentView.setSubmitHandler(this._createComment);
+      // this._newCommentView.setSubmitHandler(this._handleFormSubmit);
     }
 
     render(this._commentsListView, this._newCommentView);

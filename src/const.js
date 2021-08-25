@@ -75,7 +75,7 @@ export const FilmsListOption = {
 
 export const NEW_COMMENT_DEFAULT = {
   text: '',
-  currentEmotion: '',
+  emotion: '',
 };
 
 export const FilterType = {
