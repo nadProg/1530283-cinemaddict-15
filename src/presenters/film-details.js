@@ -45,22 +45,6 @@ export default class FilmDetailsPresenter {
     throw new Error('Film Presenter has not been initialized');
   }
 
-  _handleFormSubmit() {
-    const newComment = this._newCommentView.getData();
-
-    if (!newComment.text || !newComment.emotion) {
-      return;
-    }
-
-    const payload = {
-      newComment,
-      film: this._film,
-    };
-
-    this._changeFilm(UserAction.CREATE_COMMENT, UpdateType.MINOR, payload);
-    this._newCommentView.reset();
-  }
-
   _handleCloseButtonClick() {
     this._hideFilmDetails();
   }
@@ -119,7 +103,23 @@ export default class FilmDetailsPresenter {
       commentId: id,
       film: this._film,
     };
-    this._changeFilm(UserAction.DELETE_COMMENT, UpdateType.MINOR, payload);
+    this._changeFilm(UserAction.DELETE_COMMENT, UpdateType.PATCH, payload);
+  }
+
+  _handleFormSubmit() {
+    const newComment = this._newCommentView.getData();
+
+    if (!newComment.text || !newComment.emotion) {
+      return;
+    }
+
+    const payload = {
+      newComment,
+      film: this._film,
+    };
+
+    this._changeFilm(UserAction.CREATE_COMMENT, UpdateType.PATCH, payload);
+    this._newCommentView.reset();
   }
 
   _renderComment(comment) {

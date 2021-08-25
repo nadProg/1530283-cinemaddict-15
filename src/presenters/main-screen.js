@@ -101,6 +101,15 @@ export default class MainScreenPresenter {
         if (this._mainFilmPresenter.has(updatedFilm.id)) {
           this._mainFilmPresenter.get(updatedFilm.id).init(updatedFilm);
         }
+
+        if (this._topRatedFilmPresenter.has(updatedFilm.id)) {
+          this._topRatedFilmPresenter.get(updatedFilm.id).init(updatedFilm);
+        }
+
+        this._renderExtraFilmsList({
+          isReplace: true,
+          option: FilmsListOption.MOST_COMMENTED,
+        });
         break;
 
       case UpdateType.MINOR:
@@ -110,14 +119,6 @@ export default class MainScreenPresenter {
       case UpdateType.MAJOR:
         this._renderMainScreen({ resetFilmsCount: true });
         break;
-    }
-
-    if (this._topRatedFilmPresenter.has(updatedFilm.id)) {
-      this._topRatedFilmPresenter.get(updatedFilm.id).init(updatedFilm);
-    }
-
-    if (this._mostCommentedFilmPresenter.has(updatedFilm.id)) {
-      this._mostCommentedFilmPresenter.get(updatedFilm.id).init(updatedFilm);
     }
   }
 
@@ -203,8 +204,9 @@ export default class MainScreenPresenter {
     }
   }
 
-  _renderExtraFilmsList(option) {
+  _renderExtraFilmsList({option, isReplace = false} = {}) {
     const { type } = option;
+    const prevExtraFilmsListView = this[`_${type}FilmsListView`];
     const extraFilms = this[`_${type}Films`];
 
     this[`_${type}FilmPresenter`].clear();
@@ -221,7 +223,11 @@ export default class MainScreenPresenter {
       this._renderFilmCard(currentExtraFilmsContainerView, film, type);
     });
 
-    render(this._filmsBoardView, currentExtraFilmsListView);
+    if (prevExtraFilmsListView && isReplace) {
+      replace(currentExtraFilmsListView, prevExtraFilmsListView);
+    } else {
+      render(this._filmsBoardView, currentExtraFilmsListView);
+    }
   }
 
   _renderMainScreen({ resetFilmsCount = false} = {}) {
@@ -248,8 +254,8 @@ export default class MainScreenPresenter {
     }
 
     if (this._allFilms.length) {
-      this._renderExtraFilmsList(FilmsListOption.TOP_RATED);
-      this._renderExtraFilmsList(FilmsListOption.MOST_COMMENTED);
+      this._renderExtraFilmsList({ option: FilmsListOption.TOP_RATED });
+      this._renderExtraFilmsList({ option: FilmsListOption.MOST_COMMENTED });
     }
 
     render(this._mainScreenContainer, this._filmsBoardView);
