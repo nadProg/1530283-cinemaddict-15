@@ -2,6 +2,7 @@
 import he from 'he';
 import AbstractView from './abstract.js';
 import { getCommentDate } from '../utils/date.js';
+import { ClassName } from '../const.js';
 
 const createCommentTemplate = (comment) => {
   const { author, date, emotion, text, id } = comment;
@@ -38,7 +39,7 @@ export default class CommentView extends AbstractView {
 
   _deleteButtonClickHandler(evt) {
     evt.preventDefault();
-    const commentItem = evt.target.closest('[data-comment-id]');
+    const commentItem = evt.target.closest(`.${ClassName.COMMENT}`);
 
     this._callback._deleteButtonClick(commentItem.dataset.commentId);
   }
@@ -46,7 +47,7 @@ export default class CommentView extends AbstractView {
   setDeleteButtonClickHandler(callback) {
     this._callback._deleteButtonClick = callback;
     this.getElement()
-      .querySelector('.film-details__comment-delete')
+      .querySelector(`.${ClassName.COMMENT_DELETE_BUTTON}`)
       .addEventListener('click', this._deleteButtonClickHandler);
   }
 }

@@ -1,7 +1,7 @@
-import { sortByRating, sortByComments, hasComments, hasRating } from '../utils/film.js';
-import AbstractObserver from '../utils/abstract-observer.js';
-import { createComment, deleteComment, getCommentsByIds } from '../mock/comments.js';
 import { updateItem } from '../utils/common.js';
+import AbstractObserver from '../utils/abstract-observer.js';
+import { sortByRating, sortByComments, hasComments, hasRating } from '../utils/film.js';
+import { createComment, deleteComment, getCommentsByIds } from '../mock/comments.js';
 
 export default class FilmsModel extends AbstractObserver{
   constructor(films) {

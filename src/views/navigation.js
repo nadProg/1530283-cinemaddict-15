@@ -40,7 +40,7 @@ export default class NavigationView extends AbstractView {
   }
 
   _filterChangeHandler(evt) {
-    const filterItem = evt.target.closest('.main-navigation__item');
+    const filterItem = evt.target.closest(`.${ClassName.NAVIGATION_ITEM}`);
     if (!filterItem || !evt.currentTarget.contains(filterItem)) {
       return;
     }
@@ -57,11 +57,11 @@ export default class NavigationView extends AbstractView {
 
   setFilterChangeHandler(callback) {
     this._callback.filterChange = callback;
-    this.getElement().querySelector('.main-navigation__items').addEventListener('click', this._filterChangeHandler);
+    this.getElement().querySelector(`.${ClassName.NAVIGATION_FILTER_ITEM}`).addEventListener('click', this._filterChangeHandler);
   }
 
   setStatisticsClickHandler(callback) {
     this._callback.statisticsClick = callback;
-    this.getElement().querySelector('.main-navigation__additional').addEventListener('click', this._statisticsClickHandler);
+    this.getElement().querySelector(`.${ClassName.NAVIGATION_STATISTICS_ITEM}`).addEventListener('click', this._statisticsClickHandler);
   }
 }

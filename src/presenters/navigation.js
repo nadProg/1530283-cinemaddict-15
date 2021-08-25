@@ -63,7 +63,7 @@ export default class NavigationPresenter {
   }
 
   _handleFilterChange(filterType) {
-    if (this._activeItem === filterType) {
+    if (this._filterModel.getFilter() === filterType) {
       return;
     }
 
@@ -72,7 +72,7 @@ export default class NavigationPresenter {
   }
 
   _handleStatisticsClick() {
-
+    // Обработик переключения на экран статистики
   }
 
   _handleModelEvent() {
