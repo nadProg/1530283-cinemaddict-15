@@ -81,7 +81,7 @@ export default class MainScreenPresenter {
   }
 
   _handleViewAction(actionType, updateType, updatedData) {
-    this._filmsModel.update(updateType, updatedData);
+    this._filmsModel.updateFilm(updateType, updatedData);
   }
 
   _handleModelEvent(updateType, updatedFilm) {
@@ -108,10 +108,6 @@ export default class MainScreenPresenter {
     if (this._mostCommentedFilmPresenter.has(updatedFilm.id)) {
       this._mostCommentedFilmPresenter.get(updatedFilm.id).init(updatedFilm);
     }
-
-    if (this._filmDetailsPresenter) {
-      this._filmDetailsPresenter.init(updatedFilm);
-    }
   }
 
   _handleShowMoreButtonClick() {
@@ -127,12 +123,12 @@ export default class MainScreenPresenter {
     if (this._filmDetailsPresenter &&
         this._filmDetailsPresenter.filmId !== film.id) {
       this._filmDetailsPresenter.destroy();
-      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._handleViewAction, this._hideFilmDetails);
+      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._filmsModel, this._handleViewAction, this._hideFilmDetails);
     }
 
     if (!this._filmDetailsPresenter) {
       bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
-      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._handleViewAction, this._hideFilmDetails);
+      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._filmsModel, this._handleViewAction, this._hideFilmDetails);
     }
 
     this._filmDetailsPresenter.init(film);

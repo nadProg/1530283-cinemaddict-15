@@ -45,34 +45,20 @@ const getCommentById = (id) => comments.get(id);
 
 const getCommentsByIds = (ids) => ids.map((id) => getCommentById(id));
 
-const createComment = (film, payload) => {
+const createComment = (payload) => {
   const newComment = {
     ...payload,
     id: nanoid(),
     date: new Date(),
   };
 
-  const updatedFilm = {
-    ...film,
-    comments: film.comments.push(newComment.id),
-  };
-
   comments.set(newComment.id, newComment);
-  updateFilm(updatedFilm.id, updatedFilm);
 
-  return updatedFilm;
+  return newComment;
 };
 
-const deleteComment = (film, commentId) => {
-  const updatedFilm = {
-    ...film,
-    comments: film.comments.filter((id) => id !== commentId),
-  };
-
+const deleteComment = (commentId) => {
   comments.delete(commentId);
-  updateFilm(updatedFilm.id, updatedFilm);
-
-  return updatedFilm;
 };
 
 export { generateComment, getCommentsByIds, createComment, deleteComment };

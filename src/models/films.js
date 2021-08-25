@@ -1,7 +1,7 @@
 import { sortByRating, sortByComments, hasComments, hasRating } from '../utils/film.js';
 import AbstractObserver from '../utils/abstract-observer.js';
-import { createComment, deleteComment } from '../mock/comments.js';
-import { getAllFilms, getFilmComments, updateFilm } from '../mock/films.js';
+import { createComment, deleteComment, getCommentsByIds } from '../mock/comments.js';
+import { updateItem } from '../utils/common.js';
 
 export default class FilmsModel extends AbstractObserver{
   constructor(films) {
@@ -10,47 +10,51 @@ export default class FilmsModel extends AbstractObserver{
   }
 
   getAll() {
-    if (!this._films) {
-      this._films = getAllFilms();
-    }
-
     return this._films;
   }
 
   getTopRated() {
-    return [...this.getAll()]
+    return [...this._films]
       .filter(hasRating)
       .sort(sortByRating);
   }
 
   getMostCommented() {
-    return [...this.getAll()]
+    return [...this._films]
       .filter(hasComments)
       .sort(sortByComments);
   }
 
   getFilmComments(id) {
-    return getFilmComments(id);
+    const { comments } = this._films.find((film) => film.id = id);
+    return getCommentsByIds(comments);
   }
 
   updateFilm(updateType, updatedFilm) {
-    updateFilm(updatedFilm.id, updatedFilm);
+    this._films = updateItem(this._films, updatedFilm);
 
-    this._films = null;
     this._notify(updateType, updatedFilm);
   }
 
   createComment(updateType, { film, newComment }) {
-    const updatedFilm = createComment(film, newComment);
+    const { id: commentId } = createComment(newComment);
 
-    this._films = null;
-    this._notify(updateType, updatedFilm);
+    const updatedFilm = {
+      ...film,
+      comments: [...film.comments].push(commentId),
+    };
+
+    this.updateFilm(updateType, updatedFilm);
   }
 
   deleteComment(updateType, { film, commentId }) {
-    const updatedFilm = deleteComment(film, commentId);
+    deleteComment(commentId);
 
-    this._films = null;
-    this._notify(updateType, updatedFilm);
+    const updatedFilm = {
+      ...film,
+      comments: film.comments.filter((id) => id !== commentId),
+    };
+
+    this.updateFilm(updateType, updatedFilm);
   }
 }

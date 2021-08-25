@@ -55,4 +55,4 @@ renderProfile(headerElement, historyFilmsAmount);
 renderFooterStatisctic(footerElement, allFilmsAmount);
 
 navigationPresenter.init();
-mainScreenPresenter.init(mockFilms);
+mainScreenPresenter.init();

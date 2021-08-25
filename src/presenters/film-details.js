@@ -2,7 +2,6 @@ import { isEsc } from '../utils/common.js';
 import { UserAction, UpdateType } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { render, replace, remove } from '../utils/render.js';
-import { getFilmComments } from '../mock/films.js';
 import FilmDetailsBottomView from '../views/film-details-bottom.js';
 import FilmDetailsView from '../views/film-details.js';
 import CommentsContainerView from '../views/comments-container.js';
@@ -12,8 +11,9 @@ import CommentView from '../views/comment.js';
 import NewCommentView from '../views/new-comment.js';
 
 export default class FilmDetailsPresenter {
-  constructor(filmDetailsContainer, changeFilm, hideFilmDetails) {
+  constructor(filmDetailsContainer, filmsModel, changeFilm, hideFilmDetails) {
     this._filmDetailsContainer = filmDetailsContainer;
+    this._filmsModel = filmsModel;
     this._changeFilm = changeFilm;
     this._hideFilmDetails = hideFilmDetails;
 
@@ -25,11 +25,14 @@ export default class FilmDetailsPresenter {
     this._handleAddToWatchButtonClick = this._handleAddToWatchButtonClick.bind(this);
     this._handleAddWatchedButtonClick = this._handleAddWatchedButtonClick.bind(this);
     this._handleAddFavoriteButtonClick = this._handleAddFavoriteButtonClick.bind(this);
+
+    this._handleModelEvent = this._handleModelEvent.bind(this);
+
+    this._filmsModel.addObserver(this._handleModelEvent);
   }
 
   init(film) {
     this._film = film;
-    this._filmComments = getFilmComments(this._film.id);
     this._renderFilmDetails();
   }
 
@@ -113,14 +116,16 @@ export default class FilmDetailsPresenter {
   }
 
   _renderComments() {
+    const filmComments = this._filmsModel.getFilmComments(this.filmId);
+
     this._commentsContainerView = new CommentsContainerView();
     this._commentsListView = new CommentsListView();
-    this._commentsTitleView =  new CommentsTitleView(this._filmComments.length);
+    this._commentsTitleView =  new CommentsTitleView(filmComments.length);
 
     render(this._commentsContainerView, this._commentsTitleView);
     render(this._commentsContainerView, this._commentsListView);
 
-    this._filmComments.forEach((comment) => {
+    filmComments.forEach((comment) => {
       render(this._commentsListView, new CommentView(comment));
     });
 
@@ -155,8 +160,13 @@ export default class FilmDetailsPresenter {
     document.addEventListener('keydown', this._handleDocumentKeydown);
   }
 
+  _handleModelEvent(_, updatedFilm) {
+    this.init(updatedFilm);
+  }
+
   destroy() {
     remove(this._filmDetailsView);
+    this._filmsModel.removeObserver(this._handleModelEvent);
     document.removeEventListener('keydown', this._handleDocumentKeydown);
   }
 }

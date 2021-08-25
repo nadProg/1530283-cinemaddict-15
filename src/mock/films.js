@@ -125,4 +125,4 @@ const generateFilms = () => {
 
 generateFilms();
 
-export { getAllFilms, getFilmComments, updateFilm };
+export { getAllFilms, getFilmComments };
