@@ -1,6 +1,7 @@
 import { sortByRating, sortByComments, hasComments, hasRating } from '../utils/film.js';
 import AbstractObserver from '../utils/abstract-observer.js';
-import { updateItem } from '../utils/common.js';
+import { createComment, deleteComment } from '../mock/comments.js';
+import { getAllFilms, getFilmComments, updateFilm } from '../mock/films.js';
 
 export default class FilmsModel extends AbstractObserver{
   constructor(films) {
@@ -9,23 +10,47 @@ export default class FilmsModel extends AbstractObserver{
   }
 
   getAll() {
+    if (!this._films) {
+      this._films = getAllFilms();
+    }
+
     return this._films;
   }
 
   getTopRated() {
-    return [...this._films]
+    return [...this.getAll()]
       .filter(hasRating)
       .sort(sortByRating);
   }
 
   getMostCommented() {
-    return [...this._films]
+    return [...this.getAll()]
       .filter(hasComments)
       .sort(sortByComments);
   }
 
-  update(updateType, updatedItem) {
-    this._films = updateItem(this._films, updatedItem);
-    this._notify(updateType, updatedItem);
+  getFilmComments(id) {
+    return getFilmComments(id);
+  }
+
+  updateFilm(updateType, updatedFilm) {
+    updateFilm(updatedFilm.id, updatedFilm);
+
+    this._films = null;
+    this._notify(updateType, updatedFilm);
+  }
+
+  createComment(updateType, { film, newComment }) {
+    const updatedFilm = createComment(film, newComment);
+
+    this._films = null;
+    this._notify(updateType, updatedFilm);
+  }
+
+  deleteComment(updateType, { film, commentId }) {
+    const updatedFilm = deleteComment(film, commentId);
+
+    this._films = null;
+    this._notify(updateType, updatedFilm);
   }
 }

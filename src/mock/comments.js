@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 import { Emotion } from '../const.js';
 import * as CommentMock from './mock-const.js';
 import { getRandomItemFromArray, getRandomInteger } from '../utils/common.js';
+import { updateFilm } from './films.js';
 
 const comments = new Map();
 
@@ -44,4 +45,34 @@ const getCommentById = (id) => comments.get(id);
 
 const getCommentsByIds = (ids) => ids.map((id) => getCommentById(id));
 
-export { generateComment, getCommentsByIds };
+const createComment = (film, payload) => {
+  const newComment = {
+    ...payload,
+    id: nanoid(),
+    date: new Date(),
+  };
+
+  const updatedFilm = {
+    ...film,
+    comments: film.comments.push(newComment.id),
+  };
+
+  comments.set(newComment.id, newComment);
+  updateFilm(updatedFilm.id, updatedFilm);
+
+  return updatedFilm;
+};
+
+const deleteComment = (film, commentId) => {
+  const updatedFilm = {
+    ...film,
+    comments: film.comments.filter((id) => id !== commentId),
+  };
+
+  comments.delete(commentId);
+  updateFilm(updatedFilm.id, updatedFilm);
+
+  return updatedFilm;
+};
+
+export { generateComment, getCommentsByIds, createComment, deleteComment };
