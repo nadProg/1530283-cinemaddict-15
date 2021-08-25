@@ -107,11 +107,6 @@ const getAllFilms = () => Array.from(films.values());
 
 const getFilmComments = (id) => getCommentsByIds(films.get(id).comments);
 
-const updateFilm = (id, updatedFilm) => {
-  films.set(id, updatedFilm);
-  return films.get(id);
-};
-
 const generateFilms = () => {
   // С вероятностью 25% фильмы отсутствуют
   const filmsAmount = getRandomBoolean() && getRandomBoolean() ?

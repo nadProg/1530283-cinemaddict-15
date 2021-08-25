@@ -44,8 +44,6 @@ export default class FilmsModel extends AbstractObserver{
       comments: [...film.comments, commentId],
     };
 
-    console.log(updatedFilm);
-
     this.updateFilm(updateType, updatedFilm);
   }
 

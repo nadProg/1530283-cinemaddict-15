@@ -1,6 +1,5 @@
 import SmartView from './smart.js';
 import { Emotion, ClassName, NEW_COMMENT_DEFAULT } from '../const.js';
-import { isEnter } from '../utils/common.js';
 
 const createEmotionInputTemplate = (emotion, isChecked) => {
   const checked = isChecked ? 'checked' : '';
@@ -42,7 +41,6 @@ export default class NewCommentView extends SmartView {
       ...newCommentData,
     };
 
-    // this._submitHandler = this._submitHandler.bind(this);
     this._commentInputHandler = this._commentInputHandler.bind(this);
     this._emotionToggleHandler = this._emotionToggleHandler.bind(this);
 
@@ -55,13 +53,7 @@ export default class NewCommentView extends SmartView {
 
   restoreHandlers() {
     this._setInnerHandlers();
-    // this.setSubmitHandler(this._callback.submit);
   }
-
-  // setSubmitHandler(callback) {
-  //   this._callback.submit = callback;
-  //   this.getElement().addEventListener('keydown', this._submitHandler);
-  // }
 
   reset() {
     this.updateData(NEW_COMMENT_DEFAULT);
@@ -70,14 +62,6 @@ export default class NewCommentView extends SmartView {
   getData() {
     return this._data;
   }
-
-  // _submitHandler(evt) {
-  //   if (!(isEnter(evt) && evt.ctrlKey)) {
-  //     return;
-  //   }
-
-  //   this._callback.submit(this._data);
-  // }
 
   _emotionToggleHandler(evt) {
     const emotionInput = evt.target.closest(`.${ClassName.FILM_DETAILS_EMOJI_ITEM}`);

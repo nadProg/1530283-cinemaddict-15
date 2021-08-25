@@ -3,7 +3,6 @@ import { nanoid } from 'nanoid';
 import { Emotion } from '../const.js';
 import * as CommentMock from './mock-const.js';
 import { getRandomItemFromArray, getRandomInteger } from '../utils/common.js';
-import { updateFilm } from './films.js';
 
 const comments = new Map();
 

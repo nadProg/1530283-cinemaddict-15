@@ -46,16 +46,19 @@ export default class FilmDetailsPresenter {
   }
 
   _handleFormSubmit() {
+    const newComment = this._newCommentView.getData();
+
+    if (!newComment.text || !newComment.emotion) {
+      return;
+    }
+
     const payload = {
-      newComment: this._newCommentView.getData(),
+      newComment,
       film: this._film,
     };
-    try {
-      this._changeFilm(UserAction.CREATE_COMMENT, UpdateType.MINOR, payload);
-      this._newCommentView.reset();
-    } catch (error) {
-      console.log(error);
-    }
+
+    this._changeFilm(UserAction.CREATE_COMMENT, UpdateType.MINOR, payload);
+    this._newCommentView.reset();
   }
 
   _handleCloseButtonClick() {
@@ -158,7 +161,6 @@ export default class FilmDetailsPresenter {
   _renderNewComment() {
     if (!this._newCommentView) {
       this._newCommentView = new NewCommentView();
-      // this._newCommentView.setSubmitHandler(this._handleFormSubmit);
     }
 
     render(this._commentsListView, this._newCommentView);
@@ -183,7 +185,7 @@ export default class FilmDetailsPresenter {
     document.addEventListener('keydown', this._handleDocumentKeydown);
   }
 
-  _handleModelEvent(_, updatedFilm) {
+  _handleModelEvent(updateType, updatedFilm) {
     this.init(updatedFilm);
   }
 
