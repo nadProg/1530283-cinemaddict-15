@@ -75,7 +75,9 @@ export default class NavigationPresenter {
     // Обработик переключения на экран статистики
   }
 
-  _handleModelEvent() {
-    this.init();
+  _handleModelEvent(updateType) {
+    if (updateType !== UpdateType.PATCH) {
+      this.init();
+    }
   }
 }
