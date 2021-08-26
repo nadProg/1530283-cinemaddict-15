@@ -108,3 +108,8 @@ export const UpdateType = {
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
 };
+
+export const Screen = {
+  FILMS: 'FILMS',
+  STATISTIC: 'STATISTIC',
+};

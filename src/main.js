@@ -1,13 +1,15 @@
 import { getAllFilms } from './mock/films.js';
 import { filter } from './utils/film.js';
-import { ClassName, FilterType } from './const.js';
+import { ClassName, FilterType, Screen } from './const.js';
 import { render } from './utils/render.js';
 import FilmsModel from './models/films.js';
 import FilterModel from './models/filter.js';
 import ProfileView from './views/profile.js';
 import FooterStatisticView from './views/footer-statistic.js';
 import NavigationPresenter from './presenters/navigation.js';
-import MainScreenPresenter from './presenters/main-screen.js';
+import FilmsScreenPresenter from './presenters/films-screen.js';
+import StatisticScreenPresenter from './presenters/statisctic-screen.js';
+
 
 // Генерация моковых данных
 
@@ -44,12 +46,36 @@ const filterModel = new FilterModel();
 const filmsModel = new FilmsModel(mockFilms);
 
 const navigationPresenter = new NavigationPresenter(mainElement, filterModel, filmsModel);
-const mainScreenPresenter = new MainScreenPresenter(mainElement, filmsModel, filterModel);
+const filmsScreenPresenter = new FilmsScreenPresenter(mainElement, filmsModel, filterModel);
+const statisticScreenPresenter = new StatisticScreenPresenter(mainElement);
+
+let currentScreen = null;
+
+const renderScreen = (screen) => {
+  if (screen === currentScreen) {
+    return;
+  }
+
+  currentScreen = screen;
+
+  switch (screen) {
+    case Screen.FILMS:
+      filmsScreenPresenter.init();
+      break;
+
+    case Screen.STATISTIC:
+      statisticScreenPresenter.init();
+      break;
+  }
+};
+
 
 // Статус пользователя пока не обновляется при изменении просмотренных фильмов
 // Обновление будет после реализации экрана стастики и рефакторинга всего приложения
 renderProfile(headerElement, filter[FilterType.HISTORY](mockFilms).length);
-renderFooterStatisctic(footerElement, mockFilms.length);
 
 navigationPresenter.init();
-mainScreenPresenter.init();
+
+renderScreen(Screen.FILMS);
+
+renderFooterStatisctic(footerElement, mockFilms.length);

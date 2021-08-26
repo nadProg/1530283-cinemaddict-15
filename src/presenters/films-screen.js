@@ -11,7 +11,7 @@ import FilmDetailsPresenter from './film-details.js';
 
 const bodyElement = document.body;
 
-export default class MainScreenPresenter {
+export default class FilmsScreenPresenter {
   constructor(mainScreenContainer, filmsModel, filterModel) {
     this._mainScreenContainer = mainScreenContainer;
     this._filmsModel = filmsModel;
@@ -37,6 +37,27 @@ export default class MainScreenPresenter {
     this._filterModel.addObserver(this._handleModelEvent);
 
     this._renderMainScreen();
+  }
+
+  destroy() {
+    this._filmsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
+
+    if (this._sortBarView) {
+      remove(this._sortBarView);
+      this._sortBarView = null;
+    }
+
+    if (this._filmsBoardView) {
+      remove(this._filmsBoardView);
+      this._filmsBoardView = null;
+    }
+
+    if (this._filmDetailsPresenter) {
+      this._filmDetailsPresenter.destroy();
+      this._filmDetailsPresenter = null;
+    }
+
   }
 
   get _allFilms() {
