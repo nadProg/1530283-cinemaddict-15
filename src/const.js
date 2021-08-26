@@ -90,6 +90,11 @@ export const FilterType = {
   FAVORITES: 'FAVORITES',
 };
 
+export const NavigationItem = {
+  ...FilterType,
+  STATISTIC: 'STATISTIC',
+};
+
 export const filterTypeToEmptyTitle = {
   ALL: 'There are no movies in our database',
   WATCHLIST: 'There ara no movies to watch now',

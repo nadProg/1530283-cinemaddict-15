@@ -1,5 +1,5 @@
 import AbstractView from './abstract.js';
-import { ClassName, FilterType } from '../const.js';
+import { ClassName, FilterType, NavigationItem } from '../const.js';
 
 const setActiveClassName = (condition) => condition ? ClassName.NAVIGATION_ITEM_ACTIVE : '';
 
@@ -12,7 +12,7 @@ const createFilterTemplate = (filter, isChecked) => {
 };
 
 const createNavigationTemplate = (filters, activeItem) => {
-  const isStatsChecked = activeItem === 'stats';
+  const isStatsChecked = activeItem === NavigationItem.STATISTIC;
   const filtersTemplate = filters.map((filter) => createFilterTemplate(filter, filter.type === activeItem)).join('');
   return `
     <nav class="main-navigation">

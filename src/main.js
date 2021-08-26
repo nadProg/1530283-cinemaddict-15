@@ -43,7 +43,7 @@ const filmsModel = new FilmsModel(mockFilms);
 const profilePresenter = new ProfilePresenter(headerElement, rankModel, filmsModel);
 const navigationPresenter = new NavigationPresenter(mainElement, filterModel, filmsModel, renderScreen);
 const filmsScreenPresenter = new FilmsScreenPresenter(mainElement, filmsModel, filterModel);
-const statisticScreenPresenter = new StatisticScreenPresenter(mainElement);
+const statisticScreenPresenter = new StatisticScreenPresenter(mainElement, rankModel, filmsModel);
 
 
 let currentScreen = null;

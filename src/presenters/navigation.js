@@ -1,6 +1,6 @@
 
 import { render, replace } from '../utils/render.js';
-import { FilterType, UpdateType, Screen } from '../const.js';
+import { FilterType, UpdateType, Screen, NavigationItem } from '../const.js';
 import { filter } from '../utils/film.js';
 import NavigationView from '../views/navigation.js';
 
@@ -64,7 +64,7 @@ export default class NavigationPresenter {
   }
 
   _handleFilterChange(filterType) {
-    if (this._filterModel.getFilter() === filterType) {
+    if (this._activeItem === filterType) {
       return;
     }
 
@@ -75,6 +75,8 @@ export default class NavigationPresenter {
   }
 
   _handleStatisticClick() {
+    this._activeItem = NavigationItem.STATISTIC;
+    this.init();
     this._renderScreen(Screen.STATISTIC);
   }
 
