@@ -1,19 +1,20 @@
 
 import { render, replace } from '../utils/render.js';
-import { FilterType, UpdateType } from '../const.js';
+import { FilterType, UpdateType, Screen } from '../const.js';
 import { filter } from '../utils/film.js';
-import NavigationView from '../views/navigation';
+import NavigationView from '../views/navigation.js';
 
 export default class NavigationPresenter {
-  constructor(navigationContainer, filterModel, filmsModel) {
+  constructor(navigationContainer, filterModel, filmsModel, renderScreen) {
     this._navigationContainer = navigationContainer;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
+    this._renderScreen = renderScreen;
 
     this._activeItem = FilterType.ALL;
 
     this._handleFilterChange = this._handleFilterChange.bind(this);
-    this._handleStatisticsClick = this._handleStatisticsClick.bind(this);
+    this._handleStatisticClick = this._handleStatisticClick.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
@@ -26,7 +27,7 @@ export default class NavigationPresenter {
     this._navigationView = new NavigationView(this._getFilters(), this._activeItem);
 
     this._navigationView.setFilterChangeHandler(this._handleFilterChange);
-    this._navigationView.setStatisticsClickHandler(this._handleStatisticsClick);
+    this._navigationView.setStatisticClickHandler(this._handleStatisticClick);
 
     if (prevNavigationView) {
       replace(this._navigationView, prevNavigationView);
@@ -69,10 +70,12 @@ export default class NavigationPresenter {
 
     this._activeItem = filterType;
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+
+    this._renderScreen(Screen.FILMS);
   }
 
-  _handleStatisticsClick() {
-    // Обработик переключения на экран статистики
+  _handleStatisticClick() {
+    this._renderScreen(Screen.STATISTIC);
   }
 
   _handleModelEvent(updateType) {

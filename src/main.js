@@ -54,13 +54,14 @@ function renderScreen(screen) {
   }
 
   currentScreen = screen;
-
   switch (screen) {
     case Screen.FILMS:
+      statisticScreenPresenter.destroy();
       filmsScreenPresenter.init();
       break;
 
     case Screen.STATISTIC:
+      filmsScreenPresenter.destroy();
       statisticScreenPresenter.init();
       break;
   }
