@@ -1,5 +1,5 @@
 import AbstractView from './abstract.js';
-import { ClassName } from '../const.js';
+import { ClassName, FilterType } from '../const.js';
 
 const setActiveClassName = (condition) => condition ? ClassName.NAVIGATION_ITEM_ACTIVE : '';
 
@@ -7,7 +7,7 @@ const createFilterCountTemplate = (count) => ` <span class="main-navigation__ite
 
 const createFilterTemplate = (filter, isChecked) => {
   const { type, name, count } = filter;
-  const textContent = `${name}${type !== 'all' ? createFilterCountTemplate(count) : ''}`;
+  const textContent = `${name}${type !== FilterType.ALL ? createFilterCountTemplate(count) : ''}`;
   return `<a href="#${type}" class="main-navigation__item ${setActiveClassName(isChecked)}" data-type="${type}">${textContent}</a>`;
 };
 
