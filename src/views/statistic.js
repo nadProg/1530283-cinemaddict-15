@@ -1,7 +1,7 @@
 import AbstractView from './abstract.js';
 import { Rank } from '../const.js';
 
-export const createStatisticTemplate = ({ rank, watchedFilmsAmount, watchedFilmsDuration }) => `
+export const createStatisticTemplate = ({ rank, watchedFilmsAmount, watchedFilmsDuration, topGenre }) => `
   <section class="statistic">
     ${ rank !== Rank.NONE ?
     `<p class="statistic__rank">
@@ -40,7 +40,7 @@ export const createStatisticTemplate = ({ rank, watchedFilmsAmount, watchedFilms
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Top genre</h4>
-        <p class="statistic__item-text">Sci-Fi</p>
+        <p class="statistic__item-text">${topGenre}</p>
       </li>
     </ul>
 
