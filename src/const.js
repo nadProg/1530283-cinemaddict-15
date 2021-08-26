@@ -36,7 +36,12 @@ export const ClassName = {
   SORT_BUTTON_ACTIVE: 'sort__button--active',
   FILMS_CONTAINER: 'films-list__container',
   COMMENTS_CONTAINER: 'film-details__comments-wrap',
+  COMMENT: 'film-details__comment',
+  COMMENT_DELETE_BUTTON: 'film-details__comment-delete',
   SHOW_MORE_BUTTON: 'films-list__show-more',
+  NAVIGATION_FILTER_ITEM: 'main-navigation__items',
+  NAVIGATION_STATISTICS_ITEM: 'main-navigation__additional',
+  NAVIGATION_ITEM: 'main-navigation__item',
   NAVIGATION_ITEM_ACTIVE: 'main-navigation__item--active',
   FILM_CARD_CONTROL_ACTIVE: 'film-card__controls-item--active',
   FILM_CARD_CONTROL_TO_WATCH: 'film-card__controls-item--add-to-watchlist',
@@ -56,9 +61,6 @@ export const ClassName = {
 };
 
 export const FilmsListOption = {
-  EMPTY: {
-    title: 'There are no movies in our database',
-  },
   MAIN: {
     title: 'All movies. Upcoming',
     isTitleVisiallyHidden: true,
@@ -78,5 +80,31 @@ export const FilmsListOption = {
 
 export const NEW_COMMENT_DEFAULT = {
   text: '',
-  currentEmotion: '',
+  emotion: '',
+};
+
+export const FilterType = {
+  ALL: 'ALL',
+  WATCHLIST: 'WATCHLIST',
+  HISTORY: 'HISTORY',
+  FAVORITES: 'FAVORITES',
+};
+
+export const filterTypeToEmptyTitle = {
+  ALL: 'There are no movies in our database',
+  WATCHLIST: 'There ara no movies to watch now',
+  HISTORY: 'There ara no watched movies now',
+  FAVORITES: 'There ara no favorite movies now',
+};
+
+export const UserAction = {
+  CREATE_COMMENT: 'CREATE_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT',
+  UPDATE_FILM_USER_DETAILS: 'UPDATE_FILM_USER_DETAILS',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
 };

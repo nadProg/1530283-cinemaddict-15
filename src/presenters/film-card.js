@@ -1,6 +1,7 @@
 
 import { render, replace } from '../utils/render.js';
 import { getCurrentDate } from '../utils/date.js';
+import { UserAction, UpdateType } from '../const.js';
 import FilmCardView from '../views/film-card.js';
 
 export default class FilmCardPresenter {
@@ -53,33 +54,39 @@ export default class FilmCardPresenter {
   }
 
   _handleAddToWatchButtonClick() {
-    this._changeFilm({
+    const updatedFilm = {
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
         isToWatch: !this._film.userDetails.isToWatch,
       },
-    });
+    };
+
+    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
   _handleAddWatchedButtonClick() {
-    this._changeFilm({
+    const updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
         isWatched: !this._film.userDetails.isWatched,
         watchingDate: !this._film.userDetails.isWatched ? getCurrentDate() : '',
       },
-    });
+    };
+
+    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
   _handleAddFavoriteButtonClick() {
-    this._changeFilm({
+    const updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
         isFavorite: !this._film.userDetails.isFavorite,
       },
-    });
+    };
+
+    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 }

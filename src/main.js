@@ -1,20 +1,17 @@
-import { generateFilms } from './mock/films.js';
-import { generateFilters, getFilterCountByName } from './mock/filters.js';
-import { ClassName } from './const.js';
+import { getAllFilms } from './mock/films.js';
+import { filter } from './utils/film.js';
+import { ClassName, FilterType } from './const.js';
 import { render } from './utils/render.js';
+import FilmsModel from './models/films.js';
+import FilterModel from './models/filter.js';
 import ProfileView from './views/profile.js';
-import NavigationView from './views/navigation.js';
 import FooterStatisticView from './views/footer-statistic.js';
+import NavigationPresenter from './presenters/navigation.js';
 import MainScreenPresenter from './presenters/main-screen.js';
 
 // Генерация моковых данных
 
-const mockFilms = generateFilms();
-
-const mockFilters = generateFilters(mockFilms);
-
-const allFilmsAmount = getFilterCountByName(mockFilters, 'all');
-const historyFilmsAmount = getFilterCountByName(mockFilters, 'history');
+const mockFilms = getAllFilms();
 
 
 // Поиск основных узлов для рендеринга
@@ -33,14 +30,6 @@ const renderProfile = (container, watchedFilmsAmount) => {
 };
 
 
-// Функция рендеринга навигации с фильтрами
-
-const renderNavigation = (container, filters, activeItem) => {
-  const navigationView = new NavigationView(filters, activeItem);
-  render(container, navigationView);
-};
-
-
 // Функция рендеринга статистики в футере
 
 const renderFooterStatisctic = (container, amount) => {
@@ -51,10 +40,16 @@ const renderFooterStatisctic = (container, amount) => {
 
 // Рендеринг приложения
 
-const mainScreenPresenter = new MainScreenPresenter(mainElement);
+const filterModel = new FilterModel();
+const filmsModel = new FilmsModel(mockFilms);
 
-renderProfile(headerElement, historyFilmsAmount);
-renderNavigation(mainElement, mockFilters, mockFilters[0].name);
-renderFooterStatisctic(footerElement, allFilmsAmount);
+const navigationPresenter = new NavigationPresenter(mainElement, filterModel, filmsModel);
+const mainScreenPresenter = new MainScreenPresenter(mainElement, filmsModel, filterModel);
 
-mainScreenPresenter.init(mockFilms);
+// Статус пользователя пока не обновляется при изменении просмотренных фильмов
+// Обновление будет после реализации экрана стастики и рефакторинга всего приложения
+renderProfile(headerElement, filter[FilterType.HISTORY](mockFilms).length);
+renderFooterStatisctic(footerElement, mockFilms.length);
+
+navigationPresenter.init();
+mainScreenPresenter.init();

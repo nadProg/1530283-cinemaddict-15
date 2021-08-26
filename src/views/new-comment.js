@@ -1,6 +1,5 @@
 import SmartView from './smart.js';
 import { Emotion, ClassName, NEW_COMMENT_DEFAULT } from '../const.js';
-import { isEnter } from '../utils/common.js';
 
 const createEmotionInputTemplate = (emotion, isChecked) => {
   const checked = isChecked ? 'checked' : '';
@@ -12,7 +11,7 @@ const createEmotionInputTemplate = (emotion, isChecked) => {
   `;
 };
 
-export const createNewCommentTemplate = ({ text, currentEmotion }) => {
+export const createNewCommentTemplate = ({ text, emotion: currentEmotion }) => {
   const emotionInputsTemplate = Object.values(Emotion).map((emotion) => createEmotionInputTemplate(emotion, emotion === currentEmotion)).join('');
   const emojiLabelTemplate = currentEmotion ?
     `<img src="images/emoji/${currentEmotion}.png" width="55" height="55" alt="emoji-smile" />` : '';
@@ -42,7 +41,6 @@ export default class NewCommentView extends SmartView {
       ...newCommentData,
     };
 
-    this._submitHandler = this._submitHandler.bind(this);
     this._commentInputHandler = this._commentInputHandler.bind(this);
     this._emotionToggleHandler = this._emotionToggleHandler.bind(this);
 
@@ -55,24 +53,14 @@ export default class NewCommentView extends SmartView {
 
   restoreHandlers() {
     this._setInnerHandlers();
-    this.setSubmitHandler(this._callback.submit);
-  }
-
-  setSubmitHandler(callback) {
-    this._callback.submit = callback;
-    this.getElement().addEventListener('keydown', this._submitHandler);
   }
 
   reset() {
     this.updateData(NEW_COMMENT_DEFAULT);
   }
 
-  _submitHandler(evt) {
-    if (!(isEnter(evt) && evt.ctrlKey)) {
-      return;
-    }
-
-    this._callback.submit();
+  getData() {
+    return this._data;
   }
 
   _emotionToggleHandler(evt) {
@@ -81,7 +69,7 @@ export default class NewCommentView extends SmartView {
       return;
     }
 
-    this.updateData({ currentEmotion: emotionInput.value });
+    this.updateData({ emotion: emotionInput.value });
   }
 
   _commentInputHandler(evt) {
