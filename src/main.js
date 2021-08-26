@@ -1,11 +1,13 @@
 import { getAllFilms } from './mock/films.js';
 import { filter } from './utils/film.js';
+import { getRank } from './utils/profile.js';
 import { ClassName, FilterType, Screen } from './const.js';
 import { render } from './utils/render.js';
+import RankModel from './models/rank.js';
 import FilmsModel from './models/films.js';
 import FilterModel from './models/filter.js';
-import ProfileView from './views/profile.js';
 import FooterStatisticView from './views/footer-statistic.js';
+import ProfilePresenter from './presenters/profile.js';
 import NavigationPresenter from './presenters/navigation.js';
 import FilmsScreenPresenter from './presenters/films-screen.js';
 import StatisticScreenPresenter from './presenters/statisctic-screen.js';
@@ -14,7 +16,7 @@ import StatisticScreenPresenter from './presenters/statisctic-screen.js';
 // Генерация моковых данных
 
 const mockFilms = getAllFilms();
-
+const mockRank = getRank(filter[FilterType.HISTORY](mockFilms).length);
 
 // Поиск основных узлов для рендеринга
 
@@ -22,14 +24,6 @@ const bodyElement = document.body;
 const headerElement = bodyElement.querySelector(`.${ClassName.HEADER}`);
 const mainElement = bodyElement.querySelector(`.${ClassName.MAIN}`);
 const footerElement = bodyElement.querySelector(`.${ClassName.FOOTER}`);
-
-
-// Функция рендеринга звания пользователя в хедере
-
-const renderProfile = (container, watchedFilmsAmount) => {
-  const profileView = new ProfileView(watchedFilmsAmount);
-  render(container, profileView);
-};
 
 
 // Функция рендеринга статистики в футере
@@ -42,16 +36,19 @@ const renderFooterStatisctic = (container, amount) => {
 
 // Рендеринг приложения
 
+const rankModel = new RankModel(mockRank);
 const filterModel = new FilterModel();
 const filmsModel = new FilmsModel(mockFilms);
 
-const navigationPresenter = new NavigationPresenter(mainElement, filterModel, filmsModel);
+const profilePresenter = new ProfilePresenter(headerElement, rankModel, filmsModel);
+const navigationPresenter = new NavigationPresenter(mainElement, filterModel, filmsModel, renderScreen);
 const filmsScreenPresenter = new FilmsScreenPresenter(mainElement, filmsModel, filterModel);
 const statisticScreenPresenter = new StatisticScreenPresenter(mainElement);
 
+
 let currentScreen = null;
 
-const renderScreen = (screen) => {
+function renderScreen(screen) {
   if (screen === currentScreen) {
     return;
   }
@@ -67,13 +64,10 @@ const renderScreen = (screen) => {
       statisticScreenPresenter.init();
       break;
   }
-};
+}
 
 
-// Статус пользователя пока не обновляется при изменении просмотренных фильмов
-// Обновление будет после реализации экрана стастики и рефакторинга всего приложения
-renderProfile(headerElement, filter[FilterType.HISTORY](mockFilms).length);
-
+profilePresenter.init();
 navigationPresenter.init();
 
 renderScreen(Screen.FILMS);

@@ -113,3 +113,10 @@ export const Screen = {
   FILMS: 'FILMS',
   STATISTIC: 'STATISTIC',
 };
+
+export const Rank = {
+  NONE: 'NONE',
+  NOVICE: 'NOVICE',
+  FAN: 'FAN',
+  MOVIE_BUFF: 'MOVIE_BUFF',
+};

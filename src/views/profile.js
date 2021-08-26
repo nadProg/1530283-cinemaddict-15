@@ -1,42 +1,27 @@
 import AbstractView from './abstract.js';
 
 const rankToTextContent = {
-  none: '',
-  novice: 'Novice',
-  fan: 'Fan',
-  movieBuff: 'Movie Buff',
+  NONE: '',
+  NOVICE: 'Novice',
+  FAN: 'Fan',
+  MOVIE_BUFF: 'Movie Buff',
 };
 
-const rankToUpperLimit = {
-  none: 0,
-  novice: 10,
-  fan: 20,
-  movieBuff: Infinity,
-};
-
-const getProfileRank = (watchedFilmsAmount) => {
-  for (const [rank, upperLimit] of Object.entries(rankToUpperLimit)) {
-    if (watchedFilmsAmount <= upperLimit) {
-      return rankToTextContent[rank];
-    }
-  }
-};
-
-const createProfileTemplate = (watchedFilmsAmount) => `
+const createProfileTemplate = (rank) => `
   <section class="header__profile profile">
-    ${watchedFilmsAmount ? `<p class="profile__rating">${getProfileRank(watchedFilmsAmount)}</p>` : ''}
+    <p class="profile__rating">${rankToTextContent[rank]}</p>
     <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
   </section>
 `;
 
 export default class ProfileView extends AbstractView {
-  constructor(watchedFilmsAmount) {
+  constructor(rank) {
     super();
 
-    this._watchedFilmsAmount = watchedFilmsAmount;
+    this._rank = rank;
   }
 
   getTemplate() {
-    return createProfileTemplate(this._watchedFilmsAmount);
+    return createProfileTemplate(this._rank);
   }
 }
