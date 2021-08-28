@@ -106,27 +106,27 @@ export const filterTypeToEmptyTitle = {
 };
 
 export const UserAction = {
-  CREATE_COMMENT: 'CREATE_COMMENT',
-  DELETE_COMMENT: 'DELETE_COMMENT',
-  UPDATE_FILM_USER_DETAILS: 'UPDATE_FILM_USER_DETAILS',
+  CREATE_COMMENT: 'create-comment',
+  DELETE_COMMENT: 'delete-comment',
+  UPDATE_FILM_USER_DETAILS: 'updtae-film-user-details',
 };
 
 export const UpdateType = {
-  PATCH: 'PATCH',
-  MINOR: 'MINOR',
-  MAJOR: 'MAJOR',
+  PATCH: 'patch',
+  MINOR: 'minor',
+  MAJOR: 'major',
 };
 
 export const Screen = {
-  FILMS: 'FILMS',
-  STATISTIC: 'STATISTIC',
+  FILMS: 'films',
+  STATISTICS: 'statistics',
 };
 
 export const Rank = {
-  NONE: 'NONE',
-  NOVICE: 'NOVICE',
-  FAN: 'FAN',
-  MOVIE_BUFF: 'MOVIE_BUFF',
+  NONE: 'none',
+  NOVICE: 'novice',
+  FAN: 'fan',
+  MOVIE_BUFF: 'movie-buff',
 };
 
 export const StatisticsPeriodValue = {
