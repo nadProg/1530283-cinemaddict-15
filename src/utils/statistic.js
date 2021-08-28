@@ -3,7 +3,7 @@ const getGenresStatistic = (watchedFilms) => {
 
   watchedFilms.forEach(({ filmInfo }) => {
     filmInfo.genres.forEach((genre) => {
-      const count = genresStatistic.has(genre) ? genresStatistic.get(genre) : 1;
+      const count = genresStatistic.has(genre) ? genresStatistic.get(genre) : 0;
       genresStatistic.set(genre, count + 1);
     });
   });
@@ -18,7 +18,7 @@ const getGenresStatistic = (watchedFilms) => {
       counts.push(count);
     });
 
-  return { genres, counts };
+  return genres.length ? { genres, counts } : null;
 };
 
 const getTopGenre = ({ genres }) => genres.length ? genres[0] : null;
@@ -40,10 +40,7 @@ export const getWatchedStatisticData = (watchedFilms) => {
     totalAmount: watchedFilms.length,
     totalDuration: getTotalDuration(totalMinutesDuration),
     genresStatistic: genresStatistic,
-    topGenre: getTopGenre(genresStatistic),
+    topGenre: genresStatistic && getTopGenre(genresStatistic),
   };
 };
 
-export const isFilmInWatchedPeriod = (film, period) => {
-
-};

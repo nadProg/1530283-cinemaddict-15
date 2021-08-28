@@ -1,3 +1,5 @@
+import Chart from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart.js';
 import { Rank } from '../const.js';
 
@@ -23,7 +25,7 @@ const createPeriodInputTemplate = ({ value, checked, label }) => `
 `;
 
 export const createStatisticTemplate = (statisticsData) => {
-  const { rank, totalAmount, totalDuration, topGenre, activePeriodValue = StatisticPeriodValue.ALL_TIME} = statisticsData;
+  const { rank, totalAmount, totalDuration, topGenre, genresStatistic, activePeriodValue = StatisticPeriodValue.ALL_TIME} = statisticsData;
 
   const periodInputsTemplate = Object.entries(StatisticPeriodValue)
     .map(([period, value]) => createPeriodInputTemplate({
@@ -69,9 +71,11 @@ export const createStatisticTemplate = (statisticsData) => {
 
       </ul>
 
-      <div class="statistic__chart-wrap">
-        <canvas class="statistic__chart" width="1000"></canvas>
-      </div>
+      ${genresStatistic ? `
+        <div class="statistic__chart-wrap">
+          <canvas class="statistic__chart" width="1000"></canvas>
+        </div>
+      ` : ''}
 
     </section>
   `;
@@ -102,11 +106,78 @@ export default class StatisticView extends SmartView {
 
   updateElement() {
     super.updateElement();
-
-    console.log('Here must be chart update');
+    this._renderChart(this._data.genresStatistic);
   }
 
   _periodChangeHandler(evt) {
     this._callback.periodChange(evt.target.value);
+  }
+
+  _renderChart(genresStatistic) {
+    if (!genresStatistic) {
+      return;
+    }
+
+    const BAR_HEIGHT = 50;
+    const statisticCtx = this.getElement().querySelector('.statistic__chart');
+
+    statisticCtx.height = BAR_HEIGHT * genresStatistic.genres.length;
+
+    new Chart(statisticCtx, {
+      plugins: [ChartDataLabels],
+      type: 'horizontalBar',
+      data: {
+        labels: [ ...genresStatistic.genres ],
+        datasets: [{
+          data: [ ...genresStatistic.counts ],
+          backgroundColor: '#ffe800',
+          hoverBackgroundColor: '#ffe800',
+          anchor: 'start',
+          barThickness: 24,
+        }],
+      },
+      options: {
+        plugins: {
+          datalabels: {
+            font: {
+              size: 20,
+            },
+            color: '#ffffff',
+            anchor: 'start',
+            align: 'start',
+            offset: 40,
+          },
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              fontColor: '#ffffff',
+              padding: 100,
+              fontSize: 20,
+            },
+            gridLines: {
+              display: false,
+              drawBorder: false,
+            },
+          }],
+          xAxes: [{
+            ticks: {
+              display: false,
+              beginAtZero: true,
+            },
+            gridLines: {
+              display: false,
+              drawBorder: false,
+            },
+          }],
+        },
+        legend: {
+          display: false,
+        },
+        tooltips: {
+          enabled: false,
+        },
+      },
+    });
   }
 }
