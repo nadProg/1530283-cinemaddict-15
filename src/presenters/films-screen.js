@@ -16,7 +16,7 @@ export default class FilmsScreenPresenter {
     this._mainScreenContainer = mainScreenContainer;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
-    this._currentSortType = SortType.DEFAULT;
+
     this._mainFilmsCount = FILMS_STEP;
 
     this._mainFilmPresenter = new Map();
@@ -33,6 +33,8 @@ export default class FilmsScreenPresenter {
   }
 
   init() {
+    this._currentSortType = SortType.DEFAULT;
+
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
 
