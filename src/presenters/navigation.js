@@ -39,28 +39,36 @@ export default class NavigationPresenter {
   _getFilters() {
     const films = this._filmsModel.getAll();
 
-    return [
-      {
-        type: FilterType.ALL,
-        name: 'All movies',
-        count: filter[FilterType.ALL](films).length,
-      },
-      {
-        type: FilterType.WATCHLIST,
-        name: 'Watchlist',
-        count: filter[FilterType.WATCHLIST](films).length,
-      },
-      {
-        type: FilterType.HISTORY,
-        name: 'History',
-        count: filter[FilterType.HISTORY](films).length,
-      },
-      {
-        type: FilterType.FAVORITES,
-        name: 'Favorites',
-        count: filter[FilterType.FAVORITES](films).length,
-      },
-    ];
+    if (!this._filters) {
+      this._filters = [
+        {
+          type: FilterType.ALL,
+          name: 'All movies',
+          count: filter[FilterType.ALL](films).length,
+        },
+        {
+          type: FilterType.WATCHLIST,
+          name: 'Watchlist',
+          count: filter[FilterType.WATCHLIST](films).length,
+        },
+        {
+          type: FilterType.HISTORY,
+          name: 'History',
+          count: filter[FilterType.HISTORY](films).length,
+        },
+        {
+          type: FilterType.FAVORITES,
+          name: 'Favorites',
+          count: filter[FilterType.FAVORITES](films).length,
+        },
+      ];
+    }
+
+    return this._filters;
+  }
+
+  _resetFilters() {
+    this._filters = null;
   }
 
   _handleFilterChange(filterType) {
@@ -81,8 +89,14 @@ export default class NavigationPresenter {
   }
 
   _handleModelEvent(updateType) {
-    if (updateType !== UpdateType.PATCH) {
-      this.init();
+    if (updateType === UpdateType.PATCH) {
+      return;
     }
+
+    if (updateType === UpdateType.MINOR) {
+      this._resetFilters();
+    }
+
+    this.init();
   }
 }
