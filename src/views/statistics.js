@@ -1,36 +1,33 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart.js';
-import { Rank } from '../const.js';
-
-const StatisticPeriodValue = {
-  ALL_TIME: 'all-time',
-  TODAY: 'today',
-  WEEK: 'week',
-  MONTH: 'month',
-  YEAR: 'year',
-};
-
-const StatisticPeriodLabel = {
-  ALL_TIME: 'All time',
-  TODAY: 'Today',
-  WEEK: 'Week',
-  MONTH: 'Month',
-  YEAR: 'Year',
-};
+import { getStatisticsChartData } from '../utils/statistics.js';
+import { Rank, ClassName,
+  StatisticsPeriodValue, StatisticsPeriodLabel,
+  STAISTICS_CHART_BAR_HEIGHT, STATISTICS_CHART_OPTIONS, STATISCTICS_CHART_TYPE
+} from '../const.js';
 
 const createPeriodInputTemplate = ({ value, checked, label }) => `
-  <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${value}" value="${value}" ${checked ? 'checked' : ''}>
-  <label for="statistic-${value}" class="statistic__filters-label">${label}</label>
+  <input
+    type="radio"
+    class="statistic__filters-input visually-hidden"
+    name="statistic-filter"
+    id="statistic-${value}"
+    value="${value}"
+    ${checked ? 'checked' : ''}
+  >
+  <label for="statistic-${value}" class="statistic__filters-label">
+   ${label}
+  </label>
 `;
 
-export const createStatisticTemplate = (statisticsData) => {
-  const { rank, totalAmount, totalDuration, topGenre, genresStatistic, activePeriodValue = StatisticPeriodValue.ALL_TIME} = statisticsData;
+export const createStatisticsTemplate = (statisticsData) => {
+  const { rank, totalAmount, totalDuration, topGenre, genresStatistic, activePeriodValue = StatisticsPeriodValue.ALL} = statisticsData;
 
-  const periodInputsTemplate = Object.entries(StatisticPeriodValue)
+  const periodInputsTemplate = Object.entries(StatisticsPeriodValue)
     .map(([period, value]) => createPeriodInputTemplate({
       value,
-      label: StatisticPeriodLabel[period],
+      label: StatisticsPeriodLabel[period],
       checked: value === activePeriodValue,
     }))
     .join('');
@@ -68,7 +65,6 @@ export const createStatisticTemplate = (statisticsData) => {
             <p class="statistic__item-text">${topGenre}</p>
           </li>
         ` : ''}
-
       </ul>
 
       ${genresStatistic ? `
@@ -76,12 +72,11 @@ export const createStatisticTemplate = (statisticsData) => {
           <canvas class="statistic__chart" width="1000"></canvas>
         </div>
       ` : ''}
-
     </section>
   `;
 };
 
-export default class StatisticView extends SmartView {
+export default class StatisticsView extends SmartView {
   constructor() {
     super();
 
@@ -89,7 +84,7 @@ export default class StatisticView extends SmartView {
   }
 
   getTemplate() {
-    return createStatisticTemplate(this._data);
+    return createStatisticsTemplate(this._data);
   }
 
   restoreHandlers() {
@@ -100,7 +95,7 @@ export default class StatisticView extends SmartView {
     this._callback.periodChange = callback;
 
     this.getElement()
-      .querySelector('.statistic__filters')
+      .querySelector(`.${ClassName.STATISTICS_FILTER_FORM}`)
       .addEventListener('change', this._periodChangeHandler);
   }
 
@@ -115,7 +110,10 @@ export default class StatisticView extends SmartView {
   }
 
   _focusActiveFilter() {
-    this.getElement().querySelector('.statistic__filters-input:checked').focus();
+    const activeFilter = this.getElement().querySelector(`.${ClassName.STATISTICS_FILTER_INPUT}:checked`);
+    if (activeFilter) {
+      activeFilter.focus();
+    }
   }
 
   _renderChart(genresStatistic) {
@@ -123,66 +121,15 @@ export default class StatisticView extends SmartView {
       return;
     }
 
-    const BAR_HEIGHT = 50;
-    const statisticCtx = this.getElement().querySelector('.statistic__chart');
+    const statisticsContext = this.getElement().querySelector(`.${ClassName.STATISTICS_CHART}`);
 
-    statisticCtx.height = BAR_HEIGHT * genresStatistic.genres.length;
+    statisticsContext.height = STAISTICS_CHART_BAR_HEIGHT * genresStatistic.genres.length;
 
-    new Chart(statisticCtx, {
+    new Chart(statisticsContext, {
       plugins: [ChartDataLabels],
-      type: 'horizontalBar',
-      data: {
-        labels: [ ...genresStatistic.genres ],
-        datasets: [{
-          data: [ ...genresStatistic.counts ],
-          backgroundColor: '#ffe800',
-          hoverBackgroundColor: '#ffe800',
-          anchor: 'start',
-          barThickness: 24,
-        }],
-      },
-      options: {
-        plugins: {
-          datalabels: {
-            font: {
-              size: 20,
-            },
-            color: '#ffffff',
-            anchor: 'start',
-            align: 'start',
-            offset: 40,
-          },
-        },
-        scales: {
-          yAxes: [{
-            ticks: {
-              fontColor: '#ffffff',
-              padding: 100,
-              fontSize: 20,
-            },
-            gridLines: {
-              display: false,
-              drawBorder: false,
-            },
-          }],
-          xAxes: [{
-            ticks: {
-              display: false,
-              beginAtZero: true,
-            },
-            gridLines: {
-              display: false,
-              drawBorder: false,
-            },
-          }],
-        },
-        legend: {
-          display: false,
-        },
-        tooltips: {
-          enabled: false,
-        },
-      },
+      type: STATISCTICS_CHART_TYPE,
+      data: getStatisticsChartData(genresStatistic),
+      options: { ...STATISTICS_CHART_OPTIONS},
     });
   }
 }

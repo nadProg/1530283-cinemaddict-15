@@ -1,3 +1,4 @@
+import { StatisticsPeriodValue } from '../const';
 import { isDateInPeriod } from './date.js';
 
 export const formatRating = (rating) => rating.toFixed(1);
@@ -29,7 +30,7 @@ export const filter = {
 };
 
 export const isFilmInWhatcingPeriod = (film, period) => {
-  if (period === 'all-time') {
+  if (period === StatisticsPeriodValue.ALL) {
     return true;
   }
 

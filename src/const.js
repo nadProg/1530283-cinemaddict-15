@@ -58,6 +58,9 @@ export const ClassName = {
   FILM_CARD_COMMENTS: 'film-card__comments',
   FILM_DETAILS_CLOSE_BTN: 'film-details__close-btn',
   FILM_DETAILS_CONTROL_ACTIVE: 'film-details__control-button--active',
+  STATISTICS_FILTER_FORM: 'statistic__filters',
+  STATISTICS_FILTER_INPUT: 'statistic__filters-input',
+  STATISTICS_CHART: 'statistic__chart',
 };
 
 export const FilmsListOption = {
@@ -124,4 +127,67 @@ export const Rank = {
   NOVICE: 'NOVICE',
   FAN: 'FAN',
   MOVIE_BUFF: 'MOVIE_BUFF',
+};
+
+export const StatisticsPeriodValue = {
+  ALL: 'all',
+  TODAY: 'day',
+  WEEK: 'week',
+  MONTH: 'month',
+  YEAR: 'year',
+};
+
+export const StatisticsPeriodLabel = {
+  ALL: 'All time',
+  TODAY: 'Today',
+  WEEK: 'Week',
+  MONTH: 'Month',
+  YEAR: 'Year',
+};
+
+export const STATISCTICS_CHART_TYPE = 'horizontalBar';
+
+export const STAISTICS_CHART_BAR_HEIGHT = 50;
+
+export const STATISTICS_CHART_OPTIONS = {
+  plugins: {
+    datalabels: {
+      font: {
+        size: 20,
+      },
+      color: '#ffffff',
+      anchor: 'start',
+      align: 'start',
+      offset: 40,
+    },
+  },
+  scales: {
+    yAxes: [{
+      ticks: {
+        fontColor: '#ffffff',
+        padding: 100,
+        fontSize: 20,
+      },
+      gridLines: {
+        display: false,
+        drawBorder: false,
+      },
+    }],
+    xAxes: [{
+      ticks: {
+        display: false,
+        beginAtZero: true,
+      },
+      gridLines: {
+        display: false,
+        drawBorder: false,
+      },
+    }],
+  },
+  legend: {
+    display: false,
+  },
+  tooltips: {
+    enabled: false,
+  },
 };
