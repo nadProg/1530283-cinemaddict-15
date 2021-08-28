@@ -1,5 +1,6 @@
-import AbstractView from './abstract.js';
 import { ClassName, FilterType, NavigationItem } from '../const.js';
+
+import AbstractView from './abstract.js';
 
 const setActiveClassName = (condition) => condition ? ClassName.NAVIGATION_ITEM_ACTIVE : '';
 

@@ -1,5 +1,6 @@
-import AbstractObserver from '../utils/abstract-observer.js';
 import { Rank } from '../const.js';
+
+import AbstractObserver from '../utils/abstract-observer.js';
 
 export default class RankModel extends AbstractObserver {
   constructor(rank = Rank.NONE) {

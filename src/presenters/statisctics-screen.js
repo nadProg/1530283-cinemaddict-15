@@ -1,7 +1,8 @@
+import { FilterType, StatisticsPeriodValue } from '../const.js';
 import { remove, render } from '../utils/render.js';
 import { filter, isFilmInWhatcingPeriod } from '../utils/film.js';
 import { getWatchedStatisticsData } from '../utils/statistics.js';
-import { FilterType, StatisticsPeriodValue } from '../const.js';
+
 import StatisticsView from '../views/statistics.js';
 
 export default class StatisticsScreen {

@@ -1,8 +1,10 @@
 
 import he from 'he';
-import AbstractView from './abstract.js';
-import { getCommentDate } from '../utils/date.js';
+
 import { ClassName } from '../const.js';
+import { getCommentDate } from '../utils/date.js';
+
+import AbstractView from './abstract.js';
 
 const createCommentTemplate = (comment) => {
   const { author, date, emotion, text, id } = comment;

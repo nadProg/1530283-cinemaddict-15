@@ -1,7 +1,8 @@
 
-import { render, replace } from '../utils/render.js';
 import { FilterType, UpdateType, Screen, NavigationItem } from '../const.js';
+import { render, replace } from '../utils/render.js';
 import { filter } from '../utils/film.js';
+
 import NavigationView from '../views/navigation.js';
 
 export default class NavigationPresenter {

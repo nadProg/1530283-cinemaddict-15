@@ -1,6 +1,9 @@
-import { FilmsListOption, SortType, FILMS_STEP, EXTRA_FILMS_AMOUNT, ClassName, UpdateType, UserAction, filterTypeToEmptyTitle } from '../const.js';
+import { FilmsListOption, SortType, ClassName, UpdateType,
+  UserAction, filterTypeToEmptyTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT
+} from '../const.js';
 import { render, remove, replace } from '../utils/render.js';
 import { sortByRating, sortByDate, filter } from '../utils/film.js';
+
 import SortBarView from '../views/sort-bar.js';
 import FilmsBoardView from '../views/films-board.js';
 import FilmsListView from '../views/films-list.js';

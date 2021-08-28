@@ -1,7 +1,8 @@
-import AbstractView from './abstract.js';
 import { ClassName } from '../const.js';
-import { formatRating, trimDescription } from '../utils/film.js';
 import { getFullYear, getRuntime } from '../utils/date.js';
+import { formatRating, trimDescription } from '../utils/film.js';
+
+import AbstractView from './abstract.js';
 
 const setActiveClassName = (condition) => condition ? ClassName.FILM_CARD_CONTROL_ACTIVE : '';
 

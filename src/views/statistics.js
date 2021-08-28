@@ -1,11 +1,13 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import SmartView from './smart.js';
+
 import { getStatisticsChartData } from '../utils/statistics.js';
 import { Rank, ClassName,
   StatisticsPeriodValue, StatisticsPeriodLabel,
   STAISTICS_CHART_BAR_HEIGHT, STATISTICS_CHART_OPTIONS, STATISCTICS_CHART_TYPE
 } from '../const.js';
+
+import SmartView from './smart.js';
 
 const createPeriodInputTemplate = ({ value, checked, label }) => `
   <input

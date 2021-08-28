@@ -1,5 +1,6 @@
 
 import { render, replace } from '../utils/render.js';
+
 import FooterStatisticsView from '../views/footer-statistics.js';
 
 export default class FooterStatisticsPresenter {

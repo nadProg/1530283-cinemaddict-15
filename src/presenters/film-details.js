@@ -1,9 +1,10 @@
-import { isEsc, isEnter } from '../utils/common.js';
 import { UserAction, UpdateType } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
+import { isEsc, isEnter } from '../utils/common.js';
 import { render, replace, remove } from '../utils/render.js';
-import FilmDetailsBottomView from '../views/film-details-bottom.js';
+
 import FilmDetailsView from '../views/film-details.js';
+import FilmDetailsBottomView from '../views/film-details-bottom.js';
 import CommentsContainerView from '../views/comments-container.js';
 import CommentsTitleView from '../views/comments-title.js';
 import CommentsListView from '../views/comments-list.js';
