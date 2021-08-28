@@ -27,8 +27,10 @@ export default class NavigationPresenter {
 
     this._navigationView = new NavigationView(this._getFilters(), this._activeItem);
 
-    this._navigationView.setFilterChangeHandler(this._handleFilterChange);
-    this._navigationView.setStatisticClickHandler(this._handleStatisticClick);
+    if (this._filmsModel.getAll().length) {
+      this._navigationView.setFilterChangeHandler(this._handleFilterChange);
+      this._navigationView.setStatisticClickHandler(this._handleStatisticClick);
+    }
 
     if (prevNavigationView) {
       replace(this._navigationView, prevNavigationView);

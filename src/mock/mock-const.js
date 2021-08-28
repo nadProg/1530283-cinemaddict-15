@@ -77,7 +77,7 @@ export const COMMENT_PHRASES = [
 ];
 
 export const MIN_FILMS_AMOUNT = 15;
-export const MAX_FILMS_AMOUNT = 20;
+export const MAX_FILMS_AMOUNT = 45;
 
 export const MAX_FILM_PHRASE_AMOUNT = 5;
 
