@@ -1,3 +1,5 @@
+import { isDateInPeriod } from './date.js';
+
 export const formatRating = (rating) => rating.toFixed(1);
 
 export const formatItems = (items) => items.join(', ');
@@ -24,4 +26,14 @@ export const filter = {
     .filter((film) => film.userDetails.isWatched),
   FAVORITES: (films) => films
     .filter((film) => film.userDetails.isFavorite),
+};
+
+export const isFilmInWhatcingPeriod = (film, period) => {
+  if (period === 'all-time') {
+    return true;
+  }
+
+  const { watchingDate } = film.userDetails;
+
+  return isDateInPeriod(watchingDate, period);
 };

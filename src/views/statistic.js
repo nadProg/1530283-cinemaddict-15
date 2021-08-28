@@ -1,8 +1,37 @@
 import SmartView from './smart.js';
 import { Rank } from '../const.js';
 
+const StatisticPeriodValue = {
+  ALL_TIME: 'all-time',
+  TODAY: 'today',
+  WEEK: 'week',
+  MONTH: 'month',
+  YEAR: 'year',
+};
+
+const StatisticPeriodLabel = {
+  ALL_TIME: 'All time',
+  TODAY: 'Today',
+  WEEK: 'Week',
+  MONTH: 'Month',
+  YEAR: 'Year',
+};
+
+const createPeriodInputTemplate = ({ value, checked, label }) => `
+  <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${value}" value="${value}" ${checked ? 'checked' : ''}>
+  <label for="statistic-${value}" class="statistic__filters-label">${label}</label>
+`;
+
 export const createStatisticTemplate = (statisticsData) => {
-  const { rank, totalAmount, totalDuration, topGenre } = statisticsData;
+  const { rank, totalAmount, totalDuration, topGenre, activePeriodValue = StatisticPeriodValue.ALL_TIME} = statisticsData;
+
+  const periodInputsTemplate = Object.entries(StatisticPeriodValue)
+    .map(([period, value]) => createPeriodInputTemplate({
+      value,
+      label: StatisticPeriodLabel[period],
+      checked: value === activePeriodValue,
+    }))
+    .join('');
 
   return `
     <section class="statistic">
@@ -16,21 +45,7 @@ export const createStatisticTemplate = (statisticsData) => {
 
       <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
         <p class="statistic__filters-description">Show stats:</p>
-
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" checked>
-        <label for="statistic-all-time" class="statistic__filters-label">All time</label>
-
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today">
-        <label for="statistic-today" class="statistic__filters-label">Today</label>
-
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week">
-        <label for="statistic-week" class="statistic__filters-label">Week</label>
-
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month">
-        <label for="statistic-month" class="statistic__filters-label">Month</label>
-
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year">
-        <label for="statistic-year" class="statistic__filters-label">Year</label>
+        ${periodInputsTemplate}
       </form>
 
       <ul class="statistic__text-list">
@@ -63,16 +78,35 @@ export const createStatisticTemplate = (statisticsData) => {
 };
 
 export default class StatisticView extends SmartView {
-  // constructor() {
-  //   super();
+  constructor() {
+    super();
 
-  // }
+    this._periodChangeHandler = this._periodChangeHandler.bind(this);
+  }
 
   getTemplate() {
     return createStatisticTemplate(this._data);
   }
 
   restoreHandlers() {
+    this.setPeriodChangeHandler(this._callback.periodChange);
+  }
 
+  setPeriodChangeHandler(callback) {
+    this._callback.periodChange = callback;
+
+    this.getElement()
+      .querySelector('.statistic__filters')
+      .addEventListener('change', this._periodChangeHandler);
+  }
+
+  updateElement() {
+    super.updateElement();
+
+    console.log('Here must be chart update');
+  }
+
+  _periodChangeHandler(evt) {
+    this._callback.periodChange(evt.target.value);
   }
 }

@@ -1,8 +1,8 @@
 const getGenresStatistic = (watchedFilms) => {
   const genresStatistic = new Map();
-  watchedFilms.forEach( ({ filmInfo }) => {
-    const { genres } = filmInfo;
-    genres.forEach((genre) => {
+
+  watchedFilms.forEach(({ filmInfo }) => {
+    filmInfo.genres.forEach((genre) => {
       const count = genresStatistic.has(genre) ? genresStatistic.get(genre) : 1;
       genresStatistic.set(genre, count + 1);
     });
@@ -42,4 +42,8 @@ export const getWatchedStatisticData = (watchedFilms) => {
     genresStatistic: genresStatistic,
     topGenre: getTopGenre(genresStatistic),
   };
+};
+
+export const isFilmInWatchedPeriod = (film, period) => {
+
 };
