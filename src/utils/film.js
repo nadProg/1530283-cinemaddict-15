@@ -1,5 +1,8 @@
-import { StatisticsPeriodValue } from '../const';
+import { MAX_DESCRIPTION_LENGTH, StatisticsPeriodValue } from '../const';
 import { isDateInPeriod } from './date.js';
+
+export const trimDescription = (description) => description.length <= MAX_DESCRIPTION_LENGTH ?
+  description : `${description.slice(0, MAX_DESCRIPTION_LENGTH - 1)}...`;
 
 export const formatRating = (rating) => rating.toFixed(1);
 
