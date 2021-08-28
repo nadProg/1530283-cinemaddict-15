@@ -36,7 +36,7 @@ export default class ProfilePresenter {
   }
 
   _handleFilmsModelEvent(updateType) {
-    if (updateType === UpdateType.MINOR) {
+    if (updateType !== UpdateType.PATCH) {
       const films = this._filmsModel.getAll();
       const watchedFilmsAmount = filter[FilterType.HISTORY](films).length;
       const rank = getRank(watchedFilmsAmount);

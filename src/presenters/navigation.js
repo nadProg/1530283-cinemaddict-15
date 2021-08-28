@@ -86,9 +86,9 @@ export default class NavigationPresenter {
   }
 
   _handleStatisticClick() {
-    this._activeItem = NavigationItem.STATISTIC;
+    this._activeItem = NavigationItem.STATISTICS;
     this.init();
-    this._renderScreen(Screen.STATISTIC);
+    this._renderScreen(Screen.STATISTICS);
   }
 
   _handleModelEvent(updateType) {

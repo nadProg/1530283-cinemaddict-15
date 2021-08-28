@@ -95,7 +95,7 @@ export const FilterType = {
 
 export const NavigationItem = {
   ...FilterType,
-  STATISTIC: 'STATISTIC',
+  STATISTICS: 'STATISTICS',
 };
 
 export const filterTypeToEmptyTitle = {
