@@ -1,16 +1,17 @@
 import { getAllFilms } from './mock/films.js';
 import { filter } from './utils/film.js';
 import { getRank } from './utils/profile.js';
-import { render } from './utils/render.js';
 import { ClassName, FilterType, Screen } from './const.js';
+
 import RankModel from './models/rank.js';
 import FilmsModel from './models/films.js';
 import FilterModel from './models/filter.js';
-import FooterStatisticsView from './views/footer-statistics.js';
+
 import ProfilePresenter from './presenters/profile.js';
 import NavigationPresenter from './presenters/navigation.js';
 import FilmsScreenPresenter from './presenters/films-screen.js';
 import StatisticsScreenPresenter from './presenters/statisctics-screen.js';
+import FooterStatisticsPresenter from './presenters/footer-statistics.js';
 
 
 // Генерация моковых данных
@@ -27,14 +28,6 @@ const mainElement = bodyElement.querySelector(`.${ClassName.MAIN}`);
 const footerElement = bodyElement.querySelector(`.${ClassName.FOOTER}`);
 
 
-// Функция рендеринга статистики в футере
-
-const renderFooterStatisctics = (container, amount) => {
-  const footerStatisticsView = new FooterStatisticsView(amount);
-  render(container, footerStatisticsView);
-};
-
-
 // Создание моделей
 
 const rankModel = new RankModel(mockRank);
@@ -48,6 +41,7 @@ const profilePresenter = new ProfilePresenter(headerElement, rankModel, filmsMod
 const navigationPresenter = new NavigationPresenter(mainElement, filterModel, filmsModel, renderScreen);
 const filmsScreenPresenter = new FilmsScreenPresenter(mainElement, filmsModel, filterModel);
 const statisticsScreenPresenter = new StatisticsScreenPresenter(mainElement, rankModel, filmsModel);
+const footerStatisticsPresenter = new FooterStatisticsPresenter(footerElement);
 
 
 // Функция смены экрана приложения
@@ -77,9 +71,6 @@ function renderScreen(screen) {
 // Инициализация приложения
 
 profilePresenter.init();
-
 navigationPresenter.init();
-
 renderScreen(Screen.FILMS);
-
-renderFooterStatisctics(footerElement, mockFilms.length);
+footerStatisticsPresenter.init(mockFilms.length);
