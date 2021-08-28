@@ -1,8 +1,8 @@
 import { getAllFilms } from './mock/films.js';
 import { filter } from './utils/film.js';
 import { getRank } from './utils/profile.js';
-import { ClassName, FilterType, Screen } from './const.js';
 import { render } from './utils/render.js';
+import { ClassName, FilterType, Screen } from './const.js';
 import RankModel from './models/rank.js';
 import FilmsModel from './models/films.js';
 import FilterModel from './models/filter.js';
@@ -17,6 +17,7 @@ import StatisticsScreenPresenter from './presenters/statisctics-screen.js';
 
 const mockFilms = getAllFilms();
 const mockRank = getRank(filter[FilterType.HISTORY](mockFilms).length);
+
 
 // Поиск основных узлов для рендеринга
 
@@ -34,17 +35,22 @@ const renderFooterStatisctics = (container, amount) => {
 };
 
 
-// Рендеринг приложения
+// Создание моделей
 
 const rankModel = new RankModel(mockRank);
 const filterModel = new FilterModel();
 const filmsModel = new FilmsModel(mockFilms);
+
+
+// Создание презентеров
 
 const profilePresenter = new ProfilePresenter(headerElement, rankModel, filmsModel);
 const navigationPresenter = new NavigationPresenter(mainElement, filterModel, filmsModel, renderScreen);
 const filmsScreenPresenter = new FilmsScreenPresenter(mainElement, filmsModel, filterModel);
 const statisticsScreenPresenter = new StatisticsScreenPresenter(mainElement, rankModel, filmsModel);
 
+
+// Функция смены экрана приложения
 
 let currentScreen = null;
 
@@ -68,7 +74,10 @@ function renderScreen(screen) {
 }
 
 
+// Инициализация приложения
+
 profilePresenter.init();
+
 navigationPresenter.init();
 
 renderScreen(Screen.FILMS);
