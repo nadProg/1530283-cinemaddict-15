@@ -1,8 +1,6 @@
 import { getAllFilms } from '../mock/films.js';
 import { render } from '../utils/render';
-import { filter } from '../utils/film.js';
-import { getRank } from '../utils/profile.js';
-import { FilterType, Screen } from '../const.js';
+import { Screen, UpdateType } from '../const.js';
 
 import HeaderView from '../views/header';
 import MainView from '../views/main';
@@ -19,7 +17,6 @@ import StatisticsScreenPresenter from './statisctics-screen.js';
 import FooterStatisticsPresenter from './footer-statistics.js';
 
 const mockFilms = getAllFilms();
-const mockRank = getRank(filter[FilterType.HISTORY](mockFilms).length);
 
 export default class ApplicationPresenter {
   constructor(applicationContainer) {
@@ -29,8 +26,8 @@ export default class ApplicationPresenter {
     this._mainView = new MainView();
     this._footerView = new FooterView();
 
-    this._rankModel = new RankModel(mockRank);
-    this._filmsModel = new FilmsModel(mockFilms);
+    this._rankModel = new RankModel();
+    this._filmsModel = new FilmsModel();
     this._filterModel = new FilterModel();
 
     this._renderScreen = this._renderScreen.bind(this);
@@ -43,14 +40,21 @@ export default class ApplicationPresenter {
   }
 
   init() {
-    this._profilePresenter.init();
     this._navigationPresenter.init();
     this._renderScreen(Screen.FILMS);
-    this._footerStatisticsPresenter.init(this._filmsModel.getAll().length);
+    this._footerStatisticsPresenter.init();
 
     render(this._applicationContainer, this._headerView);
     render(this._applicationContainer, this._mainView);
     render(this._applicationContainer, this._footerView);
+
+    // Имитирует обновление модели при загрузке фильмов с сервера
+    setTimeout(() => {
+      this._filmsModel.setFilms(UpdateType.MAJOR, mockFilms);
+      this._profilePresenter.init();
+      this._filterModel.forceUpdate(UpdateType.MINOR);
+      this._footerStatisticsPresenter.init(this._filmsModel.getAll().length);
+    }, 0);
   }
 
   _renderScreen(screen) {
@@ -65,7 +69,7 @@ export default class ApplicationPresenter {
         this._filmsScreenPresenter.init();
         break;
 
-      case Screen.STATISTIC:
+      case Screen.STATISTICS:
         this._filmsScreenPresenter.destroy();
         this._statisticsScreenPresenter.init();
         break;

@@ -5,7 +5,7 @@ import { createComment, deleteComment, getCommentsByIds } from '../mock/comments
 import AbstractObserver from '../utils/abstract-observer.js';
 
 export default class FilmsModel extends AbstractObserver{
-  constructor(films) {
+  constructor(films = []) {
     super();
     this._films = films;
   }
@@ -29,6 +29,12 @@ export default class FilmsModel extends AbstractObserver{
   getFilmComments(id) {
     const { comments } = this._films.find((film) => film.id === id);
     return getCommentsByIds(comments);
+  }
+
+  setFilms(updateType, films) {
+    this._films = [ ...films ];
+
+    this._notify(updateType, films);
   }
 
   updateFilm(updateType, updatedFilm) {
