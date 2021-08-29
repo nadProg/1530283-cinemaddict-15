@@ -1,6 +1,6 @@
 import { getAllFilms } from '../mock/films.js';
 import { render } from '../utils/render';
-import { Screen, UpdateType } from '../const.js';
+import { Screen, UpdateType, EmptyBoardTitle } from '../const.js';
 
 import HeaderView from '../views/header';
 import MainView from '../views/main';
@@ -12,11 +12,10 @@ import FilterModel from '../models/filter.js';
 
 import ProfilePresenter from './profile.js';
 import NavigationPresenter from './navigation.js';
+import EmptyBoardPresenter from './empty-board.js';
 import FilmsScreenPresenter from './films-screen.js';
 import StatisticsScreenPresenter from './statisctics-screen.js';
 import FooterStatisticsPresenter from './footer-statistics.js';
-
-const mockFilms = getAllFilms();
 
 export default class ApplicationPresenter {
   constructor(applicationContainer) {
@@ -34,27 +33,47 @@ export default class ApplicationPresenter {
 
     this._profilePresenter = new ProfilePresenter(this._headerView, this._rankModel, this._filmsModel);
     this._navigationPresenter = new NavigationPresenter(this._mainView, this._filterModel, this._filmsModel, this._renderScreen);
+    this._emptyBoardPresenter = new EmptyBoardPresenter(this._mainView);
     this._filmsScreenPresenter = new FilmsScreenPresenter(this._mainView, this._filmsModel, this._filterModel);
     this._statisticsScreenPresenter = new StatisticsScreenPresenter(this._mainView, this._rankModel, this._filmsModel);
     this._footerStatisticsPresenter = new FooterStatisticsPresenter(this._footerView);
   }
 
   init() {
+    // Рендер приложения до загрузки фильмов
+
     this._navigationPresenter.init();
-    this._renderScreen(Screen.FILMS);
+    this._emptyBoardPresenter.init(EmptyBoardTitle.LOADING);
     this._footerStatisticsPresenter.init();
 
     render(this._applicationContainer, this._headerView);
     render(this._applicationContainer, this._mainView);
     render(this._applicationContainer, this._footerView);
 
-    // Имитирует обновление модели при загрузке фильмов с сервера
+
+    // Имитирует обновление приложения при загрузке фильмов с сервера
     setTimeout(() => {
-      this._filmsModel.setFilms(UpdateType.MAJOR, mockFilms);
-      this._profilePresenter.init();
-      this._filterModel.forceUpdate(UpdateType.MINOR);
-      this._footerStatisticsPresenter.init(this._filmsModel.getAll().length);
-    }, 0);
+      try {
+        const mockFilms = getAllFilms();
+
+        if (!mockFilms.length) {
+          throw new Error(EmptyBoardTitle.ERROR);
+        }
+
+        // Обновление моделей
+        this._filmsModel.setFilms(UpdateType.MAJOR, mockFilms);
+        this._filterModel.forceUpdate(UpdateType.MINOR);
+
+        // Рендер приложения
+        this._emptyBoardPresenter.destroy();
+        this._profilePresenter.init();
+        this._renderScreen(Screen.FILMS);
+        this._footerStatisticsPresenter.init(this._filmsModel.getAll().length);
+
+      } catch (error) {
+        this._emptyBoardPresenter.init(error.message);
+      }
+    }, 1000);
   }
 
   _renderScreen(screen) {

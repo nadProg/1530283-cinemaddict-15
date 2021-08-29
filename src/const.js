@@ -98,11 +98,15 @@ export const NavigationItem = {
   STATISTICS: 'STATISTICS',
 };
 
-export const filterTypeToEmptyTitle = {
-  ALL: 'There are no movies in our database',
+export const FilteredEmptyListTitle = {
   WATCHLIST: 'There ara no movies to watch now',
   HISTORY: 'There ara no watched movies now',
   FAVORITES: 'There ara no favorite movies now',
+};
+
+export const EmptyBoardTitle = {
+  ERROR: 'There are no movies in our database',
+  LOADING: 'Loading...',
 };
 
 export const UserAction = {

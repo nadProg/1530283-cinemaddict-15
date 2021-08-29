@@ -1,5 +1,5 @@
 import { FilmsListOption, SortType, ClassName, UpdateType,
-  UserAction, filterTypeToEmptyTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT
+  UserAction, FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT
 } from '../const.js';
 import { render, remove, replace } from '../utils/render.js';
 import { sortByRating, sortByDate, filter } from '../utils/film.js';
@@ -62,7 +62,6 @@ export default class FilmsScreenPresenter {
       this._filmDetailsPresenter.destroy();
       this._filmDetailsPresenter = null;
     }
-
   }
 
   get _allFilms() {
@@ -276,7 +275,7 @@ export default class FilmsScreenPresenter {
       this._renderSortBar();
       this._renderMainFilmsList();
     } else {
-      render(this._filmsBoardView, new FilmsListView({title: filterTypeToEmptyTitle[this._filterModel.getFilter()]}));
+      render(this._filmsBoardView, new FilmsListView({title: FilteredEmptyListTitle[this._filterModel.getFilter()]}));
     }
 
     if (this._allFilms.length) {
