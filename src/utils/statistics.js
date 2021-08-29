@@ -1,4 +1,4 @@
-import { getRuntime } from './date.js';
+import { getTotalRuntime } from './date.js';
 
 const getGenresStatistics = (watchedFilms) => {
   const genresStatistics = new Map();
@@ -25,24 +25,13 @@ const getGenresStatistics = (watchedFilms) => {
 
 const getTopGenre = ({ genres }) => genres.length ? genres[0] : null;
 
-const getTotalDuration = (totalMinutesDuration) => {
-  const totalRuntime = getRuntime(totalMinutesDuration);
-
-  const [hour, minute] = totalRuntime.split(' ');
-
-  return {
-    hour: parseInt(hour, 10),
-    minute: parseInt(minute, 10),
-  };
-};
-
 export const getWatchedStatisticsData = (watchedFilms) => {
   const totalMinutesDuration = watchedFilms.reduce((duration, film) => duration += film.filmInfo.runtime, 0);
   const genresStatistic = getGenresStatistics(watchedFilms);
 
   return {
     totalAmount: watchedFilms.length,
-    totalDuration: getTotalDuration(totalMinutesDuration),
+    totalDuration: getTotalRuntime(totalMinutesDuration),
     genresStatistic: genresStatistic,
     topGenre: genresStatistic && getTopGenre(genresStatistic),
   };
