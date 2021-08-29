@@ -34,8 +34,6 @@ export default class ApplicationPresenter {
     this._profilePresenter = new ProfilePresenter(this._headerView, this._rankModel, this._filmsModel);
     this._navigationPresenter = new NavigationPresenter(this._mainView, this._filterModel, this._filmsModel, this._renderScreen);
     this._emptyBoardPresenter = new EmptyBoardPresenter(this._mainView);
-    this._filmsScreenPresenter = new FilmsScreenPresenter(this._mainView, this._filmsModel, this._filterModel);
-    this._statisticsScreenPresenter = new StatisticsScreenPresenter(this._mainView, this._rankModel, this._filmsModel);
     this._footerStatisticsPresenter = new FooterStatisticsPresenter(this._footerView);
   }
 
@@ -54,18 +52,30 @@ export default class ApplicationPresenter {
     // Имитирует обновление приложения при загрузке фильмов с сервера
     setTimeout(() => {
       try {
+        // Получение фильмов
         const mockFilms = getAllFilms();
 
         if (!mockFilms.length) {
+          // Ошибка при отсутствии загруженных фильмов
           throw new Error(EmptyBoardTitle.ERROR);
         }
 
-        // Обновление моделей
-        this._filmsModel.setFilms(UpdateType.MAJOR, mockFilms);
-        this._filterModel.forceUpdate(UpdateType.MINOR);
+        // Обновление модели фильмов
+        this._filmsModel.setFilms(UpdateType.MINOR, mockFilms);
+
+
+        // Демаунт служебного презентера
+        this._emptyBoardPresenter.destroy();
+        this._emptyBoardPresenter = null;
+
+
+        // Создание презентеров экранов "Фильмы" и "Статистики"
+        this._filmsScreenPresenter = new FilmsScreenPresenter(this._mainView, this._filmsModel, this._filterModel);
+        this._statisticsScreenPresenter = new StatisticsScreenPresenter(this._mainView, this._rankModel, this._filmsModel);
+
 
         // Рендер приложения
-        this._emptyBoardPresenter.destroy();
+
         this._profilePresenter.init();
         this._renderScreen(Screen.FILMS);
         this._footerStatisticsPresenter.init(this._filmsModel.getAll().length);
