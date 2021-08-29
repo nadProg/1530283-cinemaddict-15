@@ -2,7 +2,7 @@
 import { FilterType, UpdateType } from '../const.js';
 import { render, replace } from '../utils/render.js';
 import { filter } from '../utils/film.js';
-import { getRank } from '../utils/profile.js';
+import { getRank } from '../utils/statistics';
 
 import ProfileView from '../views/profile.js';
 

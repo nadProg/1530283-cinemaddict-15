@@ -1,4 +1,13 @@
 import { getTotalRuntime } from './date.js';
+import { Rank, rankToUpperLimit } from '../const.js';
+
+export const getRank = (watchedFilmsAmount) => {
+  for (const [name, rank] of Object.entries(Rank)) {
+    if (watchedFilmsAmount <= rankToUpperLimit[name]) {
+      return rank;
+    }
+  }
+};
 
 const getGenresStatistics = (watchedFilms) => {
   const genresStatistics = new Map();

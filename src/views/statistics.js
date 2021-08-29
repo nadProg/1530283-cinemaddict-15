@@ -1,8 +1,7 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-
 import { getStatisticsChartData } from '../utils/statistics.js';
-import { Rank, ClassName,
+import { ClassName,
   StatisticsPeriodValue, StatisticsPeriodLabel,
   STAISTICS_CHART_BAR_HEIGHT, STATISTICS_CHART_OPTIONS, STATISCTICS_CHART_TYPE
 } from '../const.js';
@@ -36,7 +35,7 @@ export const createStatisticsTemplate = (statisticsData) => {
 
   return `
     <section class="statistic">
-      ${ rank && rank !== Rank.NONE ? `
+      ${ rank ? `
         <p class="statistic__rank">
           Your rank
           <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">

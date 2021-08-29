@@ -127,10 +127,17 @@ export const Screen = {
 };
 
 export const Rank = {
-  NONE: 'none',
-  NOVICE: 'novice',
-  FAN: 'fan',
-  MOVIE_BUFF: 'movie-buff',
+  NONE: '',
+  NOVICE: 'Novice',
+  FAN: 'Fan',
+  MOVIE_BUFF: 'Movie Buff',
+};
+
+export const rankToUpperLimit = {
+  NONE: 0,
+  NOVICE: 10,
+  FAN: 20,
+  MOVIE_BUFF: Infinity,
 };
 
 export const StatisticsPeriodValue = {
