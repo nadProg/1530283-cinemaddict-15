@@ -1,6 +1,6 @@
 
 import { getCurrentDate } from '../utils/date.js';
-import { render, replace } from '../utils/render.js';
+import { rerender } from '../utils/render.js';
 import { UserAction, UpdateType } from '../const.js';
 
 import FilmCardView from '../views/film-card.js';
@@ -35,11 +35,7 @@ export default class FilmCardPresenter {
     this._filmCardView.setAddWatchedButtonClickHandler(this._handleAddWatchedButtonClick);
     this._filmCardView.setAddFavoriteButtonClickHandler(this._handleAddFavoriteButtonClick);
 
-    if (prevFilmCard) {
-      replace(this._filmCardView, prevFilmCard);
-    } else {
-      render(this._filmCardContainer, this._filmCardView);
-    }
+    rerender(this._filmCardView, prevFilmCard, this._filmCardContainer);
   }
 
   _handleTitleClick() {

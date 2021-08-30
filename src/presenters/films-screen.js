@@ -1,7 +1,7 @@
 import { FilmsListOption, SortType, ClassName, UpdateType,
   UserAction, FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT
 } from '../const.js';
-import { render, remove, replace } from '../utils/render.js';
+import { render, remove, replace, rerender } from '../utils/render.js';
 import { sortByRating, sortByDate, filter } from '../utils/film.js';
 
 import SortBarView from '../views/sort-bar.js';
@@ -182,11 +182,7 @@ export default class FilmsScreenPresenter {
     this._sortBarView = new SortBarView(this._currentSortType);
     this._sortBarView.setSortTypeChangeHandler(this._handleSortTypeChange);
 
-    if (prevSortBarView) {
-      replace(this._sortBarView, prevSortBarView);
-    } else {
-      render(this._mainScreenContainer, this._sortBarView);
-    }
+    rerender(this._sortBarView, prevSortBarView, this._mainScreenContainer);
   }
 
   _renderFilmCard(filmCardContainer, film, type) {
@@ -222,11 +218,7 @@ export default class FilmsScreenPresenter {
       this._renderShowMoreButtonClick();
     }
 
-    if (prevMainFilmsListView) {
-      replace(this._mainFilmsListView, prevMainFilmsListView);
-    } else {
-      render(this._filmsBoardView, this._mainFilmsListView);
-    }
+    rerender(this._mainFilmsListView, prevMainFilmsListView, this._filmsBoardView);
   }
 
   _renderExtraFilmsList({option, isReplace = false} = {}) {

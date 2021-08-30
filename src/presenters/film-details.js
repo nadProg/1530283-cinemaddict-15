@@ -1,7 +1,7 @@
 import { UserAction, UpdateType } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { isEsc, isEnter } from '../utils/common.js';
-import { render, replace, remove } from '../utils/render.js';
+import { render, rerender, remove } from '../utils/render.js';
 
 import FilmDetailsView from '../views/film-details.js';
 import FilmDetailsBottomView from '../views/film-details-bottom.js';
@@ -175,12 +175,11 @@ export default class FilmDetailsPresenter {
     this._renderComments();
     this._renderNewComment();
 
+    rerender(this._filmDetailsView, prevFilmDetailsView, this._filmDetailsContainer);
+
     if (prevFilmDetailsView) {
       document.removeEventListener('keydown', this._handleDocumentKeydown);
-      replace(this._filmDetailsView, prevFilmDetailsView);
       this._filmDetailsView.scrollTop = scrollTop;
-    } else {
-      render(this._filmDetailsContainer, this._filmDetailsView);
     }
 
     document.addEventListener('keydown', this._handleDocumentKeydown);
