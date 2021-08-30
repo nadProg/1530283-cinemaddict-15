@@ -1,7 +1,8 @@
 
-import { render, replace } from '../utils/render.js';
 import { getCurrentDate } from '../utils/date.js';
+import { render, replace } from '../utils/render.js';
 import { UserAction, UpdateType } from '../const.js';
+
 import FilmCardView from '../views/film-card.js';
 
 export default class FilmCardPresenter {

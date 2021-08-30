@@ -1,5 +1,6 @@
-import SmartView from './smart.js';
 import { Emotion, ClassName, NEW_COMMENT_DEFAULT } from '../const.js';
+
+import SmartView from './smart.js';
 
 const createEmotionInputTemplate = (emotion, isChecked) => {
   const checked = isChecked ? 'checked' : '';

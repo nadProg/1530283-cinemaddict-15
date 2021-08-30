@@ -1,5 +1,6 @@
-import AbstractView from './abstract.js';
 import { ClassName, SortType } from '../const.js';
+
+import AbstractView from './abstract.js';
 
 const setActiveClassName = (condition) => condition ? ClassName.SORT_BUTTON_ACTIVE : '';
 

@@ -1,5 +1,6 @@
+import { ClassName, FilterType, NavigationItem } from '../const.js';
+
 import AbstractView from './abstract.js';
-import { ClassName, FilterType } from '../const.js';
 
 const setActiveClassName = (condition) => condition ? ClassName.NAVIGATION_ITEM_ACTIVE : '';
 
@@ -12,7 +13,7 @@ const createFilterTemplate = (filter, isChecked) => {
 };
 
 const createNavigationTemplate = (filters, activeItem) => {
-  const isStatsChecked = activeItem === 'stats';
+  const isStatsChecked = activeItem === NavigationItem.STATISTIC;
   const filtersTemplate = filters.map((filter) => createFilterTemplate(filter, filter.type === activeItem)).join('');
   return `
     <nav class="main-navigation">
@@ -32,7 +33,7 @@ export default class NavigationView extends AbstractView {
     this._activeItem = activeItem;
 
     this._filterChangeHandler = this._filterChangeHandler.bind(this);
-    this._statisticsClickHandler = this._statisticsClickHandler.bind(this);
+    this._statisticClickHandler = this._statisticClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -50,9 +51,9 @@ export default class NavigationView extends AbstractView {
     this._callback.filterChange(filterItem.dataset.type);
   }
 
-  _statisticsClickHandler(evt) {
+  _statisticClickHandler(evt) {
     evt.preventDefault();
-    this._callback.statisticsClick();
+    this._callback.statisticClick();
   }
 
   setFilterChangeHandler(callback) {
@@ -60,8 +61,8 @@ export default class NavigationView extends AbstractView {
     this.getElement().querySelector(`.${ClassName.NAVIGATION_FILTER_ITEM}`).addEventListener('click', this._filterChangeHandler);
   }
 
-  setStatisticsClickHandler(callback) {
-    this._callback.statisticsClick = callback;
-    this.getElement().querySelector(`.${ClassName.NAVIGATION_STATISTICS_ITEM}`).addEventListener('click', this._statisticsClickHandler);
+  setStatisticClickHandler(callback) {
+    this._callback.statisticClick = callback;
+    this.getElement().querySelector(`.${ClassName.NAVIGATION_STATISTICS_ITEM}`).addEventListener('click', this._statisticClickHandler);
   }
 }

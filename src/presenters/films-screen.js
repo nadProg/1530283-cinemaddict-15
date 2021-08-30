@@ -1,6 +1,9 @@
-import { FilmsListOption, SortType, FILMS_STEP, EXTRA_FILMS_AMOUNT, ClassName, UpdateType, UserAction, filterTypeToEmptyTitle } from '../const.js';
+import { FilmsListOption, SortType, ClassName, UpdateType,
+  UserAction, FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT
+} from '../const.js';
 import { render, remove, replace } from '../utils/render.js';
 import { sortByRating, sortByDate, filter } from '../utils/film.js';
+
 import SortBarView from '../views/sort-bar.js';
 import FilmsBoardView from '../views/films-board.js';
 import FilmsListView from '../views/films-list.js';
@@ -11,12 +14,12 @@ import FilmDetailsPresenter from './film-details.js';
 
 const bodyElement = document.body;
 
-export default class MainScreenPresenter {
+export default class FilmsScreenPresenter {
   constructor(mainScreenContainer, filmsModel, filterModel) {
     this._mainScreenContainer = mainScreenContainer;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
-    this._currentSortType = SortType.DEFAULT;
+
     this._mainFilmsCount = FILMS_STEP;
 
     this._mainFilmPresenter = new Map();
@@ -33,10 +36,32 @@ export default class MainScreenPresenter {
   }
 
   init() {
+    this._currentSortType = SortType.DEFAULT;
+
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
 
     this._renderMainScreen();
+  }
+
+  destroy() {
+    this._filmsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
+
+    if (this._sortBarView) {
+      remove(this._sortBarView);
+      this._sortBarView = null;
+    }
+
+    if (this._filmsBoardView) {
+      remove(this._filmsBoardView);
+      this._filmsBoardView = null;
+    }
+
+    if (this._filmDetailsPresenter) {
+      this._filmDetailsPresenter.destroy();
+      this._filmDetailsPresenter = null;
+    }
   }
 
   get _allFilms() {
@@ -250,7 +275,7 @@ export default class MainScreenPresenter {
       this._renderSortBar();
       this._renderMainFilmsList();
     } else {
-      render(this._filmsBoardView, new FilmsListView({title: filterTypeToEmptyTitle[this._filterModel.getFilter()]}));
+      render(this._filmsBoardView, new FilmsListView({title: FilteredEmptyListTitle[this._filterModel.getFilter()]}));
     }
 
     if (this._allFilms.length) {

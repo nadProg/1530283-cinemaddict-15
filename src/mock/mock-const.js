@@ -76,8 +76,8 @@ export const COMMENT_PHRASES = [
   'Almost two hours? Seriously?',
 ];
 
-export const MIN_FILMS_AMOUNT = 15;
-export const MAX_FILMS_AMOUNT = 20;
+export const MIN_FILMS_AMOUNT = 30;
+export const MAX_FILMS_AMOUNT = 50;
 
 export const MAX_FILM_PHRASE_AMOUNT = 5;
 

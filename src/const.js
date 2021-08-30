@@ -58,6 +58,9 @@ export const ClassName = {
   FILM_CARD_COMMENTS: 'film-card__comments',
   FILM_DETAILS_CLOSE_BTN: 'film-details__close-btn',
   FILM_DETAILS_CONTROL_ACTIVE: 'film-details__control-button--active',
+  STATISTICS_FILTER_FORM: 'statistic__filters',
+  STATISTICS_FILTER_INPUT: 'statistic__filters-input',
+  STATISTICS_CHART: 'statistic__chart',
 };
 
 export const FilmsListOption = {
@@ -90,21 +93,112 @@ export const FilterType = {
   FAVORITES: 'FAVORITES',
 };
 
-export const filterTypeToEmptyTitle = {
-  ALL: 'There are no movies in our database',
+export const NavigationItem = {
+  ...FilterType,
+  STATISTICS: 'STATISTICS',
+};
+
+export const FilteredEmptyListTitle = {
   WATCHLIST: 'There ara no movies to watch now',
   HISTORY: 'There ara no watched movies now',
   FAVORITES: 'There ara no favorite movies now',
 };
 
+export const EmptyBoardTitle = {
+  ERROR: 'There are no movies in our database',
+  LOADING: 'Loading...',
+};
+
 export const UserAction = {
-  CREATE_COMMENT: 'CREATE_COMMENT',
-  DELETE_COMMENT: 'DELETE_COMMENT',
-  UPDATE_FILM_USER_DETAILS: 'UPDATE_FILM_USER_DETAILS',
+  CREATE_COMMENT: 'create-comment',
+  DELETE_COMMENT: 'delete-comment',
+  UPDATE_FILM_USER_DETAILS: 'updtae-film-user-details',
 };
 
 export const UpdateType = {
-  PATCH: 'PATCH',
-  MINOR: 'MINOR',
-  MAJOR: 'MAJOR',
+  PATCH: 'patch',
+  MINOR: 'minor',
+  MAJOR: 'major',
+};
+
+export const Screen = {
+  FILMS: 'films',
+  STATISTICS: 'statistics',
+};
+
+export const Rank = {
+  NONE: '',
+  NOVICE: 'Novice',
+  FAN: 'Fan',
+  MOVIE_BUFF: 'Movie Buff',
+};
+
+export const rankToUpperLimit = {
+  NONE: 0,
+  NOVICE: 10,
+  FAN: 20,
+  MOVIE_BUFF: Infinity,
+};
+
+export const StatisticsPeriodValue = {
+  ALL: 'all',
+  TODAY: 'day',
+  WEEK: 'week',
+  MONTH: 'month',
+  YEAR: 'year',
+};
+
+export const StatisticsPeriodLabel = {
+  ALL: 'All time',
+  TODAY: 'Today',
+  WEEK: 'Week',
+  MONTH: 'Month',
+  YEAR: 'Year',
+};
+
+export const STATISCTICS_CHART_TYPE = 'horizontalBar';
+
+export const STAISTICS_CHART_BAR_HEIGHT = 50;
+
+export const STATISTICS_CHART_OPTIONS = {
+  plugins: {
+    datalabels: {
+      font: {
+        size: 20,
+      },
+      color: '#ffffff',
+      anchor: 'start',
+      align: 'start',
+      offset: 40,
+    },
+  },
+  scales: {
+    yAxes: [{
+      ticks: {
+        fontColor: '#ffffff',
+        padding: 100,
+        fontSize: 20,
+      },
+      gridLines: {
+        display: false,
+        drawBorder: false,
+      },
+    }],
+    xAxes: [{
+      ticks: {
+        display: false,
+        beginAtZero: true,
+      },
+      gridLines: {
+        display: false,
+        drawBorder: false,
+      },
+    }],
+  },
+  legend: {
+    display: false,
+  },
+  tooltips: {
+    enabled: false,
+  },
 };

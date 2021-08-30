@@ -1,12 +1,10 @@
-import AbstractView from './abstract.js';
-import { MAX_DESCRIPTION_LENGTH, ClassName } from '../const.js';
-import { formatRating } from '../utils/film.js';
+import { ClassName } from '../const.js';
 import { getFullYear, getRuntime } from '../utils/date.js';
+import { formatRating, trimDescription } from '../utils/film.js';
+
+import AbstractView from './abstract.js';
 
 const setActiveClassName = (condition) => condition ? ClassName.FILM_CARD_CONTROL_ACTIVE : '';
-
-const trimDescription = (description) => description.length <= MAX_DESCRIPTION_LENGTH ?
-  description : `${description.slice(0, MAX_DESCRIPTION_LENGTH)}...`;
 
 export const createFilmCardTemplate = (film) => {
   const { comments, filmInfo, userDetails, id } = film;
@@ -27,9 +25,15 @@ export const createFilmCardTemplate = (film) => {
       <p class="film-card__description">${trimDescription(description)}</p>
       <a class="film-card__comments">${comments.length} comments</a>
       <div class="film-card__controls">
-        <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${setActiveClassName(isToWatch)}" type="button">Add to watchlist</button>
-        <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${setActiveClassName(isWatched)}" type="button">Mark as watched</button>
-        <button class="film-card__controls-item film-card__controls-item--favorite ${setActiveClassName(isFavorite)}" type="button">Mark as favorite</button>
+        <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${setActiveClassName(isToWatch)}" type="button">
+          Add to watchlist
+        </button>
+        <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${setActiveClassName(isWatched)}" type="button">
+          Mark as watched
+        </button>
+        <button class="film-card__controls-item film-card__controls-item--favorite ${setActiveClassName(isFavorite)}" type="button">
+          Mark as favorite
+        </button>
       </div>
     </article>
   `;
