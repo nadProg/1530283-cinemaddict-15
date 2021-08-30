@@ -1,10 +1,12 @@
 import { getAllFilms } from '../mock/films.js';
-import { render } from '../utils/render';
+import { render, replace, remove } from '../utils/render';
 import { Screen, UpdateType, EmptyBoardTitle } from '../const.js';
 
 import HeaderView from '../views/header';
 import MainView from '../views/main';
 import FooterView from '../views/footer';
+
+import EmptyBoardView from '../views/empty-board.js';
 
 import RankModel from '../models/rank.js';
 import FilmsModel from '../models/films.js';
@@ -12,7 +14,6 @@ import FilterModel from '../models/filter.js';
 
 import ProfilePresenter from './profile.js';
 import NavigationPresenter from './navigation.js';
-import EmptyBoardPresenter from './empty-board.js';
 import FilmsScreenPresenter from './films-screen.js';
 import StatisticsScreenPresenter from './statisctics-screen.js';
 import FooterStatisticsPresenter from './footer-statistics.js';
@@ -24,6 +25,7 @@ export default class ApplicationPresenter {
     this._headerView = new HeaderView();
     this._mainView = new MainView();
     this._footerView = new FooterView();
+    this._emptyBoardView = new EmptyBoardView(EmptyBoardTitle.LOADING);
 
     this._rankModel = new RankModel();
     this._filmsModel = new FilmsModel();
@@ -31,17 +33,16 @@ export default class ApplicationPresenter {
 
     this._renderScreen = this._renderScreen.bind(this);
 
-    this._profilePresenter = new ProfilePresenter(this._headerView, this._rankModel, this._filmsModel);
+    this._profilePresenter = new ProfilePresenter(this._headerView, this._rankModel, this._filmsModel); // Переделать на View
     this._navigationPresenter = new NavigationPresenter(this._mainView, this._filterModel, this._filmsModel, this._renderScreen);
-    this._emptyBoardPresenter = new EmptyBoardPresenter(this._mainView);
-    this._footerStatisticsPresenter = new FooterStatisticsPresenter(this._footerView);
+    this._footerStatisticsPresenter = new FooterStatisticsPresenter(this._footerView);  // Переделать на View
   }
 
   init() {
     // Рендер приложения до загрузки фильмов
 
     this._navigationPresenter.init();
-    this._emptyBoardPresenter.init(EmptyBoardTitle.LOADING);
+    render(this._mainView, this._emptyBoardView);  // Рендер заглушки
     this._footerStatisticsPresenter.init();
 
     render(this._applicationContainer, this._headerView);
@@ -64,9 +65,9 @@ export default class ApplicationPresenter {
         this._filmsModel.setFilms(UpdateType.MINOR, mockFilms);
 
 
-        // Демаунт служебного презентера
-        this._emptyBoardPresenter.destroy();
-        this._emptyBoardPresenter = null;
+        // Удаляет заглушку
+        remove(this._emptyBoardView);
+        this._emptyBoardView = null;
 
 
         // Создание презентеров экранов "Фильмы" и "Статистики"
@@ -81,7 +82,9 @@ export default class ApplicationPresenter {
         this._footerStatisticsPresenter.init(this._filmsModel.getAll().length);
 
       } catch (error) {
-        this._emptyBoardPresenter.init(error.message);
+        const prevEmptyBoardView = this._emptyBoardView;
+        this._emptyBoardView = new EmptyBoardView(error.message);
+        replace(this._emptyBoardView, prevEmptyBoardView);
       }
     }, 1000);
   }
