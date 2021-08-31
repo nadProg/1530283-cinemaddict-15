@@ -22,9 +22,20 @@ export default class FilmsScreenPresenter {
 
     this._mainFilmsCount = FILMS_STEP;
 
+    this._sortBarView = null;
+    this._filmsBoardView = null;
+    this._mainFilmsContainerView = null;
+    this._mainFilmsListView = null;
+    this._showMoreButtonView = null;
+    this._topRatedFilmsContainerView = null;
+    this._topRatedFilmsListView = null;
+    this._mostCommentedFilmsContainerView = null;
+    this._mostCommentedFilmsListView = null;
+
     this._mainFilmPresenter = new Map();
     this._topRatedFilmPresenter = new Map();
     this._mostCommentedFilmPresenter = new Map();
+    this._filmDetailsPresenter = null;
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);

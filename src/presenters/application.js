@@ -1,6 +1,6 @@
 import { getAllFilms } from '../mock/films.js';
-import { render, rerender, replace, remove } from '../utils/render';
 import { Screen, FilterType, UpdateType, EmptyBoardTitle } from '../const.js';
+import { render, rerender, replace, remove } from '../utils/render.js';
 import { filter } from '../utils/film.js';
 import { getRank } from '../utils/statistics';
 
@@ -25,10 +25,10 @@ export default class ApplicationPresenter {
     this._applicationContainer = applicationContainer;
 
     this._headerView = new HeaderView();
-    this._mainView = new MainView();
-    this._footerView = new FooterView();
-    this._emptyBoardView = new EmptyBoardView(EmptyBoardTitle.LOADING);
     this._profileView = null;
+    this._mainView = new MainView();
+    this._emptyBoardView = new EmptyBoardView(EmptyBoardTitle.LOADING);
+    this._footerView = new FooterView();
     this._footerStatisticsView = new FooterStatisticsView();
 
     this._rankModel = new RankModel();

@@ -18,6 +18,15 @@ export default class FilmDetailsPresenter {
     this._changeFilm = changeFilm;
     this._hideFilmDetails = hideFilmDetails;
 
+    this._film = null;
+
+    this._filmDetailsView = null;
+    this._filmDetailsBottomView = null;
+    this._commentsContainerView = null;
+    this._commentsTitleView = null;
+    this._commentsListView = null;
+    this._newCommentView = null;
+
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
     this._handleDocumentKeydown = this._handleDocumentKeydown.bind(this);
 

@@ -1,7 +1,7 @@
 
-import { getCurrentDate } from '../utils/date.js';
-import { rerender } from '../utils/render.js';
 import { UserAction, UpdateType } from '../const.js';
+import { rerender } from '../utils/render.js';
+import { getCurrentDate } from '../utils/date.js';
 
 import FilmCardView from '../views/film-card.js';
 
@@ -10,6 +10,8 @@ export default class FilmCardPresenter {
     this._filmCardContainer = filmCardContainer;
     this._changeFilm = changeFilm;
     this._showFilmDetails = showFilmDetails;
+
+    this._filmCardView = null;
 
     this._handleTitleClick = this._handleTitleClick.bind(this);
     this._handlePosterClick = this._handlePosterClick.bind(this);

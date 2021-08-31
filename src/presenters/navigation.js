@@ -14,6 +14,8 @@ export default class NavigationPresenter {
 
     this._activeItem = FilterType.ALL;
 
+    this._navigationView = null;
+
     this._handleFilterChange = this._handleFilterChange.bind(this);
     this._handleStatisticClick = this._handleStatisticClick.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);

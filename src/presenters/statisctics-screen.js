@@ -8,6 +8,9 @@ import StatisticsView from '../views/statistics.js';
 export default class StatisticsScreen {
   constructor(statisticContainer, rankModel, filmsModel) {
     this._statisticContainer = statisticContainer;
+
+    this._statiscticsView = null;
+
     this._rankModel = rankModel;
     this._filmsModel = filmsModel;
 
