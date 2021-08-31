@@ -2,6 +2,7 @@ import { UserAction, UpdateType } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { isEsc, isEnter } from '../utils/common.js';
 import { render, rerender, remove } from '../utils/render.js';
+import { adaptCommentToClient } from '../utils/film.js';
 
 import FilmDetailsView from '../views/film-details.js';
 import FilmDetailsBottomView from '../views/film-details-bottom.js';
@@ -10,6 +11,13 @@ import CommentsTitleView from '../views/comments-title.js';
 import CommentsListView from '../views/comments-list.js';
 import CommentView from '../views/comment.js';
 import NewCommentView from '../views/new-comment.js';
+
+import API from '../api.js';
+
+const endPoint = 'https://15.ecmascript.pages.academy/cinemaddict/';
+const authorization = 'Basic b1dsf53b53b';
+
+const api = new API(endPoint, authorization);
 
 export default class FilmDetailsPresenter {
   constructor(filmDetailsContainer, filmsModel, changeFilm, hideFilmDetails) {
@@ -42,7 +50,7 @@ export default class FilmDetailsPresenter {
     this._filmsModel.addObserver(this._handleModelEvent);
   }
 
-  init(film) {
+  async init(film) {
     this._film = film;
     this._renderFilmDetails();
   }
@@ -149,8 +157,10 @@ export default class FilmDetailsPresenter {
     render(this._filmDetailsView, this._filmDetailsBottomView);
   }
 
-  _renderComments() {
-    const filmComments = this._filmsModel.getFilmComments(this.filmId);
+  async _renderComments() {
+    let filmComments = await api.getComments(this._film);
+    filmComments = filmComments.map(adaptCommentToClient);
+    console.log(filmComments);
 
     this._commentsContainerView = new CommentsContainerView();
     this._commentsListView = new CommentsListView();
@@ -176,12 +186,12 @@ export default class FilmDetailsPresenter {
     render(this._commentsListView, this._newCommentView);
   }
 
-  _renderFilmDetails() {
+  async _renderFilmDetails() {
     const prevFilmDetailsView = this._filmDetailsView;
     const scrollTop = prevFilmDetailsView ? this._filmDetailsView.scrollTop : null;
 
     this._renderFilmInfo();
-    this._renderComments();
+    await this._renderComments();
     this._renderNewComment();
 
     rerender(this._filmDetailsView, prevFilmDetailsView, this._filmDetailsContainer);

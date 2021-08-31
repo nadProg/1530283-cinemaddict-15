@@ -75,3 +75,14 @@ export const adaptFilmToClient = (film) => {
 
   return clientFilm;
 };
+
+export const adaptCommentToClient = (comment) => {
+  const clientComment = { ...comment };
+
+  clientComment.text = comment.comment;
+  clientComment.date = new Date(comment.date);
+
+  delete clientComment.comment;
+
+  return clientComment;
+};

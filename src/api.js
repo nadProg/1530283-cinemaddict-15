@@ -33,12 +33,14 @@ export default class Api {
     // .then(TasksModel.adaptToClient);
   }
 
-  getComments(film) {
-    return this._load({
+  async getComments(film) {
+    const response = await this._load({
       url: `comments/${film.id}`,
       method: Method.GEt,
       headers: new Headers({'Content-Type': 'application/json'}),
     });
+
+    return await Api.toJSON(response);
   }
 
   addComment(film) {
