@@ -1,7 +1,6 @@
-import { getAllFilms } from '../mock/films.js';
 import { Screen, FilterType, UpdateType, EmptyBoardTitle } from '../const.js';
 import { render, rerender, replace, remove } from '../utils/render.js';
-import { filter } from '../utils/film.js';
+import { filter, adaptFilmToClient } from '../utils/film.js';
 import { getRank } from '../utils/statistics';
 
 import HeaderView from '../views/header';
@@ -19,6 +18,13 @@ import FilterModel from '../models/filter.js';
 import NavigationPresenter from './navigation.js';
 import FilmsScreenPresenter from './films-screen.js';
 import StatisticsScreenPresenter from './statisctics-screen.js';
+
+import API from '../api.js';
+
+const endPoint = 'https://15.ecmascript.pages.academy/cinemaddict/';
+const authorization = 'Basic b1dsf53b53b';
+
+const api = new API(endPoint, authorization);
 
 export default class ApplicationPresenter {
   constructor(applicationContainer) {
@@ -47,7 +53,7 @@ export default class ApplicationPresenter {
     this._currentScreen = null;
   }
 
-  init() {
+  async init() {
     // Рендер приложения до загрузки фильмов
 
     this._navigationPresenter.init();
@@ -59,53 +65,53 @@ export default class ApplicationPresenter {
     render(this._applicationContainer, this._footerView);
 
 
-    // Имитирует обновление приложения при загрузке фильмов с сервера
-    setTimeout(() => {
-      try {
-        // Получение фильмов
-        const mockFilms = getAllFilms();
+    try {
+      // Получение фильмов
+      let films = await api.getFilms();
+      films = films.map(adaptFilmToClient);
+      console.log(films);
 
-        if (!mockFilms.length) {
-          // Ошибка при отсутствии загруженных фильмов
-          throw new Error(EmptyBoardTitle.ERROR);
-        }
-
-
-        // Подписка на обновление профиля пользователя
-        this._filmsModel.addObserver(this._handleFilmsModelEvent);
-        this._rankModel.addObserver(this._handleRankModelEvent);
-
-        // Обновление модели фильмов
-        this._filmsModel.setFilms(UpdateType.MINOR, mockFilms);
-
-
-        // Удаляет заглушку
-        remove(this._emptyBoardView);
-        this._emptyBoardView = null;
-
-
-        // Создание презентеров экранов "Фильмы" и "Статистики"
-        this._filmsScreenPresenter = new FilmsScreenPresenter(this._mainView, this._filmsModel, this._filterModel);
-        this._statisticsScreenPresenter = new StatisticsScreenPresenter(this._mainView, this._rankModel, this._filmsModel);
-
-
-        // Рендер приложения
-        this._isBlocked = false;
-
-        this._navigationPresenter.setActiveItem(FilterType.ALL);
-        this._filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
-        this._renderScreen(Screen.FILMS);
-
-        const prevFooterStatisticsView = this._footerStatisticsView;
-        this._footerStatisticsView = new FooterStatisticsView(this._filmsModel.getAll().length);
-        replace(this._footerStatisticsView, prevFooterStatisticsView);
-
-      } catch (error) {
-        const prevEmptyBoardView = this._emptyBoardView;
-        this._emptyBoardView = new EmptyBoardView(error.message);
-        replace(this._emptyBoardView, prevEmptyBoardView);
+      if (!films.length) {
+        // Ошибка при отсутствии загруженных фильмов
+        throw new Error(EmptyBoardTitle.ERROR);
       }
-    }, 1000);
+
+
+      // Подписка на обновление профиля пользователя
+      this._filmsModel.addObserver(this._handleFilmsModelEvent);
+      this._rankModel.addObserver(this._handleRankModelEvent);
+
+      // Обновление модели фильмов
+      this._filmsModel.setFilms(UpdateType.MINOR, films);
+
+
+      // Удаляет заглушку
+      remove(this._emptyBoardView);
+      this._emptyBoardView = null;
+
+
+      // Создание презентеров экранов "Фильмы" и "Статистики"
+      this._filmsScreenPresenter = new FilmsScreenPresenter(this._mainView, this._filmsModel, this._filterModel);
+      this._statisticsScreenPresenter = new StatisticsScreenPresenter(this._mainView, this._rankModel, this._filmsModel);
+
+
+      // Рендер приложения
+      this._isBlocked = false;
+
+      this._navigationPresenter.setActiveItem(FilterType.ALL);
+      this._filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
+      this._renderScreen(Screen.FILMS);
+
+      const prevFooterStatisticsView = this._footerStatisticsView;
+      this._footerStatisticsView = new FooterStatisticsView(this._filmsModel.getAll().length);
+      replace(this._footerStatisticsView, prevFooterStatisticsView);
+
+    } catch (error) {
+      console.log(error);
+      const prevEmptyBoardView = this._emptyBoardView;
+      this._emptyBoardView = new EmptyBoardView(error.message);
+      replace(this._emptyBoardView, prevEmptyBoardView);
+    }
   }
 
   _renderScreen(screen) {

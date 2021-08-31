@@ -16,9 +16,9 @@ export default class Api {
     this._authorization = authorization;
   }
 
-  getFilms() {
-    return this._load({url: 'movies'});
-    // .then(Api.toJSON)
+  async getFilms() {
+    const response = await this._load({url: 'movies'});
+    return await Api.toJSON(response);
     // .then((tasks) => tasks.map(TasksModel.adaptToClient));
   }
 
@@ -59,7 +59,7 @@ export default class Api {
     });
   }
 
-  _load({
+  async _load({
     url,
     method = Method.GET,
     body = null,
@@ -67,12 +67,12 @@ export default class Api {
   }) {
     headers.append('Authorization', this._authorization);
 
-    return fetch(
+    const response = await fetch(
       `${this._endPoint}/${url}`,
       {method, body, headers},
-    )
-      .then(Api.checkStatus)
-      .catch(Api.catchError);
+    );
+
+    return Api.checkStatus(response);
   }
 
   static checkStatus(response) {
