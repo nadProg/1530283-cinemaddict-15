@@ -1,18 +1,20 @@
 import { getAllFilms } from '../mock/films.js';
-import { render, replace, remove } from '../utils/render';
-import { Screen, UpdateType, EmptyBoardTitle } from '../const.js';
+import { render, rerender, replace, remove } from '../utils/render';
+import { Screen, FilterType, UpdateType, EmptyBoardTitle } from '../const.js';
+import { filter } from '../utils/film.js';
+import { getRank } from '../utils/statistics';
 
 import HeaderView from '../views/header';
 import MainView from '../views/main';
 import FooterView from '../views/footer';
 
 import EmptyBoardView from '../views/empty-board.js';
+import ProfileView from '../views/profile.js';
 
 import RankModel from '../models/rank.js';
 import FilmsModel from '../models/films.js';
 import FilterModel from '../models/filter.js';
 
-import ProfilePresenter from './profile.js';
 import NavigationPresenter from './navigation.js';
 import FilmsScreenPresenter from './films-screen.js';
 import StatisticsScreenPresenter from './statisctics-screen.js';
@@ -26,6 +28,7 @@ export default class ApplicationPresenter {
     this._mainView = new MainView();
     this._footerView = new FooterView();
     this._emptyBoardView = new EmptyBoardView(EmptyBoardTitle.LOADING);
+    this._profileView = null;
 
     this._rankModel = new RankModel();
     this._filmsModel = new FilmsModel();
@@ -33,9 +36,11 @@ export default class ApplicationPresenter {
 
     this._renderScreen = this._renderScreen.bind(this);
 
-    this._profilePresenter = new ProfilePresenter(this._headerView, this._rankModel, this._filmsModel); // Переделать на View
     this._navigationPresenter = new NavigationPresenter(this._mainView, this._filterModel, this._filmsModel, this._renderScreen);
     this._footerStatisticsPresenter = new FooterStatisticsPresenter(this._footerView);  // Переделать на View
+
+    this._handleFilmsModelEvent = this._handleFilmsModelEvent.bind(this);
+    this._handleRankModelEvent = this._handleRankModelEvent.bind(this);
   }
 
   init() {
@@ -61,6 +66,11 @@ export default class ApplicationPresenter {
           throw new Error(EmptyBoardTitle.ERROR);
         }
 
+
+        // Подписка на обновление профиля пользователя
+        this._filmsModel.addObserver(this._handleFilmsModelEvent);
+        this._rankModel.addObserver(this._handleRankModelEvent);
+
         // Обновление модели фильмов
         this._filmsModel.setFilms(UpdateType.MINOR, mockFilms);
 
@@ -77,7 +87,6 @@ export default class ApplicationPresenter {
 
         // Рендер приложения
 
-        this._profilePresenter.init();
         this._renderScreen(Screen.FILMS);
         this._footerStatisticsPresenter.init(this._filmsModel.getAll().length);
 
@@ -105,6 +114,28 @@ export default class ApplicationPresenter {
         this._filmsScreenPresenter.destroy();
         this._statisticsScreenPresenter.init();
         break;
+    }
+  }
+
+  _renderProfile() {
+    const prevProfileView = this._profileView;
+    this._profileView = new ProfileView(this._rankModel.getRank());
+    rerender(this._profileView, prevProfileView, this._headerView);
+  }
+
+  _handleRankModelEvent() {
+    this._renderProfile();
+  }
+
+  _handleFilmsModelEvent(updateType) {
+    if (updateType !== UpdateType.PATCH) {
+      const films = this._filmsModel.getAll();
+      const watchedFilmsAmount = filter[FilterType.HISTORY](films).length;
+      const rank = getRank(watchedFilmsAmount);
+
+      if (rank !== this._rankModel.getRank()) {
+        this._rankModel.setRank(UpdateType.MAJOR, rank);
+      }
     }
   }
 }
