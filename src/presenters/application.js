@@ -10,6 +10,7 @@ import FooterView from '../views/footer';
 
 import EmptyBoardView from '../views/empty-board.js';
 import ProfileView from '../views/profile.js';
+import FooterStatisticsView from '../views/footer-statistics.js';
 
 import RankModel from '../models/rank.js';
 import FilmsModel from '../models/films.js';
@@ -18,7 +19,6 @@ import FilterModel from '../models/filter.js';
 import NavigationPresenter from './navigation.js';
 import FilmsScreenPresenter from './films-screen.js';
 import StatisticsScreenPresenter from './statisctics-screen.js';
-import FooterStatisticsPresenter from './footer-statistics.js';
 
 export default class ApplicationPresenter {
   constructor(applicationContainer) {
@@ -29,18 +29,19 @@ export default class ApplicationPresenter {
     this._footerView = new FooterView();
     this._emptyBoardView = new EmptyBoardView(EmptyBoardTitle.LOADING);
     this._profileView = null;
+    this._footerStatisticsView = new FooterStatisticsView();
 
     this._rankModel = new RankModel();
     this._filmsModel = new FilmsModel();
     this._filterModel = new FilterModel();
 
     this._renderScreen = this._renderScreen.bind(this);
+    this._handleRankModelEvent = this._handleRankModelEvent.bind(this);
+    this._handleFilmsModelEvent = this._handleFilmsModelEvent.bind(this);
 
     this._navigationPresenter = new NavigationPresenter(this._mainView, this._filterModel, this._filmsModel, this._renderScreen);
-    this._footerStatisticsPresenter = new FooterStatisticsPresenter(this._footerView);  // Переделать на View
-
-    this._handleFilmsModelEvent = this._handleFilmsModelEvent.bind(this);
-    this._handleRankModelEvent = this._handleRankModelEvent.bind(this);
+    this._filmsScreenPresenter = null;
+    this._statisticsScreenPresenter = null;
   }
 
   init() {
@@ -48,7 +49,7 @@ export default class ApplicationPresenter {
 
     this._navigationPresenter.init();
     render(this._mainView, this._emptyBoardView);  // Рендер заглушки
-    this._footerStatisticsPresenter.init();
+    render(this._footerView, this._footerStatisticsView);
 
     render(this._applicationContainer, this._headerView);
     render(this._applicationContainer, this._mainView);
@@ -88,7 +89,10 @@ export default class ApplicationPresenter {
         // Рендер приложения
 
         this._renderScreen(Screen.FILMS);
-        this._footerStatisticsPresenter.init(this._filmsModel.getAll().length);
+
+        const prevFooterStatisticsView = this._footerStatisticsView;
+        this._footerStatisticsView = new FooterStatisticsView(this._filmsModel.getAll().length);
+        replace(this._footerStatisticsView, prevFooterStatisticsView);
 
       } catch (error) {
         const prevEmptyBoardView = this._emptyBoardView;
