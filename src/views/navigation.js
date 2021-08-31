@@ -13,7 +13,7 @@ const createFilterTemplate = (filter, isChecked) => {
 };
 
 const createNavigationTemplate = (filters, activeItem) => {
-  const isStatsChecked = activeItem === NavigationItem.STATISTIC;
+  const isStatsChecked = activeItem === NavigationItem.STATISTICS;
   const filtersTemplate = filters.map((filter) => createFilterTemplate(filter, filter.type === activeItem)).join('');
   return `
     <nav class="main-navigation">

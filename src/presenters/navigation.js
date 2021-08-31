@@ -27,12 +27,14 @@ export default class NavigationPresenter {
 
     this._navigationView = new NavigationView(this._getFilters(), this._activeItem);
 
-    if (this._filmsModel.getAll().length) {
-      this._navigationView.setFilterChangeHandler(this._handleFilterChange);
-      this._navigationView.setStatisticClickHandler(this._handleStatisticClick);
-    }
+    this._navigationView.setFilterChangeHandler(this._handleFilterChange);
+    this._navigationView.setStatisticClickHandler(this._handleStatisticClick);
 
     rerender(this._navigationView, prevNavigationView, this._navigationContainer);
+  }
+
+  setActiveItem(activeItem) {
+    this._activeItem = activeItem;
   }
 
   _getFilters() {

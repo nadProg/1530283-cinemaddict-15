@@ -42,6 +42,9 @@ export default class ApplicationPresenter {
     this._navigationPresenter = new NavigationPresenter(this._mainView, this._filterModel, this._filmsModel, this._renderScreen);
     this._filmsScreenPresenter = null;
     this._statisticsScreenPresenter = null;
+
+    this._isBlocked = true;
+    this._currentScreen = null;
   }
 
   init() {
@@ -87,7 +90,10 @@ export default class ApplicationPresenter {
 
 
         // Рендер приложения
+        this._isBlocked = false;
 
+        this._navigationPresenter.setActiveItem(FilterType.ALL);
+        this._filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
         this._renderScreen(Screen.FILMS);
 
         const prevFooterStatisticsView = this._footerStatisticsView;
@@ -104,6 +110,10 @@ export default class ApplicationPresenter {
 
   _renderScreen(screen) {
     if (screen === this._currentScreen) {
+      return;
+    }
+
+    if (this._isBlocked) {
       return;
     }
 
