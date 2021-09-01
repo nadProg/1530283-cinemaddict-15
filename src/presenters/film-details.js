@@ -56,6 +56,10 @@ export default class FilmDetailsPresenter {
 
   init(film) {
     this._film = film;
+
+    this._commentsTitleView = null;
+    this._commentsListView = null;
+
     this._renderFilmDetails();
   }
 
@@ -151,12 +155,15 @@ export default class FilmDetailsPresenter {
   }
 
   _handleModelEvent(updateType, updatedFilm) {
+    this._isLoading = updateType !== UpdateType.MINOR;
+    console.log(updateType);
+
     this.init(updatedFilm);
   }
 
   _renderFilmInfo() {
     const prevFilmDetailsView = this._filmDetailsView;
-    this._prevScrollTop = prevFilmDetailsView ? this._filmDetailsView.scrollTop : 0;
+
     this._filmDetailsView = new FilmDetailsView(this._film);
 
     this._filmDetailsView.setCloseButtonClickHandler(this._handleCloseButtonClick);
@@ -167,9 +174,8 @@ export default class FilmDetailsPresenter {
 
     rerender(this._filmDetailsView, prevFilmDetailsView, this._filmDetailsContainer);
 
-    if (prevFilmDetailsView) {
-      document.removeEventListener('keydown', this._handleDocumentKeydown);
-      this._filmDetailsView.scrollTop = this._prevScrollTop;
+    if (!prevFilmDetailsView) {
+      document.addEventListener('keydown', this._handleDocumentKeydown);
     }
   }
 
@@ -193,6 +199,8 @@ export default class FilmDetailsPresenter {
   }
 
   _renderComments() {
+    const prevCommentsTitleView = this._commentsTitleView;
+    const prevCommentsListView = this._commentsListView;
     let commentsTitle = this._filmComments.length;
 
     if (this._isLoading) {
@@ -204,14 +212,14 @@ export default class FilmDetailsPresenter {
     }
 
     this._commentsTitleView =  new CommentsTitleView(commentsTitle);
-    render(this._commentsContainerView, this._commentsTitleView) ;
+    this._commentsListView = new CommentsListView();
+
+    rerender(this._commentsTitleView, prevCommentsTitleView, this._commentsContainerView);
+    rerender(this._commentsListView, prevCommentsListView, this._commentsContainerView);
 
     if (this._isLoading || this._isError) {
       return;
     }
-
-    this._commentsListView = new CommentsListView();
-    render(this._commentsContainerView, this._commentsListView);
 
     this._filmComments.forEach((comment) => {
       const commentsView = new CommentView(comment);
@@ -226,13 +234,17 @@ export default class FilmDetailsPresenter {
   }
 
   async _renderFilmDetails() {
-    this._isLoading = true;
     this._isError = false;
+    this._prevScrollTop = this._filmDetailsView ? this._filmDetailsView.scrollTop : 0;
 
     this._renderFilmInfo();
     this._renderFilmsBottom();
 
-    document.addEventListener('keydown', this._handleDocumentKeydown);
+    this._filmDetailsView.scrollTop = this._prevScrollTop;
+
+    if (!this._isLoading) {
+      return;
+    }
 
     try {
       this._filmComments = await api.getComments(this._film);
@@ -241,8 +253,7 @@ export default class FilmDetailsPresenter {
       this._isError = true;
     } finally {
       this._isLoading = false;
-      remove(this._filmDetailsBottomView);
-      this._renderFilmsBottom();
+      this._renderComments();
       this._filmDetailsView.scrollTop = this._prevScrollTop;
     }
   }
