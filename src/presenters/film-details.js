@@ -1,4 +1,4 @@
-import { UserAction, UpdateType } from '../const.js';
+import { UserAction, UpdateType, CommentsTitle } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { isEsc, isEnter } from '../utils/common.js';
 import { render, rerender, remove } from '../utils/render.js';
@@ -154,6 +154,10 @@ export default class FilmDetailsPresenter {
   }
 
   _handleModelEvent(updateType, updatedFilm) {
+    if (updateType === UpdateType.MAJOR) {
+      return;
+    }
+
     this._isLoading = updateType !== UpdateType.MINOR;
 
     this.init(updatedFilm);
@@ -196,20 +200,23 @@ export default class FilmDetailsPresenter {
     render(this._filmDetailsBottomView, this._commentsContainerView);
   }
 
-  _renderComments() {
-    const prevCommentsTitleView = this._commentsTitleView;
-    const prevCommentsListView = this._commentsListView;
-    let commentsTitle = this._filmComments.length;
-
+  _getCommentsTitle() {
     if (this._isLoading) {
-      commentsTitle = 'loading...';
+      return CommentsTitle.LOADING;
     }
 
     if (this._isError) {
-      commentsTitle = 'was not loaded';
+      return CommentsTitle.ERROR;
     }
 
-    this._commentsTitleView =  new CommentsTitleView(commentsTitle);
+    return this._filmComments.length;
+  }
+
+  _renderComments() {
+    const prevCommentsTitleView = this._commentsTitleView;
+    const prevCommentsListView = this._commentsListView;
+
+    this._commentsTitleView =  new CommentsTitleView(this._getCommentsTitle());
     this._commentsListView = new CommentsListView();
 
     rerender(this._commentsTitleView, prevCommentsTitleView, this._commentsContainerView);
@@ -232,7 +239,6 @@ export default class FilmDetailsPresenter {
   }
 
   async _renderFilmDetails() {
-    this._isError = false;
     this._prevScrollTop = this._filmDetailsView ? this._filmDetailsView.scrollTop : 0;
 
     this._renderFilmInfo();
@@ -245,11 +251,13 @@ export default class FilmDetailsPresenter {
     }
 
     try {
+      this._isError = false;
       this._filmComments = await this._api.getComments(this._film);
     } catch (error) {
       this._isError = true;
     } finally {
       this._isLoading = false;
+      this._prevScrollTop = this._filmDetailsView.scrollTop;
       this._renderComments();
       this._filmDetailsView.scrollTop = this._prevScrollTop;
     }

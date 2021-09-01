@@ -1,16 +1,6 @@
+import { APIMethod, SuccessHTTPStatusRange } from './const.js';
+
 import FilmsModel from './models/films.js';
-
-const Method = {
-  GET: 'GET',
-  PUT: 'PUT',
-  POST: 'POST',
-  DELETE: 'DELETE',
-};
-
-const SuccessHTTPStatusRange = {
-  MIN: 200,
-  MAX: 299,
-};
 
 export default class Api {
   constructor(endPoint, authorization) {
@@ -29,7 +19,7 @@ export default class Api {
   async updateFilm(film) {
     const response = await this._load({
       url: `movies/${film.id}`,
-      method: Method.PUT,
+      method: APIMethod.PUT,
       body: JSON.stringify(FilmsModel.adaptFilmToServer(film)),
       headers: new Headers({'Content-Type': 'application/json'}),
     });
@@ -42,7 +32,7 @@ export default class Api {
   async getComments(film) {
     const response = await this._load({
       url: `comments/${film.id}`,
-      method: Method.GEt,
+      method: APIMethod.GEt,
       headers: new Headers({'Content-Type': 'application/json'}),
     });
 
@@ -74,7 +64,7 @@ export default class Api {
 
   async _load({
     url,
-    method = Method.GET,
+    method = APIMethod.GET,
     body = null,
     headers = new Headers(),
   }) {

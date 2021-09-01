@@ -1,4 +1,5 @@
-import { Screen, FilterType, UpdateType, EmptyBoardTitle } from '../const.js';
+import { END_POINT, AUTHORIZATION,
+  Screen, FilterType, UpdateType, EmptyBoardTitle } from '../const.js';
 import { render, rerender, replace, remove } from '../utils/render.js';
 import { filter } from '../utils/film.js';
 import { getRank } from '../utils/statistics';
@@ -20,9 +21,6 @@ import FilmsScreenPresenter from './films-screen.js';
 import StatisticsScreenPresenter from './statisctics-screen.js';
 
 import API from '../api.js';
-
-const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict/';
-const AUTHORIZATION = 'Basic b1dsf53b53b';
 
 export default class ApplicationPresenter {
   constructor(applicationContainer) {
