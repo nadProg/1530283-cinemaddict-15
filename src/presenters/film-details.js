@@ -27,6 +27,9 @@ export default class FilmDetailsPresenter {
     this._hideFilmDetails = hideFilmDetails;
 
     this._film = null;
+    this._filmComments = [];
+    this._isLoading = true;
+    this._isError = false;
 
     this._filmDetailsView = null;
     this._filmDetailsBottomView = null;
@@ -50,9 +53,15 @@ export default class FilmDetailsPresenter {
     this._filmsModel.addObserver(this._handleModelEvent);
   }
 
-  async init(film) {
+  init(film) {
     this._film = film;
     this._renderFilmDetails();
+  }
+
+  destroy() {
+    remove(this._filmDetailsView);
+    this._filmsModel.removeObserver(this._handleModelEvent);
+    document.removeEventListener('keydown', this._handleDocumentKeydown);
   }
 
   get filmId() {
@@ -140,8 +149,8 @@ export default class FilmDetailsPresenter {
     this._newCommentView.reset();
   }
 
-  _renderComment(comment) {
-    render(this._commentsContainerView, new CommentView(comment));
+  _handleModelEvent(updateType, updatedFilm) {
+    this.init(updatedFilm);
   }
 
   _renderFilmInfo() {
@@ -157,41 +166,58 @@ export default class FilmDetailsPresenter {
     render(this._filmDetailsView, this._filmDetailsBottomView);
   }
 
-  async _renderComments() {
-    let filmComments = await api.getComments(this._film);
-    filmComments = filmComments.map(adaptCommentToClient);
-    console.log(filmComments);
+  _renderComment(comment) {
+    render(this._commentsContainerView, new CommentView(comment));
+  }
 
+  _renderCommentsContainer() {
     this._commentsContainerView = new CommentsContainerView();
-    this._commentsListView = new CommentsListView();
-    this._commentsTitleView =  new CommentsTitleView(filmComments.length);
+    render(this._filmDetailsBottomView, this._commentsContainerView);
+  }
 
-    render(this._commentsContainerView, this._commentsTitleView);
+  _renderComments(comments = []) {
+    let commentsTitle = comments.length;
+
+    if (this._isLoading) {
+      commentsTitle = 'loading...';
+    }
+
+    if (this._isError) {
+      commentsTitle = 'was not loaded';
+    }
+
+    this._commentsTitleView =  new CommentsTitleView(commentsTitle);
+    render(this._commentsContainerView, this._commentsTitleView) ;
+
+    if (this._isLoading || this._isError) {
+      return;
+    }
+
+    this._commentsListView = new CommentsListView();
     render(this._commentsContainerView, this._commentsListView);
 
-    filmComments.forEach((comment) => {
+    comments.forEach((comment) => {
       const commentsView = new CommentView(comment);
       commentsView.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
       render(this._commentsListView, commentsView);
     });
-
-    render(this._filmDetailsBottomView, this._commentsContainerView);
   }
 
   _renderNewComment() {
-    if (!this._newCommentView) {
-      this._newCommentView = new NewCommentView();
-    }
-
-    render(this._commentsListView, this._newCommentView);
+    this._newCommentView = this._newCommentView || new NewCommentView();
+    render(this._commentsContainerView, this._newCommentView);
   }
 
-  async _renderFilmDetails() {
+  _renderFilmDetails() {
     const prevFilmDetailsView = this._filmDetailsView;
     const scrollTop = prevFilmDetailsView ? this._filmDetailsView.scrollTop : null;
 
+    this._isLoading = true;
+    this._isError = false;
+
     this._renderFilmInfo();
-    await this._renderComments();
+    this._renderCommentsContainer();
+    this._renderComments();
     this._renderNewComment();
 
     rerender(this._filmDetailsView, prevFilmDetailsView, this._filmDetailsContainer);
@@ -202,15 +228,19 @@ export default class FilmDetailsPresenter {
     }
 
     document.addEventListener('keydown', this._handleDocumentKeydown);
-  }
 
-  _handleModelEvent(updateType, updatedFilm) {
-    this.init(updatedFilm);
-  }
-
-  destroy() {
-    remove(this._filmDetailsView);
-    this._filmsModel.removeObserver(this._handleModelEvent);
-    document.removeEventListener('keydown', this._handleDocumentKeydown);
+    api.getComments(this._film)
+      .then((comments) => comments.map(adaptCommentToClient))
+      .catch(() => {
+        this._isError = true;
+      })
+      .then((comments) => {
+        this._isLoading = false;
+        remove(this._commentsContainerView);
+        this._renderCommentsContainer();
+        this._renderComments(comments);
+        this._renderNewComment();
+        this._filmDetailsView.scrollTop = scrollTop;
+      });
   }
 }
