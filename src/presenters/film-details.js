@@ -12,19 +12,13 @@ import CommentsListView from '../views/comments-list.js';
 import CommentView from '../views/comment.js';
 import NewCommentView from '../views/new-comment.js';
 
-import API from '../api.js';
-
-const endPoint = 'https://15.ecmascript.pages.academy/cinemaddict/';
-const authorization = 'Basic b1dsf53b53b';
-
-const api = new API(endPoint, authorization);
-
 export default class FilmDetailsPresenter {
-  constructor(filmDetailsContainer, filmsModel, changeFilm, hideFilmDetails) {
+  constructor(filmDetailsContainer, filmsModel, changeFilm, hideFilmDetails, api) {
     this._filmDetailsContainer = filmDetailsContainer;
     this._filmsModel = filmsModel;
     this._changeFilm = changeFilm;
     this._hideFilmDetails = hideFilmDetails;
+    this._api = api;
 
     this._film = null;
     this._filmComments = [];
@@ -93,8 +87,8 @@ export default class FilmDetailsPresenter {
     }
   }
 
-  _handleAddToWatchButtonClick() {
-    const updatedFilm = {
+  async _handleAddToWatchButtonClick() {
+    let updatedFilm = {
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -102,11 +96,13 @@ export default class FilmDetailsPresenter {
       },
     };
 
+    updatedFilm = await this._api.updateFilm(updatedFilm);
+
     this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
-  _handleAddWatchedButtonClick() {
-    const updatedFilm ={
+  async _handleAddWatchedButtonClick() {
+    let updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -115,17 +111,21 @@ export default class FilmDetailsPresenter {
       },
     };
 
+    updatedFilm = await this._api.updateFilm(updatedFilm);
+
     this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
-  _handleAddFavoriteButtonClick() {
-    const updatedFilm ={
+  async _handleAddFavoriteButtonClick() {
+    let updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
         isFavorite: !this._film.userDetails.isFavorite,
       },
     };
+
+    updatedFilm = await this._api.updateFilm(updatedFilm);
 
     this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
@@ -156,7 +156,6 @@ export default class FilmDetailsPresenter {
 
   _handleModelEvent(updateType, updatedFilm) {
     this._isLoading = updateType !== UpdateType.MINOR;
-    console.log(updateType);
 
     this.init(updatedFilm);
   }
@@ -247,8 +246,7 @@ export default class FilmDetailsPresenter {
     }
 
     try {
-      this._filmComments = await api.getComments(this._film);
-      this._filmComments = this._filmComments.map(adaptCommentToClient);
+      this._filmComments = await this._api.getComments(this._film);
     } catch (error) {
       this._isError = true;
     } finally {

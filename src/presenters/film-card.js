@@ -6,10 +6,11 @@ import { getCurrentDate } from '../utils/date.js';
 import FilmCardView from '../views/film-card.js';
 
 export default class FilmCardPresenter {
-  constructor(filmCardContainer, changeFilm, showFilmDetails) {
+  constructor(filmCardContainer, changeFilm, showFilmDetails, api) {
     this._filmCardContainer = filmCardContainer;
     this._changeFilm = changeFilm;
     this._showFilmDetails = showFilmDetails;
+    this._api = api;
 
     this._filmCardView = null;
 
@@ -52,8 +53,8 @@ export default class FilmCardPresenter {
     this._showFilmDetails(this._film);
   }
 
-  _handleAddToWatchButtonClick() {
-    const updatedFilm = {
+  async _handleAddToWatchButtonClick() {
+    let updatedFilm = {
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -61,11 +62,12 @@ export default class FilmCardPresenter {
       },
     };
 
+    updatedFilm = await this._api.updateFilm(updatedFilm);
     this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
-  _handleAddWatchedButtonClick() {
-    const updatedFilm ={
+  async _handleAddWatchedButtonClick() {
+    let updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -74,11 +76,12 @@ export default class FilmCardPresenter {
       },
     };
 
+    updatedFilm = await this._api.updateFilm(updatedFilm);
     this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
-  _handleAddFavoriteButtonClick() {
-    const updatedFilm ={
+  async _handleAddFavoriteButtonClick() {
+    let updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -86,6 +89,7 @@ export default class FilmCardPresenter {
       },
     };
 
+    updatedFilm = await this._api.updateFilm(updatedFilm);
     this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 }

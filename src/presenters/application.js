@@ -24,10 +24,10 @@ import API from '../api.js';
 const endPoint = 'https://15.ecmascript.pages.academy/cinemaddict/';
 const authorization = 'Basic b1dsf53b53b';
 
-const api = new API(endPoint, authorization);
-
 export default class ApplicationPresenter {
   constructor(applicationContainer) {
+    this._api = new API(endPoint, authorization);
+
     this._applicationContainer = applicationContainer;
 
     this._headerView = new HeaderView();
@@ -67,9 +67,7 @@ export default class ApplicationPresenter {
 
     try {
       // Получение фильмов
-      let films = await api.getFilms();
-      films = films.map(adaptFilmToClient);
-      console.log(films);
+      const films = await this._api.getFilms();
 
       if (!films.length) {
         // Ошибка при отсутствии загруженных фильмов
@@ -91,7 +89,7 @@ export default class ApplicationPresenter {
 
 
       // Создание презентеров экранов "Фильмы" и "Статистики"
-      this._filmsScreenPresenter = new FilmsScreenPresenter(this._mainView, this._filmsModel, this._filterModel);
+      this._filmsScreenPresenter = new FilmsScreenPresenter(this._mainView, this._filmsModel, this._filterModel, this._api);
       this._statisticsScreenPresenter = new StatisticsScreenPresenter(this._mainView, this._rankModel, this._filmsModel);
 
 

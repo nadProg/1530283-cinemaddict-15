@@ -1,3 +1,5 @@
+import FilmsModel from './models/films.js';
+
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
@@ -18,19 +20,23 @@ export default class Api {
 
   async getFilms() {
     const response = await this._load({url: 'movies'});
-    return await Api.toJSON(response);
-    // .then((tasks) => tasks.map(TasksModel.adaptToClient));
+
+    const films = await Api.toJSON(response);
+
+    return films.map(FilmsModel.adaptFilmToClient);
   }
 
-  updateFilm(film) {
-    return this._load({
-      url: `tasks/${film.id}`,
+  async updateFilm(film) {
+    const response = await this._load({
+      url: `movies/${film.id}`,
       method: Method.PUT,
-      // body: JSON.stringify(TasksModel.adaptToServer(task)),
+      body: JSON.stringify(FilmsModel.adaptFilmToServer(film)),
       headers: new Headers({'Content-Type': 'application/json'}),
     });
-    // .then(Api.toJSON)
-    // .then(TasksModel.adaptToClient);
+
+    const updatedFilm = await Api.toJSON(response);
+
+    return FilmsModel.adaptFilmToClient(updatedFilm);
   }
 
   async getComments(film) {
@@ -40,26 +46,30 @@ export default class Api {
       headers: new Headers({'Content-Type': 'application/json'}),
     });
 
-    return await Api.toJSON(response);
+    const comments = await Api.toJSON(response);
+
+    return comments.map(FilmsModel.adaptCommentToClient);
   }
 
-  addComment(film) {
-    return this._load({
-      url: `comments/${film.id}`,
-      method: Method.POST,
-      // body: JSON.stringify(TasksModel.adaptToServer(task)),
-      headers: new Headers({'Content-Type': 'application/json'}),
-    });
-    // .then(Api.toJSON)
-    // .then(TasksModel.adaptToClient);
-  }
+  // Добавление комментария будет реализовано во второй части ДЗ
+  // addComment(film) {
+  //   return this._load({
+  //     url: `comments/${film.id}`,
+  //     method: Method.POST,
+  //     // body: JSON.stringify(TasksModel.adaptToServer(task)),
+  //     headers: new Headers({'Content-Type': 'application/json'}),
+  //   });
+  //   // .then(Api.toJSON)
+  //   // .then(TasksModel.adaptToClient);
+  // }
 
-  deleteComment(comment) {
-    return this._load({
-      url: `comments/${comment.id}`,
-      method: Method.DELETE,
-    });
-  }
+  // Удаление комментария будет реализовано во второй части ДЗ
+  // deleteComment(comment) {
+  //   return this._load({
+  //     url: `comments/${comment.id}`,
+  //     method: Method.DELETE,
+  //   });
+  // }
 
   async _load({
     url,
