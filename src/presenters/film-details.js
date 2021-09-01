@@ -47,8 +47,9 @@ export default class FilmDetailsPresenter {
     this._filmsModel.addObserver(this._handleModelEvent);
   }
 
-  init(film) {
+  init(film, { loadComments = true } = {}) {
     this._film = film;
+    this._isLoading = loadComments;
 
     this._commentsTitleView = null;
     this._commentsListView = null;
@@ -158,9 +159,9 @@ export default class FilmDetailsPresenter {
       return;
     }
 
-    this._isLoading = updateType !== UpdateType.MINOR;
+    const loadComments = updateType !== UpdateType.MINOR;
 
-    this.init(updatedFilm);
+    this.init(updatedFilm, { loadComments });
   }
 
   _renderFilmInfo() {
