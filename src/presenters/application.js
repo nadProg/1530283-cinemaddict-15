@@ -1,6 +1,6 @@
 import { Screen, FilterType, UpdateType, EmptyBoardTitle } from '../const.js';
 import { render, rerender, replace, remove } from '../utils/render.js';
-import { filter, adaptFilmToClient } from '../utils/film.js';
+import { filter } from '../utils/film.js';
 import { getRank } from '../utils/statistics';
 
 import HeaderView from '../views/header';
@@ -21,12 +21,12 @@ import StatisticsScreenPresenter from './statisctics-screen.js';
 
 import API from '../api.js';
 
-const endPoint = 'https://15.ecmascript.pages.academy/cinemaddict/';
-const authorization = 'Basic b1dsf53b53b';
+const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict/';
+const AUTHORIZATION = 'Basic b1dsf53b53b';
 
 export default class ApplicationPresenter {
   constructor(applicationContainer) {
-    this._api = new API(endPoint, authorization);
+    this._api = new API(END_POINT, AUTHORIZATION);
 
     this._applicationContainer = applicationContainer;
 
@@ -105,7 +105,6 @@ export default class ApplicationPresenter {
       replace(this._footerStatisticsView, prevFooterStatisticsView);
 
     } catch (error) {
-      console.log(error);
       const prevEmptyBoardView = this._emptyBoardView;
       this._emptyBoardView = new EmptyBoardView(error.message);
       replace(this._emptyBoardView, prevEmptyBoardView);

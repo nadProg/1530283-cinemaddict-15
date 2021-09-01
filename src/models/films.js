@@ -1,6 +1,5 @@
 import { updateItem } from '../utils/common.js';
 import { sortByRating, sortByComments, hasComments, hasRating } from '../utils/film.js';
-import { createComment, deleteComment, getCommentsByIds } from '../mock/comments.js';
 
 import AbstractObserver from '../utils/abstract-observer.js';
 
@@ -26,11 +25,6 @@ export default class FilmsModel extends AbstractObserver{
       .sort(sortByComments);
   }
 
-  getFilmComments(id) {
-    const { comments } = this._films.find((film) => film.id === id);
-    return getCommentsByIds(comments);
-  }
-
   setFilms(updateType, films) {
     this._films = [ ...films ];
 
@@ -43,26 +37,12 @@ export default class FilmsModel extends AbstractObserver{
     this._notify(updateType, updatedFilm);
   }
 
-  createComment(updateType, { film, newComment }) {
-    const { id: commentId } = createComment(newComment);
+  createComment() {
 
-    const updatedFilm = {
-      ...film,
-      comments: [...film.comments, commentId],
-    };
-
-    this.updateFilm(updateType, updatedFilm);
   }
 
-  deleteComment(updateType, { film, commentId }) {
-    deleteComment(commentId);
+  deleteComment() {
 
-    const updatedFilm = {
-      ...film,
-      comments: film.comments.filter((id) => id !== commentId),
-    };
-
-    this.updateFilm(updateType, updatedFilm);
   }
 
   static adaptFilmToClient(film) {
@@ -122,8 +102,6 @@ export default class FilmsModel extends AbstractObserver{
       ['already_watched']: film.userDetails.isWatched,
       ['watching_date']: film.userDetails.watchingDate ? film.userDetails.watchingDate.toISOString(): null,
     };
-
-    console.log(serverFilm);
 
     delete serverFilm.filmInfo;
 

@@ -51,25 +51,26 @@ export default class Api {
     return comments.map(FilmsModel.adaptCommentToClient);
   }
 
-  // Добавление комментария будет реализовано во второй части ДЗ
-  // addComment(film) {
-  //   return this._load({
-  //     url: `comments/${film.id}`,
-  //     method: Method.POST,
-  //     // body: JSON.stringify(TasksModel.adaptToServer(task)),
-  //     headers: new Headers({'Content-Type': 'application/json'}),
-  //   });
-  //   // .then(Api.toJSON)
-  //   // .then(TasksModel.adaptToClient);
-  // }
 
-  // Удаление комментария будет реализовано во второй части ДЗ
-  // deleteComment(comment) {
-  //   return this._load({
-  //     url: `comments/${comment.id}`,
-  //     method: Method.DELETE,
-  //   });
-  // }
+  addComment() {
+    // Добавление комментария будет реализовано во второй части ДЗ
+    // return this._load({
+    //   url: `comments/${film.id}`,
+    //   method: Method.POST,
+    //   body: JSON.stringify({}),
+    //   headers: new Headers({'Content-Type': 'application/json'}),
+    // });
+
+  }
+
+
+  deleteComment() {
+    // Удаление комментария будет реализовано во второй части ДЗ
+    // return this._load({
+    //   url: `comments/${comment.id}`,
+    //   method: Method.DELETE,
+    // });
+  }
 
   async _load({
     url,
@@ -100,9 +101,5 @@ export default class Api {
 
   static toJSON(response) {
     return response.json();
-  }
-
-  static catchError(err) {
-    throw err;
   }
 }
