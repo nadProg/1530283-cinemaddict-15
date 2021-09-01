@@ -30,6 +30,7 @@ export default class FilmDetailsPresenter {
     this._filmComments = [];
     this._isLoading = true;
     this._isError = false;
+    this._prevScrollTop = 0;
 
     this._filmDetailsView = null;
     this._filmDetailsBottomView = null;
@@ -154,14 +155,30 @@ export default class FilmDetailsPresenter {
   }
 
   _renderFilmInfo() {
+    const prevFilmDetailsView = this._filmDetailsView;
+    this._prevScrollTop = prevFilmDetailsView ? this._filmDetailsView.scrollTop : 0;
     this._filmDetailsView = new FilmDetailsView(this._film);
-    this._filmDetailsBottomView = new FilmDetailsBottomView();
 
     this._filmDetailsView.setCloseButtonClickHandler(this._handleCloseButtonClick);
 
     this._filmDetailsView.setAddToWatchButtonClickHandler(this._handleAddToWatchButtonClick);
     this._filmDetailsView.setAddWatchedButtonClickHandler(this._handleAddWatchedButtonClick);
     this._filmDetailsView.setAddFavoriteButtonClickHandler(this._handleAddFavoriteButtonClick);
+
+    rerender(this._filmDetailsView, prevFilmDetailsView, this._filmDetailsContainer);
+
+    if (prevFilmDetailsView) {
+      document.removeEventListener('keydown', this._handleDocumentKeydown);
+      this._filmDetailsView.scrollTop = this._prevScrollTop;
+    }
+  }
+
+  _renderFilmsBottom() {
+    this._filmDetailsBottomView = new FilmDetailsBottomView();
+
+    this._renderCommentsContainer();
+    this._renderComments();
+    this._renderNewComment();
 
     render(this._filmDetailsView, this._filmDetailsBottomView);
   }
@@ -175,8 +192,8 @@ export default class FilmDetailsPresenter {
     render(this._filmDetailsBottomView, this._commentsContainerView);
   }
 
-  _renderComments(comments = []) {
-    let commentsTitle = comments.length;
+  _renderComments() {
+    let commentsTitle = this._filmComments.length;
 
     if (this._isLoading) {
       commentsTitle = 'loading...';
@@ -196,7 +213,7 @@ export default class FilmDetailsPresenter {
     this._commentsListView = new CommentsListView();
     render(this._commentsContainerView, this._commentsListView);
 
-    comments.forEach((comment) => {
+    this._filmComments.forEach((comment) => {
       const commentsView = new CommentView(comment);
       commentsView.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
       render(this._commentsListView, commentsView);
@@ -208,39 +225,25 @@ export default class FilmDetailsPresenter {
     render(this._commentsContainerView, this._newCommentView);
   }
 
-  _renderFilmDetails() {
-    const prevFilmDetailsView = this._filmDetailsView;
-    const scrollTop = prevFilmDetailsView ? this._filmDetailsView.scrollTop : null;
-
+  async _renderFilmDetails() {
     this._isLoading = true;
     this._isError = false;
 
     this._renderFilmInfo();
-    this._renderCommentsContainer();
-    this._renderComments();
-    this._renderNewComment();
-
-    rerender(this._filmDetailsView, prevFilmDetailsView, this._filmDetailsContainer);
-
-    if (prevFilmDetailsView) {
-      document.removeEventListener('keydown', this._handleDocumentKeydown);
-      this._filmDetailsView.scrollTop = scrollTop;
-    }
+    this._renderFilmsBottom();
 
     document.addEventListener('keydown', this._handleDocumentKeydown);
 
-    api.getComments(this._film)
-      .then((comments) => comments.map(adaptCommentToClient))
-      .catch(() => {
-        this._isError = true;
-      })
-      .then((comments) => {
-        this._isLoading = false;
-        remove(this._commentsContainerView);
-        this._renderCommentsContainer();
-        this._renderComments(comments);
-        this._renderNewComment();
-        this._filmDetailsView.scrollTop = scrollTop;
-      });
+    try {
+      this._filmComments = await api.getComments(this._film);
+      this._filmComments = this._filmComments.map(adaptCommentToClient);
+    } catch (error) {
+      this._isError = true;
+    } finally {
+      this._isLoading = false;
+      remove(this._filmDetailsBottomView);
+      this._renderFilmsBottom();
+      this._filmDetailsView.scrollTop = this._prevScrollTop;
+    }
   }
 }
