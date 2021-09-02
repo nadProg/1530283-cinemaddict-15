@@ -48,6 +48,7 @@ export default class FilmsScreenPresenter {
   }
 
   init() {
+    this._mainFilmsCount = FILMS_STEP;
     this._currentSortType = SortType.DEFAULT;
 
     this._filmsModel.addObserver(this._handleModelEvent);
