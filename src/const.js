@@ -61,6 +61,7 @@ export const ClassName = {
   STATISTICS_FILTER_FORM: 'statistic__filters',
   STATISTICS_FILTER_INPUT: 'statistic__filters-input',
   STATISTICS_CHART: 'statistic__chart',
+  SHAKE: 'shake',
 };
 
 export const FilmsListOption = {

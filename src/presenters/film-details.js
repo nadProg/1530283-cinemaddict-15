@@ -152,6 +152,9 @@ export default class FilmDetailsPresenter {
     const newComment = this._newCommentView.getData();
 
     try {
+      this._newCommentView.disable();
+      this._newCommentView.clearErrorState();
+
       const updatedFilm = await this._api.addComment(this._film.id, newComment);
 
       this._changeFilm(null, UpdateType.PATCH, updatedFilm);
@@ -159,9 +162,10 @@ export default class FilmDetailsPresenter {
       this._newCommentView.reset();
 
     } catch (error) {
-      // Добавить обратную связь
-      console.log(error);
+      this._newCommentView.setErrorState();
     }
+
+    this._newCommentView.enable();
   }
 
   _handleModelEvent(updateType, updatedFilm) {

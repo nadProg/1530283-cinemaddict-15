@@ -43,7 +43,7 @@ export default class NewCommentView extends SmartView {
     };
 
     this._commentInputHandler = this._commentInputHandler.bind(this);
-    this._emotionToggleHandler = this._emotionToggleHandler.bind(this);
+    this._emotionClickHandler = this._emotionClickHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -64,7 +64,35 @@ export default class NewCommentView extends SmartView {
     return this._data;
   }
 
-  _emotionToggleHandler(evt) {
+  setErrorState() {
+    this.getElement().classList.add(ClassName.SHAKE);
+  }
+
+  enable() {
+    this.getElement()
+      .querySelector(`.${ClassName.FILM_DETAILS_TEXTAREA}`)
+      .disabled = false;
+
+    this.getElement()
+      .querySelector(`.${ClassName.FILM_DETAILS_EMOJI_LIST}`)
+      .addEventListener('click', this._emotionClickHandler);
+  }
+
+  disable() {
+    this.getElement()
+      .querySelector(`.${ClassName.FILM_DETAILS_TEXTAREA}`)
+      .disabled = true;
+
+    this.getElement()
+      .querySelector(`.${ClassName.FILM_DETAILS_EMOJI_LIST}`)
+      .removeEventListener('click', this._emotionClickHandler);
+  }
+
+  clearErrorState() {
+    this.getElement().classList.remove(ClassName.SHAKE);
+  }
+
+  _emotionClickHandler(evt) {
     const emotionInput = evt.target.closest(`.${ClassName.FILM_DETAILS_EMOJI_ITEM}`);
     if (!emotionInput || !evt.currentTarget.contains(emotionInput)) {
       return;
@@ -80,7 +108,7 @@ export default class NewCommentView extends SmartView {
   _setInnerHandlers() {
     this.getElement()
       .querySelector(`.${ClassName.FILM_DETAILS_EMOJI_LIST}`)
-      .addEventListener('change', this._emotionToggleHandler);
+      .addEventListener('click', this._emotionClickHandler);
 
     this.getElement()
       .querySelector(`.${ClassName.FILM_DETAILS_TEXTAREA}`)
