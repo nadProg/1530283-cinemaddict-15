@@ -130,23 +130,34 @@ export default class FilmDetailsPresenter {
     this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
-  _handleDeleteButtonClick(id) {
-    const payload = {
-      commentId: id,
-      film: this._film,
-    };
-    this._changeFilm(UserAction.DELETE_COMMENT, UpdateType.PATCH, payload);
+  async _handleDeleteButtonClick(commentId) {
+    try {
+      await this._api.deleteComment(commentId);
+
+      const updatedFilm = {
+        ...this._film,
+        comments: this._film.comments.filter((id) => id !== commentId),
+      };
+
+      this._changeFilm('delete comment', UpdateType.PATCH, updatedFilm);
+
+    } catch (error) {
+      // Добавить обратную связь
+      console.log(error);
+    }
+
   }
 
   async _handleFormSubmit() {
     const newComment = this._newCommentView.getData();
 
     try {
-      const updatedFilm = await this._api.addComment(this._film, newComment);
+      const updatedFilm = await this._api.addComment(this._film.id, newComment);
 
       this._changeFilm(null, UpdateType.PATCH, updatedFilm);
 
       this._newCommentView.reset();
+
     } catch (error) {
       // Добавить обратную связь
       console.log(error);

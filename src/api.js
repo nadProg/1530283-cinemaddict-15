@@ -42,9 +42,9 @@ export default class Api {
   }
 
 
-  async addComment(film, newComment) {
+  async addComment(filmId, newComment) {
     const response = await this._load({
-      url: `comments/${film.id}`,
+      url: `comments/${filmId}`,
       method: APIMethod.POST,
       body: JSON.stringify(FilmsModel.adaptNewCommentToServer(newComment)),
       headers: new Headers({'Content-Type': 'application/json'}),
@@ -57,13 +57,11 @@ export default class Api {
     return updatedFilm;
   }
 
-
-  deleteComment() {
-    // Удаление комментария будет реализовано во второй части ДЗ
-    // return this._load({
-    //   url: `comments/${comment.id}`,
-    //   method: Method.DELETE,
-    // });
+  async deleteComment(id) {
+    await this._load({
+      url: `comments/${id}`,
+      method: APIMethod.DELETE,
+    });
   }
 
   async _load({
