@@ -50,11 +50,14 @@ export default class Api {
       headers: new Headers({'Content-Type': 'application/json'}),
     });
 
-    const { movie } = await Api.toJSON(response);
+    const { movie, comments } = await Api.toJSON(response);
 
-    const updatedFilm = FilmsModel.adaptFilmToClient(movie);
+    const adaptedResponse = {
+      updatedFilm: FilmsModel.adaptFilmToClient(movie),
+      updatedComments: comments.map(FilmsModel.adaptCommentToClient),
+    };
 
-    return updatedFilm;
+    return adaptedResponse;
   }
 
   async deleteComment(id) {

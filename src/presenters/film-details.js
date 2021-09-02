@@ -139,6 +139,7 @@ export default class FilmDetailsPresenter {
         comments: this._film.comments.filter((id) => id !== commentId),
       };
 
+      this._filmComments = this._filmComments.filter(({ id }) => id !== commentId);
       this._changeFilm('delete comment', UpdateType.PATCH, updatedFilm);
 
     } catch (error) {
@@ -155,8 +156,9 @@ export default class FilmDetailsPresenter {
       this._newCommentView.disable();
       this._newCommentView.clearErrorState();
 
-      const updatedFilm = await this._api.addComment(this._film.id, newComment);
+      const { updatedFilm, updatedComments } = await this._api.addComment(this._film.id, newComment);
 
+      this._filmComments = updatedComments;
       this._changeFilm(null, UpdateType.PATCH, updatedFilm);
 
       this._newCommentView.reset();
@@ -173,9 +175,7 @@ export default class FilmDetailsPresenter {
       return;
     }
 
-    const loadComments = updateType !== UpdateType.MINOR;
-
-    this.init(updatedFilm, { loadComments });
+    this.init(updatedFilm, { loadComments: false });
   }
 
   _renderFilmInfo() {
