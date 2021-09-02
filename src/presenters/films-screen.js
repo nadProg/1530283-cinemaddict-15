@@ -119,17 +119,17 @@ export default class FilmsScreenPresenter {
   }
 
   _handleViewAction(actionType, updateType, payload) {
-    switch (actionType) {
-      case UserAction.UPDATE_FILM_USER_DETAILS:
-        this._filmsModel.updateFilm(updateType, payload);
-        break;
-      case UserAction.DELETE_COMMENT:
-        this._filmsModel.deleteComment(updateType, payload);
-        break;
-      case UserAction.CREATE_COMMENT:
-        this._filmsModel.createComment(updateType, payload);
-        break;
-    }
+    // switch (actionType) {
+    //   case UserAction.UPDATE_FILM_USER_DETAILS:
+    this._filmsModel.updateFilm(updateType, payload);
+    //     break;
+    //   case UserAction.DELETE_COMMENT:
+    //     this._filmsModel.deleteComment(updateType, payload);
+    //     break;
+    //   case UserAction.CREATE_COMMENT:
+    //     this._filmsModel.createComment(updateType, payload);
+    //     break;
+    // }
 
   }
 

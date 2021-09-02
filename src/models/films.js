@@ -127,4 +127,14 @@ export default class FilmsModel extends AbstractObserver{
 
     return clientComment;
   }
+
+  static adaptNewCommentToServer(comment) {
+    const serverComment = { ...comment };
+
+    serverComment.comment = comment.text;
+
+    delete serverComment.text;
+
+    return serverComment;
+  }
 }

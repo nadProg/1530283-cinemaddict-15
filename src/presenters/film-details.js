@@ -138,20 +138,19 @@ export default class FilmDetailsPresenter {
     this._changeFilm(UserAction.DELETE_COMMENT, UpdateType.PATCH, payload);
   }
 
-  _handleFormSubmit() {
+  async _handleFormSubmit() {
     const newComment = this._newCommentView.getData();
 
-    if (!newComment.text || !newComment.emotion) {
-      return;
+    try {
+      const updatedFilm = await this._api.addComment(this._film, newComment);
+
+      this._changeFilm(null, UpdateType.PATCH, updatedFilm);
+
+      this._newCommentView.reset();
+    } catch (error) {
+      // Добавить обратную связь
+      console.log(error);
     }
-
-    const payload = {
-      newComment,
-      film: this._film,
-    };
-
-    this._changeFilm(UserAction.CREATE_COMMENT, UpdateType.PATCH, payload);
-    this._newCommentView.reset();
   }
 
   _handleModelEvent(updateType, updatedFilm) {

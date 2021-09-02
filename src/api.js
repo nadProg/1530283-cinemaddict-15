@@ -42,15 +42,19 @@ export default class Api {
   }
 
 
-  addComment() {
-    // Добавление комментария будет реализовано во второй части ДЗ
-    // return this._load({
-    //   url: `comments/${film.id}`,
-    //   method: Method.POST,
-    //   body: JSON.stringify({}),
-    //   headers: new Headers({'Content-Type': 'application/json'}),
-    // });
+  async addComment(film, newComment) {
+    const response = await this._load({
+      url: `comments/${film.id}`,
+      method: APIMethod.POST,
+      body: JSON.stringify(FilmsModel.adaptNewCommentToServer(newComment)),
+      headers: new Headers({'Content-Type': 'application/json'}),
+    });
 
+    const { movie } = await Api.toJSON(response);
+
+    const updatedFilm = FilmsModel.adaptFilmToClient(movie);
+
+    return updatedFilm;
   }
 
 
