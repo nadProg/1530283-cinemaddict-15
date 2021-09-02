@@ -39,6 +39,14 @@ export const replace = (newChild, oldChild) => {
   parent.replaceChild(newChild, oldChild);
 };
 
+export const rerender = (newElement, oldElement, container, place = Place.BEFORE_END) => {
+  if (oldElement) {
+    replace(newElement, oldElement);
+  } else {
+    render(container, newElement, place);
+  }
+};
+
 export const remove = (component) => {
   component.getElement().remove();
   component.removeElement();

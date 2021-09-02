@@ -1,7 +1,7 @@
 import { FilmsListOption, SortType, ClassName, UpdateType,
   UserAction, FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT
 } from '../const.js';
-import { render, remove, replace } from '../utils/render.js';
+import { render, remove, replace, rerender } from '../utils/render.js';
 import { sortByRating, sortByDate, filter } from '../utils/film.js';
 
 import SortBarView from '../views/sort-bar.js';
@@ -15,16 +15,28 @@ import FilmDetailsPresenter from './film-details.js';
 const bodyElement = document.body;
 
 export default class FilmsScreenPresenter {
-  constructor(mainScreenContainer, filmsModel, filterModel) {
+  constructor(mainScreenContainer, filmsModel, filterModel, api) {
     this._mainScreenContainer = mainScreenContainer;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
+    this._api = api;
 
     this._mainFilmsCount = FILMS_STEP;
+
+    this._sortBarView = null;
+    this._filmsBoardView = null;
+    this._mainFilmsContainerView = null;
+    this._mainFilmsListView = null;
+    this._showMoreButtonView = null;
+    this._topRatedFilmsContainerView = null;
+    this._topRatedFilmsListView = null;
+    this._mostCommentedFilmsContainerView = null;
+    this._mostCommentedFilmsListView = null;
 
     this._mainFilmPresenter = new Map();
     this._topRatedFilmPresenter = new Map();
     this._mostCommentedFilmPresenter = new Map();
+    this._filmDetailsPresenter = null;
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -160,12 +172,12 @@ export default class FilmsScreenPresenter {
     if (this._filmDetailsPresenter &&
         this._filmDetailsPresenter.filmId !== film.id) {
       this._filmDetailsPresenter.destroy();
-      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._filmsModel, this._handleViewAction, this._hideFilmDetails);
+      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._filmsModel, this._handleViewAction, this._hideFilmDetails, this._api);
     }
 
     if (!this._filmDetailsPresenter) {
       bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
-      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._filmsModel, this._handleViewAction, this._hideFilmDetails);
+      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._filmsModel, this._handleViewAction, this._hideFilmDetails, this._api);
     }
 
     this._filmDetailsPresenter.init(film);
@@ -182,15 +194,11 @@ export default class FilmsScreenPresenter {
     this._sortBarView = new SortBarView(this._currentSortType);
     this._sortBarView.setSortTypeChangeHandler(this._handleSortTypeChange);
 
-    if (prevSortBarView) {
-      replace(this._sortBarView, prevSortBarView);
-    } else {
-      render(this._mainScreenContainer, this._sortBarView);
-    }
+    rerender(this._sortBarView, prevSortBarView, this._mainScreenContainer);
   }
 
   _renderFilmCard(filmCardContainer, film, type) {
-    const filmCardPresenter = new FilmCardPresenter(filmCardContainer, this._handleViewAction, this._showFilmDetails);
+    const filmCardPresenter = new FilmCardPresenter(filmCardContainer, this._handleViewAction, this._showFilmDetails, this._api);
     filmCardPresenter.init(film);
     this[`_${type}FilmPresenter`].set(film.id, filmCardPresenter);
   }
@@ -222,11 +230,7 @@ export default class FilmsScreenPresenter {
       this._renderShowMoreButtonClick();
     }
 
-    if (prevMainFilmsListView) {
-      replace(this._mainFilmsListView, prevMainFilmsListView);
-    } else {
-      render(this._filmsBoardView, this._mainFilmsListView);
-    }
+    rerender(this._mainFilmsListView, prevMainFilmsListView, this._filmsBoardView);
   }
 
   _renderExtraFilmsList({option, isReplace = false} = {}) {

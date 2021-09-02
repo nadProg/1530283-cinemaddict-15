@@ -109,6 +109,11 @@ export const EmptyBoardTitle = {
   LOADING: 'Loading...',
 };
 
+export const CommentsTitle = {
+  ERROR: 'was not loaded',
+  LOADING: 'loading...',
+};
+
 export const UserAction = {
   CREATE_COMMENT: 'create-comment',
   DELETE_COMMENT: 'delete-comment',
@@ -201,4 +206,20 @@ export const STATISTICS_CHART_OPTIONS = {
   tooltips: {
     enabled: false,
   },
+};
+
+export const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
+
+export const AUTHORIZATION = 'Basic b1dsf53b53b';
+
+export const APIMethod = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
+export const SuccessHTTPStatusRange = {
+  MIN: 200,
+  MAX: 299,
 };

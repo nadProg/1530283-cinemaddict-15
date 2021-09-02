@@ -1,6 +1,6 @@
 
 import { FilterType, UpdateType, Screen, NavigationItem } from '../const.js';
-import { render, replace } from '../utils/render.js';
+import { rerender } from '../utils/render.js';
 import { filter } from '../utils/film.js';
 
 import NavigationView from '../views/navigation.js';
@@ -13,6 +13,8 @@ export default class NavigationPresenter {
     this._renderScreen = renderScreen;
 
     this._activeItem = FilterType.ALL;
+
+    this._navigationView = null;
 
     this._handleFilterChange = this._handleFilterChange.bind(this);
     this._handleStatisticClick = this._handleStatisticClick.bind(this);
@@ -27,16 +29,14 @@ export default class NavigationPresenter {
 
     this._navigationView = new NavigationView(this._getFilters(), this._activeItem);
 
-    if (this._filmsModel.getAll().length) {
-      this._navigationView.setFilterChangeHandler(this._handleFilterChange);
-      this._navigationView.setStatisticClickHandler(this._handleStatisticClick);
-    }
+    this._navigationView.setFilterChangeHandler(this._handleFilterChange);
+    this._navigationView.setStatisticClickHandler(this._handleStatisticClick);
 
-    if (prevNavigationView) {
-      replace(this._navigationView, prevNavigationView);
-    } else {
-      render(this._navigationContainer, this._navigationView);
-    }
+    rerender(this._navigationView, prevNavigationView, this._navigationContainer);
+  }
+
+  setActiveItem(activeItem) {
+    this._activeItem = activeItem;
   }
 
   _getFilters() {

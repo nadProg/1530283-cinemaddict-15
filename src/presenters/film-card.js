@@ -1,15 +1,18 @@
 
-import { getCurrentDate } from '../utils/date.js';
-import { render, replace } from '../utils/render.js';
 import { UserAction, UpdateType } from '../const.js';
+import { rerender } from '../utils/render.js';
+import { getCurrentDate } from '../utils/date.js';
 
 import FilmCardView from '../views/film-card.js';
 
 export default class FilmCardPresenter {
-  constructor(filmCardContainer, changeFilm, showFilmDetails) {
+  constructor(filmCardContainer, changeFilm, showFilmDetails, api) {
     this._filmCardContainer = filmCardContainer;
     this._changeFilm = changeFilm;
     this._showFilmDetails = showFilmDetails;
+    this._api = api;
+
+    this._filmCardView = null;
 
     this._handleTitleClick = this._handleTitleClick.bind(this);
     this._handlePosterClick = this._handlePosterClick.bind(this);
@@ -35,11 +38,7 @@ export default class FilmCardPresenter {
     this._filmCardView.setAddWatchedButtonClickHandler(this._handleAddWatchedButtonClick);
     this._filmCardView.setAddFavoriteButtonClickHandler(this._handleAddFavoriteButtonClick);
 
-    if (prevFilmCard) {
-      replace(this._filmCardView, prevFilmCard);
-    } else {
-      render(this._filmCardContainer, this._filmCardView);
-    }
+    rerender(this._filmCardView, prevFilmCard, this._filmCardContainer);
   }
 
   _handleTitleClick() {
@@ -54,8 +53,8 @@ export default class FilmCardPresenter {
     this._showFilmDetails(this._film);
   }
 
-  _handleAddToWatchButtonClick() {
-    const updatedFilm = {
+  async _handleAddToWatchButtonClick() {
+    let updatedFilm = {
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -63,11 +62,12 @@ export default class FilmCardPresenter {
       },
     };
 
+    updatedFilm = await this._api.updateFilm(updatedFilm);
     this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
-  _handleAddWatchedButtonClick() {
-    const updatedFilm ={
+  async _handleAddWatchedButtonClick() {
+    let updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -76,11 +76,12 @@ export default class FilmCardPresenter {
       },
     };
 
+    updatedFilm = await this._api.updateFilm(updatedFilm);
     this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
-  _handleAddFavoriteButtonClick() {
-    const updatedFilm ={
+  async _handleAddFavoriteButtonClick() {
+    let updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -88,6 +89,7 @@ export default class FilmCardPresenter {
       },
     };
 
+    updatedFilm = await this._api.updateFilm(updatedFilm);
     this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 }

@@ -1,7 +1,7 @@
-import { UserAction, UpdateType } from '../const.js';
+import { UserAction, UpdateType, CommentsTitle } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { isEsc, isEnter } from '../utils/common.js';
-import { render, replace, remove } from '../utils/render.js';
+import { render, rerender, remove } from '../utils/render.js';
 
 import FilmDetailsView from '../views/film-details.js';
 import FilmDetailsBottomView from '../views/film-details-bottom.js';
@@ -12,11 +12,25 @@ import CommentView from '../views/comment.js';
 import NewCommentView from '../views/new-comment.js';
 
 export default class FilmDetailsPresenter {
-  constructor(filmDetailsContainer, filmsModel, changeFilm, hideFilmDetails) {
+  constructor(filmDetailsContainer, filmsModel, changeFilm, hideFilmDetails, api) {
     this._filmDetailsContainer = filmDetailsContainer;
     this._filmsModel = filmsModel;
     this._changeFilm = changeFilm;
     this._hideFilmDetails = hideFilmDetails;
+    this._api = api;
+
+    this._film = null;
+    this._filmComments = [];
+    this._isLoading = true;
+    this._isError = false;
+    this._prevScrollTop = 0;
+
+    this._filmDetailsView = null;
+    this._filmDetailsBottomView = null;
+    this._commentsContainerView = null;
+    this._commentsTitleView = null;
+    this._commentsListView = null;
+    this._newCommentView = null;
 
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
     this._handleDocumentKeydown = this._handleDocumentKeydown.bind(this);
@@ -33,9 +47,20 @@ export default class FilmDetailsPresenter {
     this._filmsModel.addObserver(this._handleModelEvent);
   }
 
-  init(film) {
+  init(film, { loadComments = true } = {}) {
     this._film = film;
+    this._isLoading = loadComments;
+
+    this._commentsTitleView = null;
+    this._commentsListView = null;
+
     this._renderFilmDetails();
+  }
+
+  destroy() {
+    remove(this._filmDetailsView);
+    this._filmsModel.removeObserver(this._handleModelEvent);
+    document.removeEventListener('keydown', this._handleDocumentKeydown);
   }
 
   get filmId() {
@@ -62,8 +87,8 @@ export default class FilmDetailsPresenter {
     }
   }
 
-  _handleAddToWatchButtonClick() {
-    const updatedFilm = {
+  async _handleAddToWatchButtonClick() {
+    let updatedFilm = {
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -71,11 +96,13 @@ export default class FilmDetailsPresenter {
       },
     };
 
+    updatedFilm = await this._api.updateFilm(updatedFilm);
+
     this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
-  _handleAddWatchedButtonClick() {
-    const updatedFilm ={
+  async _handleAddWatchedButtonClick() {
+    let updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -84,17 +111,21 @@ export default class FilmDetailsPresenter {
       },
     };
 
+    updatedFilm = await this._api.updateFilm(updatedFilm);
+
     this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
-  _handleAddFavoriteButtonClick() {
-    const updatedFilm ={
+  async _handleAddFavoriteButtonClick() {
+    let updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
         isFavorite: !this._film.userDetails.isFavorite,
       },
     };
+
+    updatedFilm = await this._api.updateFilm(updatedFilm);
 
     this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
@@ -123,13 +154,20 @@ export default class FilmDetailsPresenter {
     this._newCommentView.reset();
   }
 
-  _renderComment(comment) {
-    render(this._commentsContainerView, new CommentView(comment));
+  _handleModelEvent(updateType, updatedFilm) {
+    if (updateType === UpdateType.MAJOR) {
+      return;
+    }
+
+    const loadComments = updateType !== UpdateType.MINOR;
+
+    this.init(updatedFilm, { loadComments });
   }
 
   _renderFilmInfo() {
+    const prevFilmDetailsView = this._filmDetailsView;
+
     this._filmDetailsView = new FilmDetailsView(this._film);
-    this._filmDetailsBottomView = new FilmDetailsBottomView();
 
     this._filmDetailsView.setCloseButtonClickHandler(this._handleCloseButtonClick);
 
@@ -137,62 +175,92 @@ export default class FilmDetailsPresenter {
     this._filmDetailsView.setAddWatchedButtonClickHandler(this._handleAddWatchedButtonClick);
     this._filmDetailsView.setAddFavoriteButtonClickHandler(this._handleAddFavoriteButtonClick);
 
+    rerender(this._filmDetailsView, prevFilmDetailsView, this._filmDetailsContainer);
+
+    if (!prevFilmDetailsView) {
+      document.addEventListener('keydown', this._handleDocumentKeydown);
+    }
+  }
+
+  _renderFilmsBottom() {
+    this._filmDetailsBottomView = new FilmDetailsBottomView();
+
+    this._renderCommentsContainer();
+    this._renderComments();
+    this._renderNewComment();
+
     render(this._filmDetailsView, this._filmDetailsBottomView);
   }
 
-  _renderComments() {
-    const filmComments = this._filmsModel.getFilmComments(this.filmId);
+  _renderComment(comment) {
+    render(this._commentsContainerView, new CommentView(comment));
+  }
 
+  _renderCommentsContainer() {
     this._commentsContainerView = new CommentsContainerView();
+    render(this._filmDetailsBottomView, this._commentsContainerView);
+  }
+
+  _getCommentsTitle() {
+    if (this._isLoading) {
+      return CommentsTitle.LOADING;
+    }
+
+    if (this._isError) {
+      return CommentsTitle.ERROR;
+    }
+
+    return this._filmComments.length;
+  }
+
+  _renderComments() {
+    const prevCommentsTitleView = this._commentsTitleView;
+    const prevCommentsListView = this._commentsListView;
+
+    this._commentsTitleView =  new CommentsTitleView(this._getCommentsTitle());
     this._commentsListView = new CommentsListView();
-    this._commentsTitleView =  new CommentsTitleView(filmComments.length);
 
-    render(this._commentsContainerView, this._commentsTitleView);
-    render(this._commentsContainerView, this._commentsListView);
+    rerender(this._commentsTitleView, prevCommentsTitleView, this._commentsContainerView);
+    rerender(this._commentsListView, prevCommentsListView, this._commentsContainerView);
 
-    filmComments.forEach((comment) => {
+    if (this._isLoading || this._isError) {
+      return;
+    }
+
+    this._filmComments.forEach((comment) => {
       const commentsView = new CommentView(comment);
       commentsView.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
       render(this._commentsListView, commentsView);
     });
-
-    render(this._filmDetailsBottomView, this._commentsContainerView);
   }
 
   _renderNewComment() {
-    if (!this._newCommentView) {
-      this._newCommentView = new NewCommentView();
-    }
-
-    render(this._commentsListView, this._newCommentView);
+    this._newCommentView = this._newCommentView || new NewCommentView();
+    render(this._commentsContainerView, this._newCommentView);
   }
 
-  _renderFilmDetails() {
-    const prevFilmDetailsView = this._filmDetailsView;
-    const scrollTop = prevFilmDetailsView ? this._filmDetailsView.scrollTop : null;
+  async _renderFilmDetails() {
+    this._prevScrollTop = this._filmDetailsView ? this._filmDetailsView.scrollTop : 0;
 
     this._renderFilmInfo();
-    this._renderComments();
-    this._renderNewComment();
+    this._renderFilmsBottom();
 
-    if (prevFilmDetailsView) {
-      document.removeEventListener('keydown', this._handleDocumentKeydown);
-      replace(this._filmDetailsView, prevFilmDetailsView);
-      this._filmDetailsView.scrollTop = scrollTop;
-    } else {
-      render(this._filmDetailsContainer, this._filmDetailsView);
+    this._filmDetailsView.scrollTop = this._prevScrollTop;
+
+    if (!this._isLoading) {
+      return;
     }
 
-    document.addEventListener('keydown', this._handleDocumentKeydown);
-  }
-
-  _handleModelEvent(updateType, updatedFilm) {
-    this.init(updatedFilm);
-  }
-
-  destroy() {
-    remove(this._filmDetailsView);
-    this._filmsModel.removeObserver(this._handleModelEvent);
-    document.removeEventListener('keydown', this._handleDocumentKeydown);
+    try {
+      this._isError = false;
+      this._filmComments = await this._api.getComments(this._film);
+    } catch (error) {
+      this._isError = true;
+    } finally {
+      this._isLoading = false;
+      this._prevScrollTop = this._filmDetailsView.scrollTop;
+      this._renderComments();
+      this._filmDetailsView.scrollTop = this._prevScrollTop;
+    }
   }
 }
