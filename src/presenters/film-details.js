@@ -1,4 +1,4 @@
-import { UserAction, UpdateType, CommentsTitle } from '../const.js';
+import { UpdateType, CommentsTitle } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { isEsc, isEnter } from '../utils/common.js';
 import { render, rerender, remove } from '../utils/render.js';
@@ -30,6 +30,7 @@ export default class FilmDetailsPresenter {
     this._commentsContainerView = null;
     this._commentsTitleView = null;
     this._commentsListView = null;
+    this._commentView = new Map();
     this._newCommentView = null;
 
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
@@ -53,6 +54,7 @@ export default class FilmDetailsPresenter {
 
     this._commentsTitleView = null;
     this._commentsListView = null;
+    this._commentView = new Map();
 
     this._renderFilmDetails();
   }
@@ -98,7 +100,7 @@ export default class FilmDetailsPresenter {
 
     updatedFilm = await this._api.updateFilm(updatedFilm);
 
-    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UpdateType.MINOR, updatedFilm);
   }
 
   async _handleAddWatchedButtonClick() {
@@ -113,7 +115,7 @@ export default class FilmDetailsPresenter {
 
     updatedFilm = await this._api.updateFilm(updatedFilm);
 
-    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UpdateType.MINOR, updatedFilm);
   }
 
   async _handleAddFavoriteButtonClick() {
@@ -127,11 +129,13 @@ export default class FilmDetailsPresenter {
 
     updatedFilm = await this._api.updateFilm(updatedFilm);
 
-    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UpdateType.MINOR, updatedFilm);
   }
 
   async _handleDeleteButtonClick(commentId) {
     try {
+      this._commentView.get(commentId).setDeletingStatus();
+
       await this._api.deleteComment(commentId);
 
       const updatedFilm = {
@@ -140,11 +144,10 @@ export default class FilmDetailsPresenter {
       };
 
       this._filmComments = this._filmComments.filter(({ id }) => id !== commentId);
-      this._changeFilm('delete comment', UpdateType.PATCH, updatedFilm);
+      this._changeFilm(UpdateType.PATCH, updatedFilm);
 
     } catch (error) {
-      // Добавить обратную связь
-      console.log(error);
+      this._commentView.get(commentId).resetDeletingStatus();
     }
 
   }
@@ -159,7 +162,7 @@ export default class FilmDetailsPresenter {
       const { updatedFilm, updatedComments } = await this._api.addComment(this._film.id, newComment);
 
       this._filmComments = updatedComments;
-      this._changeFilm(null, UpdateType.PATCH, updatedFilm);
+      this._changeFilm(UpdateType.PATCH, updatedFilm);
 
       this._newCommentView.reset();
 
@@ -206,10 +209,6 @@ export default class FilmDetailsPresenter {
     render(this._filmDetailsView, this._filmDetailsBottomView);
   }
 
-  _renderComment(comment) {
-    render(this._commentsContainerView, new CommentView(comment));
-  }
-
   _renderCommentsContainer() {
     this._commentsContainerView = new CommentsContainerView();
     render(this._filmDetailsBottomView, this._commentsContainerView);
@@ -242,9 +241,10 @@ export default class FilmDetailsPresenter {
     }
 
     this._filmComments.forEach((comment) => {
-      const commentsView = new CommentView(comment);
-      commentsView.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
-      render(this._commentsListView, commentsView);
+      const commentView = new CommentView(comment);
+      this._commentView.set(comment.id, commentView);
+      commentView.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
+      render(this._commentsListView, commentView);
     });
   }
 

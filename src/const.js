@@ -115,12 +115,6 @@ export const CommentsTitle = {
   LOADING: 'loading...',
 };
 
-export const UserAction = {
-  CREATE_COMMENT: 'create-comment',
-  DELETE_COMMENT: 'delete-comment',
-  UPDATE_FILM_USER_DETAILS: 'updtae-film-user-details',
-};
-
 export const UpdateType = {
   PATCH: 'patch',
   MINOR: 'minor',

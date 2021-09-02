@@ -1,5 +1,5 @@
 import { FilmsListOption, SortType, ClassName, UpdateType,
-  UserAction, FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT
+  FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT
 } from '../const.js';
 import { render, remove, replace, rerender } from '../utils/render.js';
 import { sortByRating, sortByDate, filter } from '../utils/film.js';
@@ -118,19 +118,8 @@ export default class FilmsScreenPresenter {
     this._renderMainFilmsList({ update: true });
   }
 
-  _handleViewAction(actionType, updateType, payload) {
-    // switch (actionType) {
-    //   case UserAction.UPDATE_FILM_USER_DETAILS:
+  _handleViewAction(updateType, payload) {
     this._filmsModel.updateFilm(updateType, payload);
-    //     break;
-    //   case UserAction.DELETE_COMMENT:
-    //     this._filmsModel.deleteComment(updateType, payload);
-    //     break;
-    //   case UserAction.CREATE_COMMENT:
-    //     this._filmsModel.createComment(updateType, payload);
-    //     break;
-    // }
-
   }
 
   _handleModelEvent(updateType, updatedFilm) {

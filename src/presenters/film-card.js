@@ -1,5 +1,5 @@
 
-import { UserAction, UpdateType } from '../const.js';
+import { UpdateType } from '../const.js';
 import { rerender } from '../utils/render.js';
 import { getCurrentDate } from '../utils/date.js';
 
@@ -63,7 +63,7 @@ export default class FilmCardPresenter {
     };
 
     updatedFilm = await this._api.updateFilm(updatedFilm);
-    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UpdateType.MINOR, updatedFilm);
   }
 
   async _handleAddWatchedButtonClick() {
@@ -77,7 +77,7 @@ export default class FilmCardPresenter {
     };
 
     updatedFilm = await this._api.updateFilm(updatedFilm);
-    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UpdateType.MINOR, updatedFilm);
   }
 
   async _handleAddFavoriteButtonClick() {
@@ -90,6 +90,6 @@ export default class FilmCardPresenter {
     };
 
     updatedFilm = await this._api.updateFilm(updatedFilm);
-    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UpdateType.MINOR, updatedFilm);
   }
 }
