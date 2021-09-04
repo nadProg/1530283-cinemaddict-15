@@ -1,4 +1,4 @@
-import { END_POINT, AUTHORIZATION,
+import { END_POINT, AUTHORIZATION, Place,
   Screen, FilterType, UpdateType, EmptyBoardTitle } from '../const.js';
 import { render, rerender, replace, remove } from '../utils/render.js';
 import { filter } from '../utils/film.js';
@@ -58,9 +58,9 @@ export default class ApplicationPresenter {
     render(this._mainView, this._emptyBoardView);  // Рендер заглушки
     render(this._footerView, this._footerStatisticsView);
 
-    render(this._applicationContainer, this._headerView);
-    render(this._applicationContainer, this._mainView);
-    render(this._applicationContainer, this._footerView);
+    render(this._applicationContainer, this._footerView, Place.AFTER_BEGIN);
+    render(this._applicationContainer, this._mainView, Place.AFTER_BEGIN);
+    render(this._applicationContainer, this._headerView, Place.AFTER_BEGIN);
 
 
     try {
