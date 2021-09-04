@@ -61,6 +61,7 @@ export const ClassName = {
   STATISTICS_FILTER_FORM: 'statistic__filters',
   STATISTICS_FILTER_INPUT: 'statistic__filters-input',
   STATISTICS_CHART: 'statistic__chart',
+  SHAKE: 'shake',
 };
 
 export const FilmsListOption = {
@@ -112,12 +113,6 @@ export const EmptyBoardTitle = {
 export const CommentsTitle = {
   ERROR: 'was not loaded',
   LOADING: 'loading...',
-};
-
-export const UserAction = {
-  CREATE_COMMENT: 'create-comment',
-  DELETE_COMMENT: 'delete-comment',
-  UPDATE_FILM_USER_DETAILS: 'updtae-film-user-details',
 };
 
 export const UpdateType = {

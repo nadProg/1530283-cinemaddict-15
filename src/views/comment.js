@@ -46,6 +46,18 @@ export default class CommentView extends AbstractView {
     this._callback._deleteButtonClick(commentItem.dataset.commentId);
   }
 
+  setDeletingStatus() {
+    this.getElement()
+      .querySelector(`.${ClassName.COMMENT_DELETE_BUTTON}`)
+      .textContent = 'Deleting...';
+  }
+
+  resetDeletingStatus() {
+    this.getElement()
+      .querySelector(`.${ClassName.COMMENT_DELETE_BUTTON}`)
+      .textContent = 'Delete';
+  }
+
   setDeleteButtonClickHandler(callback) {
     this._callback._deleteButtonClick = callback;
     this.getElement()

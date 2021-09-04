@@ -1,4 +1,4 @@
-import { UserAction, UpdateType, CommentsTitle } from '../const.js';
+import { UpdateType, CommentsTitle } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { isEsc, isEnter } from '../utils/common.js';
 import { render, rerender, remove } from '../utils/render.js';
@@ -30,6 +30,7 @@ export default class FilmDetailsPresenter {
     this._commentsContainerView = null;
     this._commentsTitleView = null;
     this._commentsListView = null;
+    this._commentView = new Map();
     this._newCommentView = null;
 
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
@@ -53,6 +54,7 @@ export default class FilmDetailsPresenter {
 
     this._commentsTitleView = null;
     this._commentsListView = null;
+    this._commentView = new Map();
 
     this._renderFilmDetails();
   }
@@ -98,7 +100,7 @@ export default class FilmDetailsPresenter {
 
     updatedFilm = await this._api.updateFilm(updatedFilm);
 
-    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UpdateType.MINOR, updatedFilm);
   }
 
   async _handleAddWatchedButtonClick() {
@@ -113,7 +115,7 @@ export default class FilmDetailsPresenter {
 
     updatedFilm = await this._api.updateFilm(updatedFilm);
 
-    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UpdateType.MINOR, updatedFilm);
   }
 
   async _handleAddFavoriteButtonClick() {
@@ -127,31 +129,48 @@ export default class FilmDetailsPresenter {
 
     updatedFilm = await this._api.updateFilm(updatedFilm);
 
-    this._changeFilm(UserAction.UPDATE_FILM_USER_DETAILS, UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UpdateType.MINOR, updatedFilm);
   }
 
-  _handleDeleteButtonClick(id) {
-    const payload = {
-      commentId: id,
-      film: this._film,
-    };
-    this._changeFilm(UserAction.DELETE_COMMENT, UpdateType.PATCH, payload);
-  }
+  async _handleDeleteButtonClick(commentId) {
+    try {
+      this._commentView.get(commentId).setDeletingStatus();
 
-  _handleFormSubmit() {
-    const newComment = this._newCommentView.getData();
+      await this._api.deleteComment(commentId);
 
-    if (!newComment.text || !newComment.emotion) {
-      return;
+      const updatedFilm = {
+        ...this._film,
+        comments: this._film.comments.filter((id) => id !== commentId),
+      };
+
+      this._filmComments = this._filmComments.filter(({ id }) => id !== commentId);
+      this._changeFilm(UpdateType.PATCH, updatedFilm);
+
+    } catch (error) {
+      this._commentView.get(commentId).resetDeletingStatus();
     }
 
-    const payload = {
-      newComment,
-      film: this._film,
-    };
+  }
 
-    this._changeFilm(UserAction.CREATE_COMMENT, UpdateType.PATCH, payload);
-    this._newCommentView.reset();
+  async _handleFormSubmit() {
+    const newComment = this._newCommentView.getData();
+
+    try {
+      this._newCommentView.disable();
+      this._newCommentView.clearErrorState();
+
+      const { updatedFilm, updatedComments } = await this._api.addComment(this._film.id, newComment);
+
+      this._filmComments = updatedComments;
+      this._changeFilm(UpdateType.PATCH, updatedFilm);
+
+      this._newCommentView.reset();
+
+    } catch (error) {
+      this._newCommentView.setErrorState();
+    }
+
+    this._newCommentView.enable();
   }
 
   _handleModelEvent(updateType, updatedFilm) {
@@ -159,9 +178,7 @@ export default class FilmDetailsPresenter {
       return;
     }
 
-    const loadComments = updateType !== UpdateType.MINOR;
-
-    this.init(updatedFilm, { loadComments });
+    this.init(updatedFilm, { loadComments: false });
   }
 
   _renderFilmInfo() {
@@ -190,10 +207,6 @@ export default class FilmDetailsPresenter {
     this._renderNewComment();
 
     render(this._filmDetailsView, this._filmDetailsBottomView);
-  }
-
-  _renderComment(comment) {
-    render(this._commentsContainerView, new CommentView(comment));
   }
 
   _renderCommentsContainer() {
@@ -228,9 +241,10 @@ export default class FilmDetailsPresenter {
     }
 
     this._filmComments.forEach((comment) => {
-      const commentsView = new CommentView(comment);
-      commentsView.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
-      render(this._commentsListView, commentsView);
+      const commentView = new CommentView(comment);
+      this._commentView.set(comment.id, commentView);
+      commentView.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
+      render(this._commentsListView, commentView);
     });
   }
 
