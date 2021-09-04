@@ -170,8 +170,8 @@ export default class FilmDetailsPresenter {
 
       const { updatedFilm, updatedComments } = await this._api.addComment(this._film.id, newComment);
 
-      this._filmComments = updatedComments;
       this._changeFilm(UpdateType.PATCH, updatedFilm);
+      this._commentsModel.setComments(UpdateType.PATCH, updatedComments);
 
       this._newCommentView.reset();
 
@@ -191,20 +191,18 @@ export default class FilmDetailsPresenter {
   _handleCommentsModelEvent(updateType, updatedPayload) {
     switch (updateType) {
       case UpdateType.INIT:
-        // this._prevScrollTop = this._filmDetailsView.scrollTop;
         this._renderCommentsTitle();
         this._renderCommentsList();
         this._renderNewComment();
-        // this._filmDetailsView.scrollTop = this._prevScrollTop;
-        console.log('Comments loaded!');
         break;
       case UpdateType.PATCH:
-        if (typeof updatedPayload === 'string') {
-          console.log('Delete ', updatedPayload);
+        if (Array.isArray(updatedPayload)) {
+          this._renderCommentsTitle();
+          this._renderCommentsList();
+        } else {
           remove(this._commentView.get(updatedPayload));
           this._commentView.delete(updatedPayload);
         }
-        // либо отобразить новый массив, либо удалить коммент по id
         break;
     }
   }
