@@ -21,7 +21,6 @@ export default class Api {
       url: `movies/${film.id}`,
       method: APIMethod.PUT,
       body: JSON.stringify(FilmsModel.adaptFilmToServer(film)),
-      headers: new Headers({'Content-Type': 'application/json'}),
     });
 
     const updatedFilm = await Api.toJSON(response);
@@ -33,7 +32,6 @@ export default class Api {
     const response = await this._load({
       url: `comments/${film.id}`,
       method: APIMethod.GEt,
-      headers: new Headers({'Content-Type': 'application/json'}),
     });
 
     const comments = await Api.toJSON(response);
@@ -47,7 +45,6 @@ export default class Api {
       url: `comments/${filmId}`,
       method: APIMethod.POST,
       body: JSON.stringify(FilmsModel.adaptNewCommentToServer(newComment)),
-      headers: new Headers({'Content-Type': 'application/json'}),
     });
 
     const { movie, comments } = await Api.toJSON(response);
@@ -73,6 +70,7 @@ export default class Api {
     body = null,
     headers = new Headers(),
   }) {
+    headers.append('Content-Type', 'application/json');
     headers.append('Authorization', this._authorization);
 
     const response = await fetch(
