@@ -152,8 +152,8 @@ export default class FilmDetailsPresenter {
         comments: this._film.comments.filter((id) => id !== commentId),
       };
 
-      this._filmComments = this._filmComments.filter(({ id }) => id !== commentId);
       this._changeFilm(UpdateType.PATCH, updatedFilm);
+      this._commentsModel.deleteComment(UpdateType.PATCH, commentId);
 
     } catch (error) {
       this._commentView.get(commentId).resetDeletingStatus();
@@ -191,14 +191,19 @@ export default class FilmDetailsPresenter {
   _handleCommentsModelEvent(updateType, updatedPayload) {
     switch (updateType) {
       case UpdateType.INIT:
-        this._prevScrollTop = this._filmDetailsView.scrollTop;
+        // this._prevScrollTop = this._filmDetailsView.scrollTop;
         this._renderCommentsTitle();
         this._renderCommentsList();
         this._renderNewComment();
-        this._filmDetailsView.scrollTop = this._prevScrollTop;
-        console.log('!');
+        // this._filmDetailsView.scrollTop = this._prevScrollTop;
+        console.log('Comments loaded!');
         break;
-      case updateType.PATCH:
+      case UpdateType.PATCH:
+        if (typeof updatedPayload === 'string') {
+          console.log('Delete ', updatedPayload);
+          remove(this._commentView.get(updatedPayload));
+          this._commentView.delete(updatedPayload);
+        }
         // либо отобразить новый массив, либо удалить коммент по id
         break;
     }

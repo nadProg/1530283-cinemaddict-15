@@ -16,9 +16,10 @@ export default class CommentsModel extends AbstractObserver{
     this._notify(updateType, comments);
   }
 
-  deleteComment(updateType, id) {
+  deleteComment(updateType, commentId) {
+    this._comments = this._comments.filter(({ id }) => id !== commentId);
 
-    this._notify(updateType, id);
+    this._notify(updateType, commentId);
   }
 
   static adaptCommentToClient(comment) {
