@@ -116,6 +116,7 @@ export const CommentsTitle = {
 };
 
 export const UpdateType = {
+  INIT: 'init',
   PATCH: 'patch',
   MINOR: 'minor',
   MAJOR: 'major',

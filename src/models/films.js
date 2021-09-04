@@ -37,14 +37,6 @@ export default class FilmsModel extends AbstractObserver{
     this._notify(updateType, updatedFilm);
   }
 
-  createComment() {
-
-  }
-
-  deleteComment() {
-
-  }
-
   static adaptFilmToClient(film) {
     const clientFilm = { ... film};
 

@@ -1,6 +1,7 @@
 import { APIMethod, SuccessHTTPStatusRange } from './const.js';
 
 import FilmsModel from './models/films.js';
+import CommentsModel from './models/comments.js';
 
 export default class Api {
   constructor(endPoint, authorization) {
@@ -36,7 +37,7 @@ export default class Api {
 
     const comments = await Api.toJSON(response);
 
-    return comments.map(FilmsModel.adaptCommentToClient);
+    return comments.map(CommentsModel.adaptCommentToClient);
   }
 
 
@@ -44,14 +45,14 @@ export default class Api {
     const response = await this._load({
       url: `comments/${filmId}`,
       method: APIMethod.POST,
-      body: JSON.stringify(FilmsModel.adaptNewCommentToServer(newComment)),
+      body: JSON.stringify(CommentsModel.adaptNewCommentToServer(newComment)),
     });
 
     const { movie, comments } = await Api.toJSON(response);
 
     const adaptedResponse = {
       updatedFilm: FilmsModel.adaptFilmToClient(movie),
-      updatedComments: comments.map(FilmsModel.adaptCommentToClient),
+      updatedComments: comments.map(CommentsModel.adaptCommentToClient),
     };
 
     return adaptedResponse;
