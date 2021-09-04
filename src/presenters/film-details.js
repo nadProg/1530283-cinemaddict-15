@@ -169,7 +169,6 @@ export default class FilmDetailsPresenter {
       this._newCommentView.clearErrorState();
 
       const { updatedFilm, updatedComments } = await this._api.addComment(this._film.id, newComment);
-
       this._changeFilm(UpdateType.PATCH, updatedFilm);
       this._commentsModel.setComments(UpdateType.PATCH, updatedComments);
 

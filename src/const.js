@@ -85,6 +85,8 @@ export const FilmsListOption = {
 export const NEW_COMMENT_DEFAULT = {
   text: '',
   emotion: '',
+  isError: false,
+  isDisabled: false,
 };
 
 export const FilterType = {
