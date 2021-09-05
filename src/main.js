@@ -14,6 +14,10 @@ const applicationPresenter = new ApplicationPresenter(document.body, provider);
 
 applicationPresenter.init();
 
+window.addEventListener('load', () => {
+  navigator.serviceWorker.register('/sw.js');
+});
+
 window.addEventListener('online', () => {
   document.title = document.title.replace(' [offline]', '');
   provider.sync();
