@@ -1,7 +1,7 @@
 export default class Store {
-  constructor(key, storage) {
+  constructor(storeKey, storage) {
     this._storage = storage;
-    this._storeKey = key;
+    this._storeKey = storeKey;
   }
 
   getItems() {
@@ -28,17 +28,6 @@ export default class Store {
         ...store,
         [key]: value,
       }),
-    );
-  }
-
-  removeItem(key) {
-    const store = this.getItems();
-
-    delete store[key];
-
-    this._storage.setItem(
-      this._storeKey,
-      JSON.stringify(store),
     );
   }
 }

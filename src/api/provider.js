@@ -2,11 +2,6 @@ import { isOnline } from '../utils/common.js';
 
 import FilmsModel from '../models/films.js';
 
-const createStoreStructure = (items) => items.reduce((store, item) => ({
-  ...store,
-  [item.id]: item,
-}), {});
-
 export default class Provider {
   constructor(api, store) {
     this._api = api;
@@ -17,7 +12,8 @@ export default class Provider {
     if (isOnline()) {
       const films = await this._api.getFilms();
 
-      const items = createStoreStructure(films.map(FilmsModel.adaptFilmToServer));
+      const filmsAdaptedToServer = films.map(FilmsModel.adaptFilmToServer);
+      const items = Provider.createStoreStructure(filmsAdaptedToServer);
       this._store.setItems(items);
 
       return films;
@@ -78,12 +74,19 @@ export default class Provider {
 
       const { updated: updatedFilms } = await this._api.sync(storeFilms);
 
-      const items = createStoreStructure([ ...updatedFilms ]);
+      const items = Provider.createStoreStructure([ ...updatedFilms ]);
       this._store.setItems(items);
 
       return;
     }
 
     return Promise.reject(new Error('Sync data failed'));
+  }
+
+  static createStoreStructure(items) {
+    return items.reduce((store, item) => ({
+      ...store,
+      [item.id]: item,
+    }), {});
   }
 }

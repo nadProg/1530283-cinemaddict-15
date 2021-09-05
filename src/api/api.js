@@ -10,7 +10,9 @@ export default class Api {
   }
 
   async getFilms() {
-    const response = await this._load({url: 'movies'});
+    const response = await this._load({
+      url: 'movies',
+    });
 
     const films = await Api.toJSON(response);
 
@@ -32,7 +34,7 @@ export default class Api {
   async getComments(filmId) {
     const response = await this._load({
       url: `comments/${filmId}`,
-      method: APIMethod.GEt,
+      method: APIMethod.GET,
     });
 
     const comments = await Api.toJSON(response);
@@ -58,9 +60,9 @@ export default class Api {
     return adaptedResponse;
   }
 
-  async deleteComment(id) {
+  async deleteComment(commentId) {
     await this._load({
-      url: `comments/${id}`,
+      url: `comments/${commentId}`,
       method: APIMethod.DELETE,
     });
   }
@@ -84,10 +86,9 @@ export default class Api {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', this._authorization);
 
-    const response = await fetch(
-      `${this._endPoint}/${url}`,
-      {method, body, headers},
-    );
+    const fetchUrl = `${this._endPoint}/${url}`;
+    const fetchOptions = { method, body, headers };
+    const response = await fetch(fetchUrl, fetchOptions);
 
     return Api.checkStatus(response);
   }
