@@ -17,3 +17,12 @@ const provider = new Provider(api, store);
 const applicationPresenter = new ApplicationPresenter(document.body, provider);
 
 applicationPresenter.init();
+
+window.addEventListener('online', () => {
+  document.title = document.title.replace(' [offline]', '');
+  // provider.sync();
+});
+
+window.addEventListener('offline', () => {
+  document.title += ' [offline]';
+});

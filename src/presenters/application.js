@@ -1,5 +1,5 @@
-import { END_POINT, AUTHORIZATION, Place,
-  Screen, FilterType, UpdateType, EmptyBoardTitle } from '../const.js';
+import { Place, UpdateType, Screen,
+  EmptyBoardTitle, FilterType  } from '../const.js';
 import { render, rerender, replace, remove } from '../utils/render.js';
 import { filter } from '../utils/film.js';
 import { getRank } from '../utils/statistics';
