@@ -50,6 +50,25 @@ export default class Provider {
     return Promise.resolve(film);
   }
 
+  async getComments(film) {
+    if (isOnline()) {
+      return await this._api.getComments(film);
+    }
+
+    return Promise.reject(new Error('Get comments failed'));
+  }
+
+  // async addComment(filmId, newComment) {
+  // Если он-лайн, то создает коммент и обновляет соответствующий фильм в сторе
+  // Иначе ошибка
+  // }
+
+  // async deleteComment(id) {
+  // Если он-лайн, то удаляет коммент и...
+  // Как обновить фильм в сторе, ведь здесь нет id фильма???
+  // Иначе ошибка
+  // }
+
   // addTask(task) {
   //   if (isOnline()) {
   //     return this._api.addTask(task)
