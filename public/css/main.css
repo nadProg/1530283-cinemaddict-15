@@ -1228,9 +1228,15 @@ button {
   width: 100%;
   padding: 0 1rem;
 
-  background-color: #ff4e4e;
-
   animation: show-and-hide ease-in-out forwards;
+}
+
+.alert--success {
+  background-color: #6fd656;
+}
+
+.alert--error {
+  background-color: #ff4e4e;
 }
 
 .alert__text {

@@ -1,5 +1,6 @@
 import { END_POINT, AUTHORIZATION, STORE_NAME, OFFLINE_POSTFIX } from './const.js';
 import { isOnline } from './utils/common.js';
+import { alert, AlertType } from './utils/alert.js';
 
 import ApplicationPresenter from './presenters/application.js';
 
@@ -15,6 +16,7 @@ const applicationPresenter = new ApplicationPresenter(document.body, provider);
 
 const onWindowOffline = () => {
   document.title += OFFLINE_POSTFIX;
+  alert('Offline mode');
 };
 
 if (!isOnline()) {
@@ -25,6 +27,7 @@ applicationPresenter.init();
 
 window.addEventListener('online', () => {
   document.title = document.title.replace(OFFLINE_POSTFIX, '');
+  alert('Online mode', {type: AlertType.SUCCESS});
   provider.sync();
 });
 
