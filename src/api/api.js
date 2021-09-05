@@ -72,7 +72,7 @@ export default class Api {
       body: JSON.stringify(films),
     });
 
-    return response;
+    return await Api.toJSON(response);
   }
 
   async _load({

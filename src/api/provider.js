@@ -80,6 +80,8 @@ export default class Provider {
 
       const items = createStoreStructure([ ...updatedFilms ]);
       this._store.setItems(items);
+
+      return;
     }
 
     return Promise.reject(new Error('Sync data failed'));
