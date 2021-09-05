@@ -20,11 +20,9 @@ import NavigationPresenter from './navigation.js';
 import FilmsScreenPresenter from './films-screen.js';
 import StatisticsScreenPresenter from './statisctics-screen.js';
 
-import API from '../api.js';
-
 export default class ApplicationPresenter {
-  constructor(applicationContainer) {
-    this._api = new API(END_POINT, AUTHORIZATION);
+  constructor(applicationContainer, api) {
+    this._api = api;
 
     this._applicationContainer = applicationContainer;
 

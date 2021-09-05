@@ -4,6 +4,8 @@ export const isEsc = ({ code }) => code === KeyCode.ESCAPE;
 
 export const isEnter = ({ code }) => code === KeyCode.ENTER;
 
+export const isOnline = () => window.navigator.onLine;
+
 export const updateItem = (items, updatedItem) => {
   const index = items.findIndex((item) => item.id === updatedItem.id);
 

@@ -1,7 +1,7 @@
-import { APIMethod, SuccessHTTPStatusRange } from './const.js';
+import { APIMethod, SuccessHTTPStatusRange } from '../const.js';
 
-import FilmsModel from './models/films.js';
-import CommentsModel from './models/comments.js';
+import FilmsModel from '../models/films.js';
+import CommentsModel from '../models/comments.js';
 
 export default class Api {
   constructor(endPoint, authorization) {
@@ -63,6 +63,23 @@ export default class Api {
       url: `comments/${id}`,
       method: APIMethod.DELETE,
     });
+  }
+
+  async sync() {
+    // Синхронизация с сервером /movies/sync
+    // Этот метод потребуется для реализации дополнительного задания про офлайн.
+    // Обратите внимание, изменять можно только пользовательскую информацию. То есть то, что находится внутри поля user_details.
+    // Пример:
+    // Request:
+    // URL: POST /movies/sync
+    // Headers: Authorization: Basic kTy9gIdsz2317rD
+    // Body: [$Movie$, $Movie$]
+    // Response:
+    // Status: 200 OK
+    // Body:
+    // {
+    //   "updated": [$Movie$, $Movie$]
+    // }
   }
 
   async _load({
