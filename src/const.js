@@ -227,3 +227,9 @@ export const SuccessHTTPStatusRange = {
   MIN: 200,
   MAX: 299,
 };
+
+export const STORE_PREFIX = 'cinemaddict-localstorage';
+
+export const STORE_VER = 'v15';
+
+export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;

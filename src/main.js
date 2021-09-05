@@ -1,14 +1,10 @@
-import { END_POINT, AUTHORIZATION } from './const';
+import { END_POINT, AUTHORIZATION, STORE_NAME } from './const.js';
 
-import ApplicationPresenter from './presenters/application';
+import ApplicationPresenter from './presenters/application.js';
 
 import Api from './api/api.js';
 import Store from './api/store.js';
 import Provider from './api/provider.js';
-
-const STORE_PREFIX = 'cinemaddict-localstorage';
-const STORE_VER = 'v15';
-const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 const api = new Api(END_POINT, AUTHORIZATION);
 const store = new Store(STORE_NAME, window.localStorage);
