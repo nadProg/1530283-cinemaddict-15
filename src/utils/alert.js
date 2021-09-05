@@ -1,32 +1,30 @@
+import { createElement } from './render.js';
+
 const ALERT_TIME = 3000;
-const BASE_CLASS = 'alert';
+
 const AlertType = {
-  SUCCESS: 'success',
   ERROR: 'error',
-}
-
-const createAlertNode = (text, type) => {
-  const alertNode = document.createElement('div');
-  alertNode.classList.add(BASE_CLASS, `${BASE_CLASS}--${type}`);
-  alertNode.innerHTML = '<p class="alert__text"></p>';
-
-  alertNode.querySelector('.alert__text').textContent = text;
-
-  return alertNode;
+  SUCCESS: 'success',
 };
+
+const getAlertTemplate = (text, {time = ALERT_TIME, type = AlertType.ERROR } = {}) => `
+  <div class="alert alert--${type}" style="animation-duration:${time}ms">
+    <p class="alert__text">${text}</p>
+  </div>
+`;
 
 const onAlertNodeAnimationEnd = ({ currentTarget }) => {
   currentTarget.removeEventListener('animationend', onAlertNodeAnimationEnd);
   currentTarget.remove();
 };
 
-const alert = (text, {time = ALERT_TIME, type = AlertType.ERROR } = {}) => {
-  const alertNode = createAlertNode(text, type);
+const alert = (text, options) => {
+  const template = getAlertTemplate(text, options);
+  const alertNode = createElement(template);
 
-  alertNode.style.animationDuration = `${time}ms`;
   alertNode.addEventListener('animationend', onAlertNodeAnimationEnd);
 
   document.body.appendChild(alertNode);
 };
 
-export { alert, AlertType }
+export { alert, AlertType };

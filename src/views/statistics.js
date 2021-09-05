@@ -57,8 +57,8 @@ export const createStatisticsTemplate = (statisticsData) => {
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Total duration</h4>
           <p class="statistic__item-text">
-            ${totalDuration && totalDuration.hour || 0} <span class="statistic__item-description">h</span>
-            ${totalDuration && totalDuration.minute || 0} <span class="statistic__item-description">m</span>
+            ${totalDuration && totalDuration.hours || 0} <span class="statistic__item-description">h</span>
+            ${totalDuration && totalDuration.minutes || 0} <span class="statistic__item-description">m</span>
           </p>
         </li>
         ${topGenre ? `
