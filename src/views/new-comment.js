@@ -99,7 +99,7 @@ export default class NewCommentView extends SmartView {
     this.updateData({
       text: evt.currentTarget.value,
       isError: false,
-    }, true);
+    }, { isElementUpdate: true });
   }
 
   _setInnerHandlers() {

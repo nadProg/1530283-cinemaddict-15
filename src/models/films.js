@@ -14,13 +14,13 @@ export default class FilmsModel extends AbstractObserver{
   }
 
   getTopRated() {
-    return [...this._films]
+    return [ ...this._films ]
       .filter(hasRating)
       .sort(sortByRating);
   }
 
   getMostCommented() {
-    return [...this._films]
+    return [ ...this._films ]
       .filter(hasComments)
       .sort(sortByComments);
   }

@@ -2,7 +2,6 @@ import { UpdateType, UserAction, CommentsTitle } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { isEsc, isEnter, isOnline } from '../utils/common.js';
 import { render, rerender, remove } from '../utils/render.js';
-// import { toast } from '../utils/toast.js';
 import { alert } from '../utils/alert.js';
 
 import CommentsModel from '../models/comments.js';

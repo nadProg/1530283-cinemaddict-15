@@ -9,17 +9,17 @@ export default class SmartView extends AbstractView {
     this._data = {};
   }
 
-  updateData(update, justDataUpdating) {
-    if (!update) {
+  updateData(updatedData, { isElementUpdate = false } = {}) {
+    if (!updatedData) {
       return;
     }
 
     this._data = {
       ...this._data,
-      ...update,
+      ...updatedData,
     };
 
-    if (justDataUpdating) {
+    if (isElementUpdate) {
       return;
     }
 
