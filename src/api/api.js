@@ -65,21 +65,14 @@ export default class Api {
     });
   }
 
-  async sync() {
-    // Синхронизация с сервером /movies/sync
-    // Этот метод потребуется для реализации дополнительного задания про офлайн.
-    // Обратите внимание, изменять можно только пользовательскую информацию. То есть то, что находится внутри поля user_details.
-    // Пример:
-    // Request:
-    // URL: POST /movies/sync
-    // Headers: Authorization: Basic kTy9gIdsz2317rD
-    // Body: [$Movie$, $Movie$]
-    // Response:
-    // Status: 200 OK
-    // Body:
-    // {
-    //   "updated": [$Movie$, $Movie$]
-    // }
+  async sync(films) {
+    const response = await this._load({
+      url: '/movies/sync',
+      method: APIMethod.POST,
+      body: JSON.stringify(films),
+    });
+
+    return response;
   }
 
   async _load({

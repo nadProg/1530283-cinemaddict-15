@@ -20,7 +20,7 @@ applicationPresenter.init();
 
 window.addEventListener('online', () => {
   document.title = document.title.replace(' [offline]', '');
-  // provider.sync();
+  provider.sync();
 });
 
 window.addEventListener('offline', () => {

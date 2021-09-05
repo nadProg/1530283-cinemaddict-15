@@ -182,7 +182,6 @@ export default class FilmDetailsPresenter {
       this._newCommentView.reset();
 
     } catch (error) {
-      console.log(error);
       this._newCommentView.setErrorState();
     }
 

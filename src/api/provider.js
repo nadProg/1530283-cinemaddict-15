@@ -2,17 +2,10 @@ import { isOnline } from '../utils/common.js';
 
 import FilmsModel from '../models/films.js';
 
-// const getSyncedTasks = (items) =>
-//   items
-//     .filter(({success}) => success)
-//     .map(({payload}) => payload.task);
-
-const createStoreStructure = (items) =>
-  items
-    .reduce((acc, current) => Object.assign({}, acc, {
-      [current.id]: current,
-    }), {});
-
+const createStoreStructure = (items) => items.reduce((store, item) => ({
+  ...store,
+  [item.id]: item,
+}), {});
 
 export default class Provider {
   constructor(api, store) {
@@ -73,31 +66,22 @@ export default class Provider {
   async deleteComment(id) {
     if (isOnline()) {
       await this._api.deleteComment(id);
-      // Как обновить фильм в сторе, ведь здесь нет id фильма???
       return;
     }
 
     return Promise.reject(new Error('Delete comment failed'));
   }
 
-  // sync() {
-  //   if (isOnline()) {
-  //     const storeTasks = Object.values(this._store.getItems());
+  async sync() {
+    if (isOnline()) {
+      const storeFilms = Object.values(this._store.getItems());
 
-  //     return this._api.sync(storeTasks)
-  //       .then((response) => {
-  //         // Забираем из ответа синхронизированные задачи
-  //         const createdTasks = getSyncedTasks(response.created);
-  //         const updatedTasks = getSyncedTasks(response.updated);
+      const { updated: updatedFilms } = await this._api.sync(storeFilms);
 
-  //         // Добавляем синхронизированные задачи в хранилище.
-  //         // Хранилище должно быть актуальным в любой момент.
-  //         const items = createStoreStructure([...createdTasks, ...updatedTasks]);
+      const items = createStoreStructure([ ...updatedFilms ]);
+      this._store.setItems(items);
+    }
 
-  //         this._store.setItems(items);
-  //       });
-  //   }
-
-  //   return Promise.reject(new Error('Sync data failed'));
-  // }
+    return Promise.reject(new Error('Sync data failed'));
+  }
 }
