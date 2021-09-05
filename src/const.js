@@ -117,6 +117,12 @@ export const CommentsTitle = {
   LOADING: 'loading...',
 };
 
+export const UserAction = {
+  UPDATE_USER_DETAILS: 'update-user-details',
+  CREATE_COMMENT: 'create-comment',
+  DELETE_COMMENT: 'delete-comment',
+};
+
 export const UpdateType = {
   INIT: 'init',
   PATCH: 'patch',

@@ -1,4 +1,4 @@
-import { UpdateType, CommentsTitle } from '../const.js';
+import { UpdateType, UserAction, CommentsTitle } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { isEsc, isEnter } from '../utils/common.js';
 import { render, rerender, remove } from '../utils/render.js';
@@ -99,7 +99,7 @@ export default class FilmDetailsPresenter {
   }
 
   async _handleAddToWatchButtonClick() {
-    let updatedFilm = {
+    const updatedFilm = {
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -107,13 +107,11 @@ export default class FilmDetailsPresenter {
       },
     };
 
-    updatedFilm = await this._api.updateFilm(updatedFilm);
-
-    this._changeFilm(UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UserAction.UPDATE_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
   async _handleAddWatchedButtonClick() {
-    let updatedFilm ={
+    const updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -122,13 +120,11 @@ export default class FilmDetailsPresenter {
       },
     };
 
-    updatedFilm = await this._api.updateFilm(updatedFilm);
-
-    this._changeFilm(UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UserAction.UPDATE_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
   async _handleAddFavoriteButtonClick() {
-    let updatedFilm ={
+    const updatedFilm ={
       ...this._film,
       userDetails: {
         ...this._film.userDetails,
@@ -136,9 +132,7 @@ export default class FilmDetailsPresenter {
       },
     };
 
-    updatedFilm = await this._api.updateFilm(updatedFilm);
-
-    this._changeFilm(UpdateType.MINOR, updatedFilm);
+    this._changeFilm(UserAction.UPDATE_USER_DETAILS, UpdateType.MINOR, updatedFilm);
   }
 
   async _handleDeleteButtonClick(commentId) {
@@ -152,7 +146,7 @@ export default class FilmDetailsPresenter {
         comments: this._film.comments.filter((id) => id !== commentId),
       };
 
-      this._changeFilm(UpdateType.PATCH, updatedFilm);
+      this._changeFilm(UserAction.DELETE_COMMENT, UpdateType.PATCH, updatedFilm);
       this._commentsModel.deleteComment(UpdateType.PATCH, commentId);
 
     } catch (error) {
@@ -169,7 +163,7 @@ export default class FilmDetailsPresenter {
       this._newCommentView.clearErrorState();
 
       const { updatedFilm, updatedComments } = await this._api.addComment(this._film.id, newComment);
-      this._changeFilm(UpdateType.PATCH, updatedFilm);
+      this._changeFilm(UserAction.CREATE_COMMENT, UpdateType.PATCH, updatedFilm);
       this._commentsModel.setComments(UpdateType.PATCH, updatedComments);
 
       this._newCommentView.reset();
@@ -182,8 +176,13 @@ export default class FilmDetailsPresenter {
   }
 
   _handleFilmsModelEvent(updateType, updatedFilm) {
-    if (updateType === UpdateType.MINOR) {
-      this.init(updatedFilm, { isLoadComments: false });
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this._film = updatedFilm;
+        break;
+      case UpdateType.MINOR:
+        this.init(updatedFilm, { isLoadComments: false });
+        break;
     }
   }
 
@@ -194,14 +193,17 @@ export default class FilmDetailsPresenter {
         this._renderCommentsList();
         this._renderNewComment();
         break;
+
       case UpdateType.PATCH:
+        this._renderCommentsTitle();
+
         if (Array.isArray(updatedPayload)) {
-          this._renderCommentsTitle();
           this._renderCommentsList();
         } else {
           remove(this._commentView.get(updatedPayload));
           this._commentView.delete(updatedPayload);
         }
+
         break;
     }
   }

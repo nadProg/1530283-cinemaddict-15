@@ -1,5 +1,5 @@
 import { FilmsListOption, SortType, ClassName, UpdateType,
-  FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT
+  FilteredEmptyListTitle, FILMS_STEP, EXTRA_FILMS_AMOUNT, UserAction
 } from '../const.js';
 import { render, remove, replace, rerender } from '../utils/render.js';
 import { sortByRating, sortByDate, filter } from '../utils/film.js';
@@ -118,8 +118,12 @@ export default class FilmsScreenPresenter {
     this._renderMainFilmsList({ update: true });
   }
 
-  _handleViewAction(updateType, payload) {
-    this._filmsModel.updateFilm(updateType, payload);
+  async _handleViewAction(userAction, updateType, updatedFilm) {
+    if (userAction === UserAction.UPDATE_USER_DETAILS) {
+      updatedFilm = await this._api.updateFilm(updatedFilm);
+    }
+
+    this._filmsModel.updateFilm(updateType, updatedFilm);
   }
 
   _handleModelEvent(updateType, updatedFilm) {
