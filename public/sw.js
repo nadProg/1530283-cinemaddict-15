@@ -5,7 +5,7 @@ const CACHE_NAME = `${CACHE_PREFIX}-${CACHE_VER}`;
 const HTTP_STATUS_OK = 200;
 const RESPONSE_SAFE_TYPE = 'basic';
 
-const addAllToCache = (cache) => cache.addAll([
+const CACHE_PATHS = [
   '/',
   '/index.html',
   '/bundle.js',
@@ -35,7 +35,8 @@ const addAllToCache = (cache) => cache.addAll([
   '/images/posters/the-dance-of-life.jpg',
   '/images/posters/the-great-flamarion.jpg',
   '/images/posters/the-man-with-the-golden-arm.jpg',
-]);
+];
+const IGNORE_CACHE_PATH = 'sockjs-node';
 
 const handleCacheKey = (key) => {
   if (key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME) {
@@ -47,7 +48,7 @@ const handleCacheKey = (key) => {
 
 const isNotNull = (key) => key !== null;
 
-const fetchWithCache = (request) => fetch(request).then((response) => {
+const fetchAndCache = (request) => fetch(request).then((response) => {
   if (!response || response.status !== HTTP_STATUS_OK || response.type !== RESPONSE_SAFE_TYPE) {
     return response;
   }
@@ -64,7 +65,7 @@ self.addEventListener('install', (evt) => {
   evt.waitUntil(
     caches
       .open(CACHE_NAME)
-      .then(addAllToCache),
+      .then((cache) => cache.addAll(CACHE_PATHS)),
   );
 });
 
@@ -79,9 +80,13 @@ self.addEventListener('activate', (evt) => {
 self.addEventListener('fetch', (evt) => {
   const { request } = evt;
 
+  if (request.url.includes(IGNORE_CACHE_PATH)) {
+    return;
+  }
+
   evt.respondWith(
     caches
       .match(request)
-      .then((cacheResponse) => cacheResponse ? cacheResponse : fetchWithCache(request)),
+      .then((cacheResponse) => cacheResponse ? cacheResponse : fetchAndCache(request)),
   );
 });
