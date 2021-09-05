@@ -214,7 +214,7 @@ export const STATISTICS_CHART_OPTIONS = {
 
 export const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
 
-export const AUTHORIZATION = 'Basic b1dsf53b53b';
+export const AUTHORIZATION = 'Basic 5Hk8boTb1dsf53b53b';
 
 export const APIMethod = {
   GET: 'GET',
@@ -233,3 +233,5 @@ export const STORE_PREFIX = 'cinemaddict-localstorage';
 export const STORE_VER = 'v15';
 
 export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+
+export const OFFLINE_POSTFIX =  ' [offline]';

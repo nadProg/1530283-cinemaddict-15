@@ -1,4 +1,5 @@
-import { END_POINT, AUTHORIZATION, STORE_NAME } from './const.js';
+import { END_POINT, AUTHORIZATION, STORE_NAME, OFFLINE_POSTFIX } from './const.js';
+import { isOnline } from './utils/common.js';
 
 import ApplicationPresenter from './presenters/application.js';
 
@@ -12,16 +13,22 @@ const provider = new Provider(api, store);
 
 const applicationPresenter = new ApplicationPresenter(document.body, provider);
 
+const onWindowOffline = () => {
+  document.title += OFFLINE_POSTFIX;
+};
+
+if (!isOnline()) {
+  onWindowOffline();
+}
+
 applicationPresenter.init();
 
 window.addEventListener('online', () => {
-  document.title = document.title.replace(' [offline]', '');
+  document.title = document.title.replace(OFFLINE_POSTFIX, '');
   provider.sync();
 });
 
-window.addEventListener('offline', () => {
-  document.title += ' [offline]';
-});
+window.addEventListener('offline', onWindowOffline);
 
 window.addEventListener('load', () => {
   navigator.serviceWorker.register('/sw.js');
