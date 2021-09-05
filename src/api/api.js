@@ -29,9 +29,9 @@ export default class Api {
     return FilmsModel.adaptFilmToClient(updatedFilm);
   }
 
-  async getComments(film) {
+  async getComments(filmId) {
     const response = await this._load({
-      url: `comments/${film.id}`,
+      url: `comments/${filmId}`,
       method: APIMethod.GEt,
     });
 

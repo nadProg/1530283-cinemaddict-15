@@ -169,6 +169,7 @@ export default class FilmDetailsPresenter {
       this._newCommentView.reset();
 
     } catch (error) {
+      console.log(error);
       this._newCommentView.setErrorState();
     }
 
@@ -299,7 +300,7 @@ export default class FilmDetailsPresenter {
     let comments = [];
     try {
       this._isError = false;
-      comments = await this._api.getComments(this._film);
+      comments = await this._api.getComments(this._film.id);
     } catch (error) {
       this._isError = true;
     } finally {

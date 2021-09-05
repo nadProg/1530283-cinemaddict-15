@@ -50,18 +50,26 @@ export default class Provider {
     return Promise.resolve(film);
   }
 
-  async getComments(film) {
+  async getComments(filmId) {
     if (isOnline()) {
-      return await this._api.getComments(film);
+      return await this._api.getComments(filmId);
     }
 
     return Promise.reject(new Error('Get comments failed'));
   }
 
-  // async addComment(filmId, newComment) {
-  // Если он-лайн, то создает коммент и обновляет соответствующий фильм в сторе
-  // Иначе ошибка
-  // }
+  async addComment(filmId, newComment) {
+    if (isOnline()) {
+      const updatedPayload = await this._api.addComment(filmId, newComment);
+
+      const { updatedFilm } = updatedPayload;
+      this._store.setItem(updatedFilm.id, FilmsModel.adaptFilmToServer(updatedFilm));
+
+      return updatedPayload;
+    }
+
+    return Promise.reject(new Error('Create comment failed'));
+  }
 
   // async deleteComment(id) {
   // Если он-лайн, то удаляет коммент и...
