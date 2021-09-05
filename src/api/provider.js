@@ -3,10 +3,10 @@ import { isOnline } from '../utils/common.js';
 import FilmsModel from '../models/films.js';
 import CommentsModel from '../models/comments.js';
 
-const getSyncedTasks = (items) =>
-  items
-    .filter(({success}) => success)
-    .map(({payload}) => payload.task);
+// const getSyncedTasks = (items) =>
+//   items
+//     .filter(({success}) => success)
+//     .map(({payload}) => payload.task);
 
 const createStoreStructure = (items) =>
   items
@@ -36,19 +36,19 @@ export default class Provider {
     return Promise.resolve(storeTasks.map(FilmsModel.adaptFilmToClient));
   }
 
-  // updateTask(task) {
-  //   if (isOnline()) {
-  //     return this._api.updateTask(task)
-  //       .then((updatedTask) => {
-  //         this._store.setItem(updatedTask.id, TasksModel.adaptToServer(updatedTask));
-  //         return updatedTask;
-  //       });
-  //   }
+  async updateFilm(film) {
+    if (isOnline()) {
+      const updatedFilm = await this._api.updateFilm(film);
 
-  //   this._store.setItem(task.id, TasksModel.adaptToServer(Object.assign({}, task)));
+      this._store.setItem(updatedFilm.id, FilmsModel.adaptFilmToServer(updatedFilm));
 
-  //   return Promise.resolve(task);
-  // }
+      return updatedFilm;
+    }
+
+    this._store.setItem(film.id, FilmsModel.adaptFilmToServer({ ...film }));
+
+    return Promise.resolve(film);
+  }
 
   // addTask(task) {
   //   if (isOnline()) {
