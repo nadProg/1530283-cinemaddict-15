@@ -1,7 +1,6 @@
 import { isOnline } from '../utils/common.js';
 
 import FilmsModel from '../models/films.js';
-import CommentsModel from '../models/comments.js';
 
 // const getSyncedTasks = (items) =>
 //   items
@@ -36,9 +35,9 @@ export default class Provider {
     return Promise.resolve(storeTasks.map(FilmsModel.adaptFilmToClient));
   }
 
-  async updateFilm(film) {
+  async updateFilm(film, { isServerUpdate = true} = {} ) {
     if (isOnline()) {
-      const updatedFilm = await this._api.updateFilm(film);
+      const updatedFilm = isServerUpdate ? await this._api.updateFilm(film) : film;
 
       this._store.setItem(updatedFilm.id, FilmsModel.adaptFilmToServer(updatedFilm));
 
@@ -71,32 +70,15 @@ export default class Provider {
     return Promise.reject(new Error('Create comment failed'));
   }
 
-  // async deleteComment(id) {
-  // Если он-лайн, то удаляет коммент и...
-  // Как обновить фильм в сторе, ведь здесь нет id фильма???
-  // Иначе ошибка
-  // }
+  async deleteComment(id) {
+    if (isOnline()) {
+      await this._api.deleteComment(id);
+      // Как обновить фильм в сторе, ведь здесь нет id фильма???
+      return;
+    }
 
-  // addTask(task) {
-  //   if (isOnline()) {
-  //     return this._api.addTask(task)
-  //       .then((newTask) => {
-  //         this._store.setItem(newTask.id, TasksModel.adaptToServer(newTask));
-  //         return newTask;
-  //       });
-  //   }
-
-  //   return Promise.reject(new Error('Add task failed'));
-  // }
-
-  // deleteTask(task) {
-  //   if (isOnline()) {
-  //     return this._api.deleteTask(task)
-  //       .then(() => this._store.removeItem(task.id));
-  //   }
-
-  //   return Promise.reject(new Error('Delete task failed'));
-  // }
+    return Promise.reject(new Error('Delete comment failed'));
+  }
 
   // sync() {
   //   if (isOnline()) {

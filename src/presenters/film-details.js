@@ -146,6 +146,8 @@ export default class FilmDetailsPresenter {
         comments: this._film.comments.filter((id) => id !== commentId),
       };
 
+      await this._api.updateFilm(updatedFilm, { isServerUpdate: false });
+
       this._changeFilm(UserAction.DELETE_COMMENT, UpdateType.PATCH, updatedFilm);
       this._commentsModel.deleteComment(UpdateType.PATCH, commentId);
 
