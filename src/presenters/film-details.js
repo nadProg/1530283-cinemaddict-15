@@ -165,6 +165,7 @@ export default class FilmDetailsPresenter {
 
   async _handleFormSubmit() {
     if (!isOnline()) {
+      this._newCommentView.setErrorState();
       toast('You can not add comment in offline mode');
       return;
     }
@@ -293,6 +294,7 @@ export default class FilmDetailsPresenter {
   _renderNewComment() {
     if (this._isSuccess) {
       this._newCommentView = this._newCommentView || new NewCommentView();
+      this._newCommentView.clearErrorState();
       render(this._commentsContainerView, this._newCommentView);
     }
   }

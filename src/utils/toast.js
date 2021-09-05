@@ -4,7 +4,7 @@ const toastContainer = document.createElement('div');
 toastContainer.classList.add('toast-container');
 document.body.append(toastContainer);
 
-const toast = (message) => {
+const toast = (message, time = SHOW_TIME ) => {
   const toastItem = document.createElement('div');
   toastItem.textContent = message;
   toastItem.classList.add('toast-item');
@@ -13,7 +13,7 @@ const toast = (message) => {
 
   setTimeout(() => {
     toastItem.remove();
-  }, SHOW_TIME);
+  }, time);
 };
 
 export { toast };
