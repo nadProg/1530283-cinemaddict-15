@@ -2,7 +2,8 @@ import { UpdateType, UserAction, CommentsTitle } from '../const.js';
 import { getCurrentDate } from '../utils/date.js';
 import { isEsc, isEnter, isOnline } from '../utils/common.js';
 import { render, rerender, remove } from '../utils/render.js';
-import { toast } from '../utils/toast.js';
+// import { toast } from '../utils/toast.js';
+import { alert } from '../utils/alert.js';
 
 import CommentsModel from '../models/comments.js';
 
@@ -138,7 +139,7 @@ export default class FilmDetailsPresenter {
 
   async _handleDeleteButtonClick(commentId) {
     if (!isOnline()) {
-      toast('You can not delete comment in offline mode');
+      alert('You can not delete comment in offline mode');
       return;
     }
 
@@ -166,7 +167,7 @@ export default class FilmDetailsPresenter {
   async _handleFormSubmit() {
     if (!isOnline()) {
       this._newCommentView.setErrorState();
-      toast('You can not add comment in offline mode');
+      alert('You can not add comment in offline mode');
       return;
     }
 
