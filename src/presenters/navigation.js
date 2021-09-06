@@ -6,8 +6,8 @@ import { filter } from '../utils/film.js';
 import NavigationView from '../views/navigation.js';
 
 export default class NavigationPresenter {
-  constructor(navigationContainer, filterModel, filmsModel, renderScreen) {
-    this._navigationContainer = navigationContainer;
+  constructor({ container, filterModel, filmsModel, renderScreen }) {
+    this._navigationContainer = container;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
     this._renderScreen = renderScreen;

@@ -15,8 +15,8 @@ import CommentView from '../views/comment.js';
 import NewCommentView from '../views/new-comment.js';
 
 export default class FilmDetailsPresenter {
-  constructor(filmDetailsContainer, filmsModel, changeFilm, hideFilmDetails, api) {
-    this._filmDetailsContainer = filmDetailsContainer;
+  constructor({ container, filmsModel, changeFilm, hideFilmDetails, api }) {
+    this._filmDetailsContainer = container;
     this._filmsModel = filmsModel;
     this._changeFilm = changeFilm;
     this._hideFilmDetails = hideFilmDetails;

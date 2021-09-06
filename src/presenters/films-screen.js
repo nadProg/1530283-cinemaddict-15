@@ -15,8 +15,8 @@ import FilmDetailsPresenter from './film-details.js';
 const bodyElement = document.body;
 
 export default class FilmsScreenPresenter {
-  constructor(mainScreenContainer, filmsModel, filterModel, api) {
-    this._mainScreenContainer = mainScreenContainer;
+  constructor({ container, filmsModel, filterModel, api }) {
+    this._mainScreenContainer = container;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._api = api;
@@ -166,12 +166,24 @@ export default class FilmsScreenPresenter {
     if (this._filmDetailsPresenter &&
         this._filmDetailsPresenter.filmId !== film.id) {
       this._filmDetailsPresenter.destroy();
-      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._filmsModel, this._handleViewAction, this._hideFilmDetails, this._api);
+      this._filmDetailsPresenter = new FilmDetailsPresenter({
+        api: this._api,
+        container: bodyElement,
+        filmsModel: this._filmsModel,
+        changeFilm: this._handleViewAction,
+        hideFilmDetails: this._hideFilmDetails,
+      });
     }
 
     if (!this._filmDetailsPresenter) {
       bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
-      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._filmsModel, this._handleViewAction, this._hideFilmDetails, this._api);
+      this._filmDetailsPresenter = new FilmDetailsPresenter({
+        api: this._api,
+        container: bodyElement,
+        filmsModel: this._filmsModel,
+        changeFilm: this._handleViewAction,
+        hideFilmDetails: this._hideFilmDetails,
+      });
     }
 
     this._filmDetailsPresenter.init(film);
@@ -192,7 +204,13 @@ export default class FilmsScreenPresenter {
   }
 
   _renderFilmCard(filmCardContainer, film, type) {
-    const filmCardPresenter = new FilmCardPresenter(filmCardContainer, this._handleViewAction, this._showFilmDetails, this._api);
+    const filmCardPresenter = new FilmCardPresenter({
+      api: this._api,
+      container: filmCardContainer,
+      changeFilm: this._handleViewAction,
+      showFilmDetails: this._showFilmDetails,
+    });
+
     filmCardPresenter.init(film);
     this[`_${type}FilmPresenter`].set(film.id, filmCardPresenter);
   }

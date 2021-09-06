@@ -12,7 +12,10 @@ const api = new Api(END_POINT, AUTHORIZATION);
 const store = new Store(STORE_NAME, window.localStorage);
 const provider = new Provider(api, store);
 
-const applicationPresenter = new ApplicationPresenter(document.body, provider);
+const applicationPresenter = new ApplicationPresenter({
+  api: provider,
+  container: document.body,
+});
 
 const onWindowOffline = () => {
   document.title += OFFLINE_POSTFIX;

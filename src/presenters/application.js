@@ -21,10 +21,10 @@ import FilmsScreenPresenter from './films-screen.js';
 import StatisticsScreenPresenter from './statisctics-screen.js';
 
 export default class ApplicationPresenter {
-  constructor(applicationContainer, api) {
+  constructor({ container, api }) {
     this._api = api;
 
-    this._applicationContainer = applicationContainer;
+    this._applicationContainer = container;
 
     this._headerView = new HeaderView();
     this._profileView = null;
@@ -41,7 +41,12 @@ export default class ApplicationPresenter {
     this._handleRankModelEvent = this._handleRankModelEvent.bind(this);
     this._handleFilmsModelEvent = this._handleFilmsModelEvent.bind(this);
 
-    this._navigationPresenter = new NavigationPresenter(this._mainView, this._filterModel, this._filmsModel, this._renderScreen);
+    this._navigationPresenter = new NavigationPresenter({
+      container: this._mainView,
+      filmsModel: this._filmsModel,
+      filterModel: this._filterModel,
+      renderScreen: this._renderScreen,
+    });
     this._filmsScreenPresenter = null;
     this._statisticsScreenPresenter = null;
 
@@ -75,8 +80,18 @@ export default class ApplicationPresenter {
       remove(this._emptyBoardView);
       this._emptyBoardView = null;
 
-      this._filmsScreenPresenter = new FilmsScreenPresenter(this._mainView, this._filmsModel, this._filterModel, this._api);
-      this._statisticsScreenPresenter = new StatisticsScreenPresenter(this._mainView, this._rankModel, this._filmsModel);
+      this._filmsScreenPresenter = new FilmsScreenPresenter({
+        api: this._api,
+        container: this._mainView,
+        filmsModel: this._filmsModel,
+        filterModel: this._filterModel,
+      });
+
+      this._statisticsScreenPresenter = new StatisticsScreenPresenter({
+        container: this._mainView,
+        rankModel: this._rankModel,
+        filmsModel: this._filmsModel,
+      });
 
       this._isBlocked = false;
 
