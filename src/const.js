@@ -3,12 +3,6 @@ export const KeyCode = {
   ESCAPE: 'Escape',
 };
 
-export const FILMS_STEP = 5;
-
-export const EXTRA_FILMS_AMOUNT = 2;
-
-export const MAX_DESCRIPTION_LENGTH = 140;
-
 export const SortType = {
   DEFAULT: 'default',
   DATE: 'date',
@@ -80,13 +74,6 @@ export const FilmsListOption = {
     isExtra: true,
     type: 'mostCommented',
   },
-};
-
-export const NEW_COMMENT_DEFAULT = {
-  text: '',
-  emotion: '',
-  isError: false,
-  isDisabled: false,
 };
 
 export const FilterType = {
@@ -165,6 +152,26 @@ export const StatisticsPeriodLabel = {
   YEAR: 'Year',
 };
 
+export const APIMethod = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
+export const NEW_COMMENT_DEFAULT = {
+  text: '',
+  emotion: '',
+  isError: false,
+  isDisabled: false,
+};
+
+export const FILMS_STEP = 5;
+
+export const EXTRA_FILMS_AMOUNT = 2;
+
+export const MAX_DESCRIPTION_LENGTH = 140;
+
 export const STATISCTICS_CHART_TYPE = 'horizontalBar';
 
 export const STAISTICS_CHART_BAR_HEIGHT = 50;
@@ -215,13 +222,6 @@ export const STATISTICS_CHART_OPTIONS = {
 export const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
 
 export const AUTHORIZATION = 'Basic 5Hk8boTb1dsf53b53b';
-
-export const APIMethod = {
-  GET: 'GET',
-  PUT: 'PUT',
-  POST: 'POST',
-  DELETE: 'DELETE',
-};
 
 export const SuccessHTTPStatusRange = {
   MIN: 200,
