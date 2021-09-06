@@ -15,6 +15,7 @@ export default class Provider {
       const filmsAdaptedToServer = films.map(FilmsModel.adaptFilmToServer);
       const items = Provider.createStoreStructure(filmsAdaptedToServer);
       this._store.setItems(items);
+      this._store.isSyncRequired = false;
 
       return films;
     }
@@ -34,6 +35,7 @@ export default class Provider {
     }
 
     this._store.setItem(film.id, FilmsModel.adaptFilmToServer({ ...film }));
+    this._store.isSyncRequired = true;
 
     return Promise.resolve(film);
   }
@@ -70,12 +72,17 @@ export default class Provider {
 
   async sync() {
     if (isOnline()) {
+      if (!this._store.isSyncRequired) {
+        return;
+      }
+
       const storeFilms = Object.values(this._store.getItems());
 
       const { updated: updatedFilms } = await this._api.sync(storeFilms);
 
       const items = Provider.createStoreStructure([ ...updatedFilms ]);
       this._store.setItems(items);
+      this._store.isSyncRequired = false;
 
       return;
     }
