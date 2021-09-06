@@ -43,7 +43,7 @@ export default class Api {
   }
 
 
-  async addComment(filmId, newComment) {
+  async addComment({ filmId, newComment }) {
     const response = await this._load({
       url: `comments/${filmId}`,
       method: APIMethod.POST,
