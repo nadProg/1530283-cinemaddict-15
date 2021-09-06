@@ -6,7 +6,8 @@ import AbstractObserver from '../utils/abstract-observer.js';
 export default class FilmsModel extends AbstractObserver{
   constructor(films = []) {
     super();
-    this._films = films;
+
+    this._films = [ ...films ];
   }
 
   getAll() {
@@ -107,26 +108,5 @@ export default class FilmsModel extends AbstractObserver{
     delete serverFilm.userDetails;
 
     return serverFilm;
-  }
-
-  static adaptCommentToClient(comment) {
-    const clientComment = { ...comment };
-
-    clientComment.text = comment.comment;
-    clientComment.date = new Date(comment.date);
-
-    delete clientComment.comment;
-
-    return clientComment;
-  }
-
-  static adaptNewCommentToServer(comment) {
-    const serverComment = { ...comment };
-
-    serverComment.comment = comment.text;
-
-    delete serverComment.text;
-
-    return serverComment;
   }
 }
