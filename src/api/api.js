@@ -1,6 +1,7 @@
-import { APIMethod, SuccessHTTPStatusRange } from './const.js';
+import { APIMethod, SuccessHTTPStatusRange } from '../const.js';
 
-import FilmsModel from './models/films.js';
+import FilmsModel from '../models/films.js';
+import CommentsModel from '../models/comments.js';
 
 export default class Api {
   constructor(endPoint, authorization) {
@@ -9,7 +10,9 @@ export default class Api {
   }
 
   async getFilms() {
-    const response = await this._load({url: 'movies'});
+    const response = await this._load({
+      url: 'movies',
+    });
 
     const films = await Api.toJSON(response);
 
@@ -21,7 +24,6 @@ export default class Api {
       url: `movies/${film.id}`,
       method: APIMethod.PUT,
       body: JSON.stringify(FilmsModel.adaptFilmToServer(film)),
-      headers: new Headers({'Content-Type': 'application/json'}),
     });
 
     const updatedFilm = await Api.toJSON(response);
@@ -29,42 +31,50 @@ export default class Api {
     return FilmsModel.adaptFilmToClient(updatedFilm);
   }
 
-  async getComments(film) {
+  async getComments(filmId) {
     const response = await this._load({
-      url: `comments/${film.id}`,
-      method: APIMethod.GEt,
-      headers: new Headers({'Content-Type': 'application/json'}),
+      url: `comments/${filmId}`,
+      method: APIMethod.GET,
     });
 
     const comments = await Api.toJSON(response);
 
-    return comments.map(FilmsModel.adaptCommentToClient);
+    return comments.map(CommentsModel.adaptCommentToClient);
   }
 
 
-  async addComment(filmId, newComment) {
+  async addComment({ filmId, newComment }) {
     const response = await this._load({
       url: `comments/${filmId}`,
       method: APIMethod.POST,
-      body: JSON.stringify(FilmsModel.adaptNewCommentToServer(newComment)),
-      headers: new Headers({'Content-Type': 'application/json'}),
+      body: JSON.stringify(CommentsModel.adaptNewCommentToServer(newComment)),
     });
 
     const { movie, comments } = await Api.toJSON(response);
 
     const adaptedResponse = {
       updatedFilm: FilmsModel.adaptFilmToClient(movie),
-      updatedComments: comments.map(FilmsModel.adaptCommentToClient),
+      updatedComments: comments.map(CommentsModel.adaptCommentToClient),
     };
 
     return adaptedResponse;
   }
 
-  async deleteComment(id) {
+  async deleteComment(commentId) {
     await this._load({
-      url: `comments/${id}`,
+      url: `comments/${commentId}`,
       method: APIMethod.DELETE,
     });
+  }
+
+  async sync(films) {
+    const response = await this._load({
+      url: '/movies/sync',
+      method: APIMethod.POST,
+      body: JSON.stringify(films),
+    });
+
+    return await Api.toJSON(response);
   }
 
   async _load({
@@ -73,12 +83,12 @@ export default class Api {
     body = null,
     headers = new Headers(),
   }) {
+    headers.append('Content-Type', 'application/json');
     headers.append('Authorization', this._authorization);
 
-    const response = await fetch(
-      `${this._endPoint}/${url}`,
-      {method, body, headers},
-    );
+    const fetchUrl = `${this._endPoint}/${url}`;
+    const fetchOptions = { method, body, headers };
+    const response = await fetch(fetchUrl, fetchOptions);
 
     return Api.checkStatus(response);
   }

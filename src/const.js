@@ -85,6 +85,8 @@ export const FilmsListOption = {
 export const NEW_COMMENT_DEFAULT = {
   text: '',
   emotion: '',
+  isError: false,
+  isDisabled: false,
 };
 
 export const FilterType = {
@@ -115,7 +117,14 @@ export const CommentsTitle = {
   LOADING: 'loading...',
 };
 
+export const UserAction = {
+  UPDATE_USER_DETAILS: 'update-user-details',
+  CREATE_COMMENT: 'create-comment',
+  DELETE_COMMENT: 'delete-comment',
+};
+
 export const UpdateType = {
+  INIT: 'init',
   PATCH: 'patch',
   MINOR: 'minor',
   MAJOR: 'major',
@@ -205,7 +214,7 @@ export const STATISTICS_CHART_OPTIONS = {
 
 export const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
 
-export const AUTHORIZATION = 'Basic b1dsf53b53b';
+export const AUTHORIZATION = 'Basic 5Hk8boTb1dsf53b53b';
 
 export const APIMethod = {
   GET: 'GET',
@@ -218,3 +227,11 @@ export const SuccessHTTPStatusRange = {
   MIN: 200,
   MAX: 299,
 };
+
+export const STORE_PREFIX = 'cinemaddict-localstorage';
+
+export const STORE_VER = 'v15';
+
+export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+
+export const OFFLINE_POSTFIX =  ' [offline]';

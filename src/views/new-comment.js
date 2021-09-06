@@ -2,29 +2,32 @@ import { Emotion, ClassName, NEW_COMMENT_DEFAULT } from '../const.js';
 
 import SmartView from './smart.js';
 
-const createEmotionInputTemplate = (emotion, isChecked) => {
+const createEmotionInputTemplate = (emotion, isChecked, isDisabled) => {
   const checked = isChecked ? 'checked' : '';
+  const inputDisabled = isDisabled ? 'disabled' : '';
   return `
-    <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}" value="${emotion}" ${checked}>
+    <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}" value="${emotion}" ${checked} ${inputDisabled}>
     <label class="film-details__emoji-label" for="emoji-${emotion}">
       <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
     </label>
   `;
 };
 
-export const createNewCommentTemplate = ({ text, emotion: currentEmotion }) => {
-  const emotionInputsTemplate = Object.values(Emotion).map((emotion) => createEmotionInputTemplate(emotion, emotion === currentEmotion)).join('');
+export const createNewCommentTemplate = ({ text, emotion: currentEmotion, isDisabled, isError }) => {
+  const emotionInputsTemplate = Object.values(Emotion).map((emotion) => createEmotionInputTemplate(emotion, emotion === currentEmotion, isDisabled)).join('');
   const emojiLabelTemplate = currentEmotion ?
     `<img src="images/emoji/${currentEmotion}.png" width="55" height="55" alt="emoji-smile" />` : '';
+  const textAreaDisabled = isDisabled ? 'disabled' : '';
+  const errorClass = isError ? ClassName.SHAKE : '';
 
   return `
-    <div class="film-details__new-comment">
+    <div class="film-details__new-comment ${errorClass}">
       <div class="film-details__add-emoji-label">
         ${emojiLabelTemplate}
       </div>
 
       <label class="film-details__comment-label">
-        <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${text}</textarea>
+        <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${textAreaDisabled}>${text}</textarea>
       </label>
 
       <div class="film-details__emoji-list">
@@ -43,7 +46,7 @@ export default class NewCommentView extends SmartView {
     };
 
     this._commentInputHandler = this._commentInputHandler.bind(this);
-    this._emotionClickHandler = this._emotionClickHandler.bind(this);
+    this._emotionChangeHandler = this._emotionChangeHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -65,50 +68,44 @@ export default class NewCommentView extends SmartView {
   }
 
   setErrorState() {
-    this.getElement().classList.add(ClassName.SHAKE);
-  }
-
-  enable() {
-    this.getElement()
-      .querySelector(`.${ClassName.FILM_DETAILS_TEXTAREA}`)
-      .disabled = false;
-
-    this.getElement()
-      .querySelector(`.${ClassName.FILM_DETAILS_EMOJI_LIST}`)
-      .addEventListener('click', this._emotionClickHandler);
-  }
-
-  disable() {
-    this.getElement()
-      .querySelector(`.${ClassName.FILM_DETAILS_TEXTAREA}`)
-      .disabled = true;
-
-    this.getElement()
-      .querySelector(`.${ClassName.FILM_DETAILS_EMOJI_LIST}`)
-      .removeEventListener('click', this._emotionClickHandler);
+    this.updateData({ isError: true });
   }
 
   clearErrorState() {
-    this.getElement().classList.remove(ClassName.SHAKE);
+    this.updateData({ isError: false });
   }
 
-  _emotionClickHandler(evt) {
+  enable() {
+    this.updateData({ isDisabled: false });
+  }
+
+  disable() {
+    this.updateData({ isDisabled: true });
+  }
+
+  _emotionChangeHandler(evt) {
     const emotionInput = evt.target.closest(`.${ClassName.FILM_DETAILS_EMOJI_ITEM}`);
     if (!emotionInput || !evt.currentTarget.contains(emotionInput)) {
       return;
     }
 
-    this.updateData({ emotion: emotionInput.value });
+    this.updateData({
+      emotion: emotionInput.value,
+      isError: false,
+    });
   }
 
   _commentInputHandler(evt) {
-    this.updateData({ text: evt.currentTarget.value }, true);
+    this.updateData({
+      text: evt.currentTarget.value,
+      isError: false,
+    }, { isElementUpdate: true });
   }
 
   _setInnerHandlers() {
     this.getElement()
       .querySelector(`.${ClassName.FILM_DETAILS_EMOJI_LIST}`)
-      .addEventListener('click', this._emotionClickHandler);
+      .addEventListener('change', this._emotionChangeHandler);
 
     this.getElement()
       .querySelector(`.${ClassName.FILM_DETAILS_TEXTAREA}`)

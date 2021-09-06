@@ -38,7 +38,7 @@ export default class StatisticsScreen {
   }
 
   _handlePeriodChange(activePeriodValue) {
-    const watchedFilms = [...this._watchedFilms].filter((film) => isFilmInWhatcingPeriod(film, activePeriodValue));
+    const watchedFilms = [ ...this._watchedFilms ].filter((film) => isFilmInWhatcingPeriod(film, activePeriodValue));
 
     this._statiscticsView.updateData({
       activePeriodValue,

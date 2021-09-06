@@ -12,9 +12,9 @@ export const getRuntime = (minutesAmount) => dayjs().startOf('day').add(minutesA
 export const getTotalRuntime = (totalMinutesAmount) => {
   const referenceDate = dayjs().startOf('day');
   const date = referenceDate.add(totalMinutesAmount, 'minute');
-  const hoursAmount = date.diff(referenceDate, 'hour');
-  const minutesAmount = date.subtract(hoursAmount, 'hour').diff(referenceDate, 'minute');
-  return { hour: hoursAmount, minute: minutesAmount };
+  const hours = date.diff(referenceDate, 'hour');
+  const minutes = date.subtract(hours, 'hour').diff(referenceDate, 'minute');
+  return { hours, minutes };
 };
 
 export const getCommentDate = (date) => dayjs(date).fromNow();

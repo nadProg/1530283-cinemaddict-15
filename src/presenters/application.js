@@ -1,12 +1,12 @@
-import { END_POINT, AUTHORIZATION,
-  Screen, FilterType, UpdateType, EmptyBoardTitle } from '../const.js';
+import { Place, UpdateType, Screen,
+  EmptyBoardTitle, FilterType  } from '../const.js';
 import { render, rerender, replace, remove } from '../utils/render.js';
 import { filter } from '../utils/film.js';
-import { getRank } from '../utils/statistics';
+import { getRank } from '../utils/statistics.js';
 
-import HeaderView from '../views/header';
-import MainView from '../views/main';
-import FooterView from '../views/footer';
+import HeaderView from '../views/header.js';
+import MainView from '../views/main.js';
+import FooterView from '../views/footer.js';
 
 import EmptyBoardView from '../views/empty-board.js';
 import ProfileView from '../views/profile.js';
@@ -20,11 +20,9 @@ import NavigationPresenter from './navigation.js';
 import FilmsScreenPresenter from './films-screen.js';
 import StatisticsScreenPresenter from './statisctics-screen.js';
 
-import API from '../api.js';
-
 export default class ApplicationPresenter {
-  constructor(applicationContainer) {
-    this._api = new API(END_POINT, AUTHORIZATION);
+  constructor(applicationContainer, api) {
+    this._api = api;
 
     this._applicationContainer = applicationContainer;
 
@@ -52,46 +50,34 @@ export default class ApplicationPresenter {
   }
 
   async init() {
-    // Рендер приложения до загрузки фильмов
-
     this._navigationPresenter.init();
-    render(this._mainView, this._emptyBoardView);  // Рендер заглушки
+
+    render(this._mainView, this._emptyBoardView);
     render(this._footerView, this._footerStatisticsView);
 
-    render(this._applicationContainer, this._headerView);
-    render(this._applicationContainer, this._mainView);
-    render(this._applicationContainer, this._footerView);
+    render(this._applicationContainer, this._footerView, Place.AFTER_BEGIN);
+    render(this._applicationContainer, this._mainView, Place.AFTER_BEGIN);
+    render(this._applicationContainer, this._headerView, Place.AFTER_BEGIN);
 
 
     try {
-      // Получение фильмов
       const films = await this._api.getFilms();
 
       if (!films.length) {
-        // Ошибка при отсутствии загруженных фильмов
         throw new Error(EmptyBoardTitle.ERROR);
       }
 
-
-      // Подписка на обновление профиля пользователя
       this._filmsModel.addObserver(this._handleFilmsModelEvent);
       this._rankModel.addObserver(this._handleRankModelEvent);
 
-      // Обновление модели фильмов
-      this._filmsModel.setFilms(UpdateType.MINOR, films);
+      this._filmsModel.setFilms(UpdateType.INIT, films);
 
-
-      // Удаляет заглушку
       remove(this._emptyBoardView);
       this._emptyBoardView = null;
 
-
-      // Создание презентеров экранов "Фильмы" и "Статистики"
       this._filmsScreenPresenter = new FilmsScreenPresenter(this._mainView, this._filmsModel, this._filterModel, this._api);
       this._statisticsScreenPresenter = new StatisticsScreenPresenter(this._mainView, this._rankModel, this._filmsModel);
 
-
-      // Рендер приложения
       this._isBlocked = false;
 
       this._navigationPresenter.setActiveItem(FilterType.ALL);
@@ -104,7 +90,7 @@ export default class ApplicationPresenter {
 
     } catch (error) {
       const prevEmptyBoardView = this._emptyBoardView;
-      this._emptyBoardView = new EmptyBoardView(error.message);
+      this._emptyBoardView = new EmptyBoardView(EmptyBoardTitle.ERROR);
       replace(this._emptyBoardView, prevEmptyBoardView);
     }
   }
@@ -143,7 +129,7 @@ export default class ApplicationPresenter {
   }
 
   _handleFilmsModelEvent(updateType) {
-    if (updateType !== UpdateType.PATCH) {
+    if (updateType === UpdateType.INIT || updateType === UpdateType.MINOR) {
       const films = this._filmsModel.getAll();
       const watchedFilmsAmount = filter[FilterType.HISTORY](films).length;
       const rank = getRank(watchedFilmsAmount);

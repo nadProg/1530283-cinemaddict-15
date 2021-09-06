@@ -40,8 +40,8 @@ export const getWatchedStatisticsData = (watchedFilms) => {
 
   return {
     totalAmount: watchedFilms.length,
-    totalDuration: getTotalRuntime(totalMinutesDuration),
     genresStatistic: genresStatistic,
+    totalDuration: getTotalRuntime(totalMinutesDuration),
     topGenre: genresStatistic && getTopGenre(genresStatistic),
   };
 };
@@ -50,10 +50,10 @@ export const getStatisticsChartData = (genresStatistics) => ({
   labels: [ ...genresStatistics.genres ],
   datasets: [{
     data: [ ...genresStatistics.counts ],
-    backgroundColor: '#ffe800',
-    hoverBackgroundColor: '#ffe800',
     anchor: 'start',
     barThickness: 24,
+    backgroundColor: '#ffe800',
+    hoverBackgroundColor: '#ffe800',
   }],
 });
 
