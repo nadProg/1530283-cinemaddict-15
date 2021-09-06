@@ -1,10 +1,14 @@
-const SYNC_REQUIRED = 'sync-required';
+const PostFix = {
+  ITEMS: 'items',
+  SYNC_REQUIRED: 'sync-required',
+};
 
 export default class Store {
   constructor(storeKey, storage) {
     this._storage = storage;
     this._storeKey = storeKey;
-    this._storeSyncKey = `${this._storeKey}-${SYNC_REQUIRED}`;
+    this._storeItemsKey = `${this._storeKey}-${PostFix.ITEMS}`;
+    this._storeSyncKey = `${this._storeKey}-${PostFix.SYNC_REQUIRED}`;
   }
 
   get isSyncRequired() {
@@ -19,7 +23,7 @@ export default class Store {
 
   getItems() {
     try {
-      return JSON.parse(this._storage.getItem(this._storeKey)) || {};
+      return JSON.parse(this._storage.getItem(this._storeItemsKey)) || {};
     } catch (error) {
       return {};
     }
@@ -27,7 +31,7 @@ export default class Store {
 
   setItems(items) {
     this._storage.setItem(
-      this._storeKey,
+      this._storeItemsKey,
       JSON.stringify(items),
     );
   }
@@ -36,7 +40,7 @@ export default class Store {
     const store = this.getItems();
 
     this._storage.setItem(
-      this._storeKey,
+      this._storeItemsKey,
       JSON.stringify({
         ...store,
         [key]: value,
