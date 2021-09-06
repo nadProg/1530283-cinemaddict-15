@@ -48,34 +48,40 @@ const handleCacheKey = (key) => {
 
 const isNotNull = (key) => key !== null;
 
-const fetchAndCache = (request) => fetch(request).then((response) => {
-  if (!response || response.status !== HTTP_STATUS_OK || response.type !== RESPONSE_SAFE_TYPE) {
+const createCache = async () => {
+  const cache = await caches.open(CACHE_NAME);
+  return await cache.addAll(CACHE_PATHS);
+};
+
+const updateCache = async () => {
+  const keys = await caches.keys();
+  return await Promise.all(keys.map(handleCacheKey).filter(isNotNull));
+};
+
+const fetchAndCache = async (request) => {
+  const response = await fetch(request);
+
+  if (!response ||
+    response.status !== HTTP_STATUS_OK ||
+    response.type !== RESPONSE_SAFE_TYPE) {
     return response;
   }
 
   const clonedResponse = response.clone();
-
-  caches.open(CACHE_NAME)
-    .then((cache) => cache.put(request, clonedResponse));
+  const cache = caches.open(CACHE_NAME);
+  await cache.put(request, clonedResponse);
 
   return response;
-});
+};
 
-self.addEventListener('install', (evt) => {
-  evt.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then((cache) => cache.addAll(CACHE_PATHS)),
-  );
-});
+const respondWithCache = async (request) => {
+  const cachedResponse = await caches.match(request);
+  return cachedResponse ? cachedResponse : fetchAndCache(request);
+};
 
-self.addEventListener('activate', (evt) => {
-  evt.waitUntil(
-    caches
-      .keys()
-      .then((keys) => Promise.all(keys.map(handleCacheKey).filter(isNotNull))),
-  );
-});
+self.addEventListener('install', (evt) => evt.waitUntil(createCache()));
+
+self.addEventListener('activate', (evt) => evt.waitUntil(updateCache()));
 
 self.addEventListener('fetch', (evt) => {
   const { request } = evt;
@@ -84,9 +90,5 @@ self.addEventListener('fetch', (evt) => {
     return;
   }
 
-  evt.respondWith(
-    caches
-      .match(request)
-      .then((cacheResponse) => cacheResponse ? cacheResponse : fetchAndCache(request)),
-  );
+  evt.respondWith(respondWithCache(request));
 });
