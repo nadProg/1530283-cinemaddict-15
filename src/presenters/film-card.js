@@ -6,8 +6,8 @@ import { getCurrentDate } from '../utils/date.js';
 import FilmCardView from '../views/film-card.js';
 
 export default class FilmCardPresenter {
-  constructor(filmCardContainer, changeFilm, showFilmDetails, api) {
-    this._filmCardContainer = filmCardContainer;
+  constructor({ container, changeFilm, showFilmDetails, api }) {
+    this._filmCardContainer = container;
     this._changeFilm = changeFilm;
     this._showFilmDetails = showFilmDetails;
     this._api = api;

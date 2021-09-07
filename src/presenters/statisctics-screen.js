@@ -6,8 +6,8 @@ import { getWatchedStatisticsData } from '../utils/statistics.js';
 import StatisticsView from '../views/statistics.js';
 
 export default class StatisticsScreen {
-  constructor(statisticContainer, rankModel, filmsModel) {
-    this._statisticContainer = statisticContainer;
+  constructor({ container, rankModel, filmsModel }) {
+    this._statisticContainer = container;
 
     this._statiscticsView = null;
 

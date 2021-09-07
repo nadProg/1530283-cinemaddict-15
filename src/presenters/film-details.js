@@ -15,8 +15,8 @@ import CommentView from '../views/comment.js';
 import NewCommentView from '../views/new-comment.js';
 
 export default class FilmDetailsPresenter {
-  constructor(filmDetailsContainer, filmsModel, changeFilm, hideFilmDetails, api) {
-    this._filmDetailsContainer = filmDetailsContainer;
+  constructor({ container, filmsModel, changeFilm, hideFilmDetails, api }) {
+    this._filmDetailsContainer = container;
     this._filmsModel = filmsModel;
     this._changeFilm = changeFilm;
     this._hideFilmDetails = hideFilmDetails;
@@ -34,7 +34,7 @@ export default class FilmDetailsPresenter {
     this._commentsContainerView = null;
     this._commentsTitleView = null;
     this._commentsListView = null;
-    this._commentView = new Map();
+    this._commentViews = new Map();
     this._newCommentView = null;
 
     this._handleCloseButtonClick = this._handleCloseButtonClick.bind(this);
@@ -61,7 +61,7 @@ export default class FilmDetailsPresenter {
 
     this._commentsTitleView = null;
     this._commentsListView = null;
-    this._commentView = new Map();
+    this._commentViews = new Map();
 
     this._renderFilmDetails();
   }
@@ -144,11 +144,11 @@ export default class FilmDetailsPresenter {
     }
 
     try {
-      this._commentView.get(commentId).setDeletingStatus();
+      this._commentViews.get(commentId).setDeletingStatus();
       await this._handleCommentsViewAction(UserAction.DELETE_COMMENT, UpdateType.PATCH, commentId);
 
     } catch (error) {
-      this._commentView.get(commentId).resetDeletingStatus();
+      this._commentViews.get(commentId).resetDeletingStatus();
     }
 
   }
@@ -238,8 +238,8 @@ export default class FilmDetailsPresenter {
         if (Array.isArray(payload)) {
           this._renderCommentsList();
         } else {
-          remove(this._commentView.get(payload));
-          this._commentView.delete(payload);
+          remove(this._commentViews.get(payload));
+          this._commentViews.delete(payload);
         }
 
         break;
@@ -309,7 +309,7 @@ export default class FilmDetailsPresenter {
 
     this._commentsModel.getAll().forEach((comment) => {
       const commentView = new CommentView(comment);
-      this._commentView.set(comment.id, commentView);
+      this._commentViews.set(comment.id, commentView);
       commentView.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
       render(this._commentsListView, commentView);
     });

@@ -15,8 +15,8 @@ import FilmDetailsPresenter from './film-details.js';
 const bodyElement = document.body;
 
 export default class FilmsScreenPresenter {
-  constructor(mainScreenContainer, filmsModel, filterModel, api) {
-    this._mainScreenContainer = mainScreenContainer;
+  constructor({ container, filmsModel, filterModel, api }) {
+    this._mainScreenContainer = container;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._api = api;
@@ -33,9 +33,9 @@ export default class FilmsScreenPresenter {
     this._mostCommentedFilmsContainerView = null;
     this._mostCommentedFilmsListView = null;
 
-    this._mainFilmPresenter = new Map();
-    this._topRatedFilmPresenter = new Map();
-    this._mostCommentedFilmPresenter = new Map();
+    this._mainFilmPresenters = new Map();
+    this._topRatedFilmPresenters = new Map();
+    this._mostCommentedFilmPresenters = new Map();
     this._filmDetailsPresenter = null;
 
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -129,12 +129,12 @@ export default class FilmsScreenPresenter {
   _handleModelEvent(updateType, updatedFilm) {
     switch (updateType) {
       case UpdateType.PATCH:
-        if (this._mainFilmPresenter.has(updatedFilm.id)) {
-          this._mainFilmPresenter.get(updatedFilm.id).init(updatedFilm);
+        if (this._mainFilmPresenters.has(updatedFilm.id)) {
+          this._mainFilmPresenters.get(updatedFilm.id).init(updatedFilm);
         }
 
-        if (this._topRatedFilmPresenter.has(updatedFilm.id)) {
-          this._topRatedFilmPresenter.get(updatedFilm.id).init(updatedFilm);
+        if (this._topRatedFilmPresenters.has(updatedFilm.id)) {
+          this._topRatedFilmPresenters.get(updatedFilm.id).init(updatedFilm);
         }
 
         this._renderExtraFilmsList({
@@ -166,12 +166,24 @@ export default class FilmsScreenPresenter {
     if (this._filmDetailsPresenter &&
         this._filmDetailsPresenter.filmId !== film.id) {
       this._filmDetailsPresenter.destroy();
-      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._filmsModel, this._handleViewAction, this._hideFilmDetails, this._api);
+      this._filmDetailsPresenter = new FilmDetailsPresenter({
+        api: this._api,
+        container: bodyElement,
+        filmsModel: this._filmsModel,
+        changeFilm: this._handleViewAction,
+        hideFilmDetails: this._hideFilmDetails,
+      });
     }
 
     if (!this._filmDetailsPresenter) {
       bodyElement.classList.add(ClassName.HIDE_OVERFLOW);
-      this._filmDetailsPresenter = new FilmDetailsPresenter(bodyElement, this._filmsModel, this._handleViewAction, this._hideFilmDetails, this._api);
+      this._filmDetailsPresenter = new FilmDetailsPresenter({
+        api: this._api,
+        container: bodyElement,
+        filmsModel: this._filmsModel,
+        changeFilm: this._handleViewAction,
+        hideFilmDetails: this._hideFilmDetails,
+      });
     }
 
     this._filmDetailsPresenter.init(film);
@@ -192,9 +204,15 @@ export default class FilmsScreenPresenter {
   }
 
   _renderFilmCard(filmCardContainer, film, type) {
-    const filmCardPresenter = new FilmCardPresenter(filmCardContainer, this._handleViewAction, this._showFilmDetails, this._api);
+    const filmCardPresenter = new FilmCardPresenter({
+      api: this._api,
+      container: filmCardContainer,
+      changeFilm: this._handleViewAction,
+      showFilmDetails: this._showFilmDetails,
+    });
+
     filmCardPresenter.init(film);
-    this[`_${type}FilmPresenter`].set(film.id, filmCardPresenter);
+    this[`_${type}FilmPresenters`].set(film.id, filmCardPresenter);
   }
 
   _renderPartialMainFilms(from, to) {
@@ -216,7 +234,7 @@ export default class FilmsScreenPresenter {
     this._mainFilmsContainerView = new FilmsContainerView();
 
     render(this._mainFilmsListView, this._mainFilmsContainerView);
-    this._mainFilmPresenter.clear();
+    this._mainFilmPresenters.clear();
 
     this._renderPartialMainFilms(0, this._mainFilmsCount);
 
@@ -232,7 +250,7 @@ export default class FilmsScreenPresenter {
     const prevExtraFilmsListView = this[`_${type}FilmsListView`];
     const extraFilms = this[`_${type}Films`];
 
-    this[`_${type}FilmPresenter`].clear();
+    this[`_${type}FilmPresenters`].clear();
 
     if (!extraFilms.length) {
       if (prevExtraFilmsListView) {

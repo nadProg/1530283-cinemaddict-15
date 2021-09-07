@@ -2,7 +2,7 @@ import { Emotion, ClassName, NEW_COMMENT_DEFAULT } from '../const.js';
 
 import SmartView from './smart.js';
 
-const createEmotionInputTemplate = (emotion, isChecked, isDisabled) => {
+const createEmotionInputTemplate = ({ emotion, isChecked, isDisabled }) => {
   const checked = isChecked ? 'checked' : '';
   const inputDisabled = isDisabled ? 'disabled' : '';
   return `
@@ -14,9 +14,17 @@ const createEmotionInputTemplate = (emotion, isChecked, isDisabled) => {
 };
 
 export const createNewCommentTemplate = ({ text, emotion: currentEmotion, isDisabled, isError }) => {
-  const emotionInputsTemplate = Object.values(Emotion).map((emotion) => createEmotionInputTemplate(emotion, emotion === currentEmotion, isDisabled)).join('');
+  const emotionInputsTemplate = Object.values(Emotion)
+    .map((emotion) => createEmotionInputTemplate({
+      emotion,
+      isDisabled,
+      isChecked: emotion === currentEmotion,
+    }))
+    .join('');
+
   const emojiLabelTemplate = currentEmotion ?
     `<img src="images/emoji/${currentEmotion}.png" width="55" height="55" alt="emoji-smile" />` : '';
+
   const textAreaDisabled = isDisabled ? 'disabled' : '';
   const errorClass = isError ? ClassName.SHAKE : '';
 
@@ -41,9 +49,7 @@ export default class NewCommentView extends SmartView {
   constructor(newCommentData = NEW_COMMENT_DEFAULT) {
     super();
 
-    this._data = {
-      ...newCommentData,
-    };
+    this._data = { ...newCommentData };
 
     this._commentInputHandler = this._commentInputHandler.bind(this);
     this._emotionChangeHandler = this._emotionChangeHandler.bind(this);
@@ -64,7 +70,10 @@ export default class NewCommentView extends SmartView {
   }
 
   getData() {
-    return this._data;
+    return {
+      text: this._data.text,
+      emotion: this._data.emotion,
+    };
   }
 
   setErrorState() {

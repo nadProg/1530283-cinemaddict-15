@@ -6,8 +6,8 @@ import { filter } from '../utils/film.js';
 import NavigationView from '../views/navigation.js';
 
 export default class NavigationPresenter {
-  constructor(navigationContainer, filterModel, filmsModel, renderScreen) {
-    this._navigationContainer = navigationContainer;
+  constructor({ container, filterModel, filmsModel, renderScreen }) {
+    this._navigationContainer = container;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
     this._renderScreen = renderScreen;
@@ -30,7 +30,7 @@ export default class NavigationPresenter {
     this._navigationView = new NavigationView(this._getFilters(), this._activeItem);
 
     this._navigationView.setFilterChangeHandler(this._handleFilterChange);
-    this._navigationView.setStatisticClickHandler(this._handleStatisticClick);
+    this._navigationView.setStatisticsClickHandler(this._handleStatisticClick);
 
     rerender(this._navigationView, prevNavigationView, this._navigationContainer);
   }
