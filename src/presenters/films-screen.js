@@ -33,9 +33,9 @@ export default class FilmsScreenPresenter {
     this._mostCommentedFilmsContainerView = null;
     this._mostCommentedFilmsListView = null;
 
-    this._mainFilmPresenter = new Map();
-    this._topRatedFilmPresenter = new Map();
-    this._mostCommentedFilmPresenter = new Map();
+    this._mainFilmPresenters = new Map();
+    this._topRatedFilmPresenters = new Map();
+    this._mostCommentedFilmPresenters = new Map();
     this._filmDetailsPresenter = null;
 
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -129,12 +129,12 @@ export default class FilmsScreenPresenter {
   _handleModelEvent(updateType, updatedFilm) {
     switch (updateType) {
       case UpdateType.PATCH:
-        if (this._mainFilmPresenter.has(updatedFilm.id)) {
-          this._mainFilmPresenter.get(updatedFilm.id).init(updatedFilm);
+        if (this._mainFilmPresenters.has(updatedFilm.id)) {
+          this._mainFilmPresenters.get(updatedFilm.id).init(updatedFilm);
         }
 
-        if (this._topRatedFilmPresenter.has(updatedFilm.id)) {
-          this._topRatedFilmPresenter.get(updatedFilm.id).init(updatedFilm);
+        if (this._topRatedFilmPresenters.has(updatedFilm.id)) {
+          this._topRatedFilmPresenters.get(updatedFilm.id).init(updatedFilm);
         }
 
         this._renderExtraFilmsList({
@@ -212,7 +212,7 @@ export default class FilmsScreenPresenter {
     });
 
     filmCardPresenter.init(film);
-    this[`_${type}FilmPresenter`].set(film.id, filmCardPresenter);
+    this[`_${type}FilmPresenters`].set(film.id, filmCardPresenter);
   }
 
   _renderPartialMainFilms(from, to) {
@@ -234,7 +234,7 @@ export default class FilmsScreenPresenter {
     this._mainFilmsContainerView = new FilmsContainerView();
 
     render(this._mainFilmsListView, this._mainFilmsContainerView);
-    this._mainFilmPresenter.clear();
+    this._mainFilmPresenters.clear();
 
     this._renderPartialMainFilms(0, this._mainFilmsCount);
 
@@ -250,7 +250,7 @@ export default class FilmsScreenPresenter {
     const prevExtraFilmsListView = this[`_${type}FilmsListView`];
     const extraFilms = this[`_${type}Films`];
 
-    this[`_${type}FilmPresenter`].clear();
+    this[`_${type}FilmPresenters`].clear();
 
     if (!extraFilms.length) {
       if (prevExtraFilmsListView) {
