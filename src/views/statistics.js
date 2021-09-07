@@ -2,9 +2,9 @@ import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 import { getStatisticsChartData } from '../utils/statistics.js';
-import { ClassName,
-  StatisticsPeriodValue, StatisticsPeriodLabel,
-  STAISTICS_CHART_BAR_HEIGHT, STATISTICS_CHART_OPTIONS, STATISCTICS_CHART_TYPE
+import { ClassName, StatisticsPeriodValue,
+  StatisticsPeriodLabel, STATISCTICS_CHART_TYPE,
+  STAISTICS_CHART_BAR_HEIGHT, STATISTICS_CHART_OPTIONS
 } from '../const.js';
 
 import SmartView from './smart.js';
@@ -24,7 +24,14 @@ const createPeriodInputTemplate = ({ value, checked, label }) => `
 `;
 
 export const createStatisticsTemplate = (statisticsData) => {
-  const { rank, totalAmount, totalDuration, topGenre, genresStatistic, activePeriodValue = StatisticsPeriodValue.ALL} = statisticsData;
+  const {
+    rank,
+    topGenre,
+    totalAmount,
+    totalDuration,
+    genresStatistic,
+    activePeriodValue = StatisticsPeriodValue.ALL,
+  } = statisticsData;
 
   const periodInputsTemplate = Object.entries(StatisticsPeriodValue)
     .map(([period, value]) => createPeriodInputTemplate({
@@ -130,8 +137,8 @@ export default class StatisticsView extends SmartView {
     new Chart(statisticsContext, {
       plugins: [ChartDataLabels],
       type: STATISCTICS_CHART_TYPE,
-      data: getStatisticsChartData(genresStatistic),
       options: { ...STATISTICS_CHART_OPTIONS},
+      data: getStatisticsChartData(genresStatistic),
     });
   }
 }

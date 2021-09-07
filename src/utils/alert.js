@@ -7,7 +7,7 @@ const AlertType = {
   SUCCESS: 'success',
 };
 
-const getAlertTemplate = (text, {time = ALERT_TIME, type = AlertType.ERROR } = {}) => `
+const getAlertTemplate = (text, { time = ALERT_TIME, type = AlertType.ERROR } = {}) => `
   <div class="alert alert--${type}" style="animation-duration:${time}ms">
     <p class="alert__text">${text}</p>
   </div>

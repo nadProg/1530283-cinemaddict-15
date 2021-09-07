@@ -2,7 +2,7 @@ import { Emotion, ClassName, NEW_COMMENT_DEFAULT } from '../const.js';
 
 import SmartView from './smart.js';
 
-const createEmotionInputTemplate = ({ emotion, isChecked, isDisabled} ) => {
+const createEmotionInputTemplate = ({ emotion, isChecked, isDisabled }) => {
   const checked = isChecked ? 'checked' : '';
   const inputDisabled = isDisabled ? 'disabled' : '';
   return `

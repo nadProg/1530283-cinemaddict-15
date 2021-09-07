@@ -13,7 +13,10 @@ const createSortItemTemplate = (sortType, isChecked) => `
 `;
 
 export const createSortBarTemplate = (activeSortType) => {
-  const sortItemsTemplate = Object.values(SortType).map((sortType) => createSortItemTemplate(sortType, sortType === activeSortType)).join('');
+  const sortItemsTemplate = Object.values(SortType)
+    .map((sortType) => createSortItemTemplate(sortType, sortType === activeSortType))
+    .join('');
+
   return `<ul class="sort">${sortItemsTemplate}</ul>`;
 };
 

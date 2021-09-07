@@ -26,14 +26,14 @@ const createNavigationTemplate = (filters, activeItem) => {
 };
 
 export default class NavigationView extends AbstractView {
-  constructor(filters = [], activeItem) {
+  constructor(filters = [], activeItem = NavigationItem.ALL) {
     super();
 
     this._filters = filters;
     this._activeItem = activeItem;
 
     this._filterChangeHandler = this._filterChangeHandler.bind(this);
-    this._statisticClickHandler = this._statisticClickHandler.bind(this);
+    this._statisticsClickHandler = this._statisticsClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -51,9 +51,9 @@ export default class NavigationView extends AbstractView {
     this._callback.filterChange(filterItem.dataset.type);
   }
 
-  _statisticClickHandler(evt) {
+  _statisticsClickHandler(evt) {
     evt.preventDefault();
-    this._callback.statisticClick();
+    this._callback.statisticsClick();
   }
 
   setFilterChangeHandler(callback) {
@@ -61,8 +61,8 @@ export default class NavigationView extends AbstractView {
     this.getElement().querySelector(`.${ClassName.NAVIGATION_FILTER_ITEM}`).addEventListener('click', this._filterChangeHandler);
   }
 
-  setStatisticClickHandler(callback) {
-    this._callback.statisticClick = callback;
-    this.getElement().querySelector(`.${ClassName.NAVIGATION_STATISTICS_ITEM}`).addEventListener('click', this._statisticClickHandler);
+  setStatisticsClickHandler(callback) {
+    this._callback.statisticsClick = callback;
+    this.getElement().querySelector(`.${ClassName.NAVIGATION_STATISTICS_ITEM}`).addEventListener('click', this._statisticsClickHandler);
   }
 }

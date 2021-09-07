@@ -30,7 +30,7 @@ export default class NavigationPresenter {
     this._navigationView = new NavigationView(this._getFilters(), this._activeItem);
 
     this._navigationView.setFilterChangeHandler(this._handleFilterChange);
-    this._navigationView.setStatisticClickHandler(this._handleStatisticClick);
+    this._navigationView.setStatisticsClickHandler(this._handleStatisticClick);
 
     rerender(this._navigationView, prevNavigationView, this._navigationContainer);
   }

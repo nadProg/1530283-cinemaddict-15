@@ -30,7 +30,7 @@ applicationPresenter.init();
 
 window.addEventListener('online', () => {
   document.title = document.title.replace(OFFLINE_POSTFIX, '');
-  alert('Online mode', {type: AlertType.SUCCESS});
+  alert('Online mode', { type: AlertType.SUCCESS });
   provider.sync();
 });
 
