@@ -1,6 +1,6 @@
 import { FilterType, StatisticsPeriodValue } from '../const.js';
 import { remove, render } from '../utils/render.js';
-import { filter, isFilmInWhatcingPeriod } from '../utils/film.js';
+import { filter, isFilmInWatchingPeriod } from '../utils/film.js';
 import { getWatchedStatisticsData } from '../utils/statistics.js';
 
 import StatisticsView from '../views/statistics.js';
@@ -38,7 +38,7 @@ export default class StatisticsScreen {
   }
 
   _handlePeriodChange(activePeriodValue) {
-    const watchedFilms = [ ...this._watchedFilms ].filter((film) => isFilmInWhatcingPeriod(film, activePeriodValue));
+    const watchedFilms = [ ...this._watchedFilms ].filter((film) => isFilmInWatchingPeriod(film, activePeriodValue));
 
     this._statiscticsView.updateData({
       activePeriodValue,

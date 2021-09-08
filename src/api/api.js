@@ -52,12 +52,10 @@ export default class Api {
 
     const { movie, comments } = await Api.toJSON(response);
 
-    const adaptedResponse = {
+    return {
       updatedFilm: FilmsModel.adaptFilmToClient(movie),
       updatedComments: comments.map(CommentsModel.adaptCommentToClient),
     };
-
-    return adaptedResponse;
   }
 
   async deleteComment(commentId) {
